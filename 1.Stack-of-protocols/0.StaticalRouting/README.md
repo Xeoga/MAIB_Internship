@@ -26,3 +26,15 @@ Verificam care sunt rutele:
 ```Linux
 ip show route
 ```
+## Rutele agrigate
+Sunt rute care grupează mai multe rețele mai mici într-una singură, pentru a simplifica tabela de rutare și a reduce dimensiunea anunțurilor în rețea.
+Să zicem că am 4 rețele mici:
+```Cisco
+192.168.0.0/24
+192.168.1.0/24
+192.168.2.0/24
+192.168.3.0/24
+```
+Toate aceste subrețele pot fi agregate într-o singură rută:
+
+`192.168.0.0/22` - /22 acoperă toate adresele de la 192.168.0.0 până la 192.168.3.255.
