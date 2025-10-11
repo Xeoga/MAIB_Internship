@@ -38,3 +38,4 @@ Să zicem că am 4 rețele mici:
 Toate aceste subrețele pot fi agregate într-o singură rută:
 
 `192.168.0.0/22` - /22 acoperă toate adresele de la 192.168.0.0 până la 192.168.3.255.
+

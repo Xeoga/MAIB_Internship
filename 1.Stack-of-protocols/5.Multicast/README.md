@@ -15,4 +15,6 @@ Scopul este să economisească lățimea de bandă și să optimizeze traficul d
 |------------|------------|------------|
 | Unicast  | 1 -> 1  | SSH, HTTP normal  |
 | Broadcast  | 1 -> Toti din retea  | ARP, DHCP Discover  |
-| Multicast | 1 -> Grup selectat | IPTV, OSPF, Conferinta video | Valoare B
+| Multicast | 1 -> Grup selectat | IPTV, OSPF, Conferinta video |
+
+oioo
