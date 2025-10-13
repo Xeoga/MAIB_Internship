@@ -88,6 +88,7 @@
     Nu scalează eficient pentru mii de pachete (operații manuale lente).  
     Lipsă integrare directă cu semnarea automată (doar manual prin `gpg`).  
 # [Repomanager](https://github.com/lbr38/repomanager)
+### Cerințele:
 | Criteriu                    | Descriere                                            | Exemplu                                                   |
 | --------------------------- | ---------------------------------------------------- | --------------------------------------------------------- |
 | Compatibilitate             | Suport pentru `.deb` și `.rpm`                       | Debian, Ubuntu, CentOS                                    |
@@ -99,13 +100,13 @@
 | Performanță / scalabilitate | Bună pentru repo-uri mici/medii                      | ~mii de pachete max.                                      |
 | Ușurință de instalare       | Ușor, bazat pe Python + Django                       | `pip install -r requirements.txt` + `manage.py runserver` |
 
-Puncte tari:
+### Puncte tari:
 
     Interfață web grafică ușor de folosit (administrare vizuală).
     Posibilitate de semnare GPG integrată.
     Instalare simplă, fără baze de date externe (SQLite by default).
 
-Puncte slabe:
+### Puncte slabe:
 
     Nu are funcționalități automate de mirror sau sync.
     Lipsă completă de snapshot/versionare și promovare între medii.
@@ -113,7 +114,6 @@ Puncte slabe:
     Proiect aflat în întreținere redusă (nu mai primește update-uri frecvente).
 # [Foreman + Katello](https://docs.theforeman.org/3.4/Quickstart/index-katello.html)
 ### Cerințele:
-
 | Criteriu                    | Descriere                                                    | Exemplu                                |
 | --------------------------- | ------------------------------------------------------------ | -------------------------------------- |
 | Compatibilitate             | Multi-format (`.deb`, `.rpm`, Ansible, Puppet, ISO`)         |                                        |
@@ -126,14 +126,14 @@ Puncte slabe:
 | Ușurință de instalare       | Complexă (Ansible installer / foreman-installer)             | `foreman-installer --scenario katello` |
 
 
-Puncte tari:
+### Puncte tari:
 
     Platformă enterprise completă pentru managementul pachetelor, sistemelor și patch-urilor.
     Folosește Pulp 3 sub capotă, dar oferă interfață și orchestrare completă.
     Permite lifecycle management: promovare controlată între Dev/Test/Prod.
     Suport pentru .deb, .rpm, Ansible, Docker și ISO.
 
-Puncte slabe:
+### Puncte slabe:
 
     Instalare complexă, cu multe componente (Pulp, Candlepin, Foreman, PostgreSQL).
     Consum mare de resurse.
@@ -150,13 +150,12 @@ Puncte slabe:
 | Semnare GPG                 | Nu suportă implicit                   | —                      |
 | Performanță / scalabilitate | Limitată la repo-uri mici             | —                      |
 | Ușurință de instalare       | Ușor (Docker Compose)                 | `docker-compose up -d` |
-
-Puncte tari:
+### Puncte tari:
 
     Interfață web minimalistă și ușor de utilizat.
     Implementare rapidă (Docker Compose).
     Poate fi folosit ca repo vizual pentru echipe mici.
-Puncte slabe:
+### Puncte slabe:
 
     Nu are mirror, snapshot sau promovare între medii.
     Nu are suport GPG integrat.
@@ -173,15 +172,14 @@ Puncte slabe:
 | **Semnare GPG**                 | Suport complet pentru semnare automată a repo-urilor.                       | `SignWith: yes` în `conf/distributions` |
 | **Performanță / scalabilitate** | Foarte bună pentru repo-uri mici/medii; performant pe sistem single-node.   | Testat cu mii de pachete                |
 | **Ușurință de instalare**       | Foarte simplă (`apt install reprepro`), fără baze de date externe.          | `sudo apt install reprepro`             |
-
-Puncte tari:
+### Puncte tari:
 
     Simplu, stabil, open-source și integrat în ecosistemul Debian.
     Poate realiza mirror local și actualizare repo automatizată (update, pull).
     Configurare clară, bazată pe fișiere text (distributions, updates).
     Suportă semnare GPG nativă și publicare directă pentru APT.
     Nu necesită baze de date externe sau infrastructură complexă.
-Puncte slabe:
+### Puncte slabe:
 
     Nu are snapshot/versionare automată.
     Migrarea între medii se face manual.
@@ -202,7 +200,7 @@ Puncte slabe:
 | **Ușurință de instalare**       | Simplă (pip/apt + configurare YAML)                                             | `pip install apt-mirror2`                                    |
 | **Licență**                     | GPLv2 (open-source)                                                             | ✅ Gratuit                                                    |
 
-Puncte tari:
+### Puncte tari:
 
     Mirror complet Debian/Ubuntu – copiază integral repo-urile APT, păstrând structura și semnăturile.
     Automatizare completă: actualizare prin cron/systemd, perfect pentru menținerea unui mirror local.
@@ -211,14 +209,14 @@ Puncte tari:
     Open-source activ întreținut, fără dependențe grele.
     Ideal pentru caching și backup de repo-uri externe.
 
-Puncte slabe:
+### Puncte slabe:
 
     Nu are funcționalitate de snapshot/versionare automată.
     Nu oferă promovare între medii (Test → Prod).
     Nu are interfață web sau API REST.
     Nu permite semnare GPG proprie — repo-ul rămâne semnat cu cheia upstream.
     Nu este un manager complet de pachete .deb, ci un mirror sync tool.
-# [Nexus Repository OSS]()
+# [Nexus Repository OSS]
 Nexus Repository OSS NU îndeplinește cerințele proiectului, deoarece cerința principală este o soluție open-source și gratuită cu suport complet pentru pachete `.deb`.
 # Concluzie generală
 | Soluție                  | Snapshot    | Mirror     | Migrare Test/Prod | Web UI | API | Complexitate   | Recomandare                                                                |
