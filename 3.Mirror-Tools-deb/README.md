@@ -1,3 +1,9 @@
+# Lista de instrumente propuse/comparatia:
+# - aptly
+ 
+
+
+
 # [aptly](https://www.aptly.info/) -
 
 ### Cerințele:
@@ -100,6 +106,15 @@
     Nu are API / interfață web.
     Nu scalează eficient pentru mii de pachete (operații manuale lente).  
     Lipsă integrare directă cu semnarea automată (doar manual prin `gpg`).  
+# [Repomanager](https://github.com/lbr38/repomanager)
+#TODO
+
+# [Foreman + Katello](https://docs.theforeman.org/3.4/Quickstart/index-katello.html)
+#todo
+
+# [OpenRepo](https://github.com/openkilt/openrepo)
+#todo
+
 
 ## Concluzie generală
 | Soluție | Snapshot | Mirror | Migrare Test/Prod | Web UI | API | Complexitate | Recomandare |
