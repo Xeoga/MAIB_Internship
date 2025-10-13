@@ -119,6 +119,28 @@ http://207.154.213.49:8080/pool/main/n/nginx/
     Nu este o soluție completă de management (doar mirror).  
 # [Rattlesnake]()
 
+### Cerintele:
+| Criteriu | Descriere | Exemplu |
+|-----------|------------|----------|
+| Compatibilitate | Suport pentru `.deb` (repo simplu local) | (limitat) |
+| Actualizare repo | Manuală (copiere pachete în repo local) |
+| Snapshot / freeze | Nu suportă versionare/snapshot |
+| Migrare între medii | Nu are funcție dedicată |
+| Interfață web / API | Fără UI sau API (script Python) |
+| Semnare GPG | Nu include funcție GPG | 
+| Performanță / scalabilitate | Ușor, orientat pe pipeline-uri CI | ✅ |
+| Ușurință de instalare | Simplu (script Python local) | ✅ |
+
+### Puncte tari:
+    Simplu și portabil – ușor de integrat în CI/CD.  
+    Poate genera repo `.deb` temporare din directoare de build.  
+    Fără dependențe grele.  
+###  Puncte slabe
+    Nu are funcții de mirror, snapshot, migrare sau semnare.  
+    Nu este un manager de repo complet, ci un utilitar de build.  
+    Scop principal: automatizarea pipeline-urilor, nu managementul repo-urilor.  
+
+
 ## Concluzie generală
 
 | Soluție | Snapshot | Mirror | Migrare Test/Prod | Web UI | API | Complexitate | Recomandare |
@@ -127,3 +149,4 @@ http://207.154.213.49:8080/pool/main/n/nginx/
 | **Pulp 3** | ✅ | ✅ | ✅ | ✅ | ✅ | Ridicată | 🔸 Recomandat pentru infrastructuri enterprise |
 | **Paket Mirror** | ❌ | ✅ | ❌ | ❌ | ❌ | Scăzută | 🔹 Bun pentru mirror simplu |
 | **Rattlesnake OS Tool** | ❌ | ❌ | ❌ | ❌ | ❌ | Foarte scăzută | ⚙️ Potrivit pentru CI/CD și build-uri temporare |
+
