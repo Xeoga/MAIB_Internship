@@ -1,11 +1,15 @@
 # Lista de instrumente propuse/comparatia:
- - [aptly](#aptly)
- - [pulp 3 + plugin pulp_deb](#pulp-3--plugin-pulp_deb)
-- [Rattlesnake](#rattlesnake)
+- [aptly](#aptly)
+- [pulp 3 + plugin pulp_deb](#pulp-3--plugin-pulp_deb)
 - [dpkg-scanpackages](#dpkg-scanpackages)
 - [Repomanager](#repomanager)
 - [Foreman + Katello](#foreman--katello)
 - [OpenRepo](#openrepo)
+- [Reprepro](#reprepro)
+- [apt-mirror2](#apt-mirror2)
+- [Nexus Repository OSS](#nexus-repository-oss) (Open Source) / Community Edition
+- [Comararea Instrumentelor](#concluzie-generală)
+- [Solutia Propusa](#soluțiile-propuse)
 
 # [aptly](https://www.aptly.info/)
 
@@ -32,7 +36,7 @@
     **API REST** integrat (util pentru CI/CD sau automatizări).  
     Instalare simplă (nativ sau Docker).  
     Performanță excelentă chiar și pe servere mici.
-# [pulp 3](https://pulpproject.org/pulp_deb/docs/user/) + plugin pulp_deb -  
+# [pulp 3](https://pulpproject.org/pulp_deb/docs/user/) + plugin pulp_deb
 
 ### Cerințele:
 | Criteriu | Descriere | Exemplu |
@@ -57,29 +61,7 @@
     Instalare complexă (PostgreSQL + Redis + ansible installer).  
     Consum mai mare de resurse.  
     Supraspecificat pentru infrastructuri mici.  
-# [Rattlesnake](https://github.com/dan-v/rattlesnakeos-stack) -
-
-### Cerințele:
-| Criteriu | Descriere | Exemplu |
-|-----------|------------|----------|
-| Compatibilitate | Suport pentru `.deb` (repo simplu local) | (limitat) |
-| Actualizare repo | Manuală (copiere pachete în repo local) |
-| Snapshot / freeze | Nu suportă versionare/snapshot |
-| Migrare între medii | Nu are funcție dedicată |
-| Interfață web / API | Fără UI sau API (script Python) |
-| Semnare GPG | Nu include funcție GPG | 
-| Performanță / scalabilitate | Ușor, orientat pe pipeline-uri CI |
-| Ușurință de instalare | Simplu (script Python local) |
-
-### Puncte tari:
-    Simplu și portabil – ușor de integrat în CI/CD.  
-    Poate genera repo `.deb` temporare din directoare de build.  
-    Fără dependențe grele.  
-###  Puncte slabe:
-    Nu are funcții de mirror, snapshot, migrare sau semnare.  
-    Nu este un manager de repo complet, ci un utilitar de build.  
-    Scop principal: automatizarea pipeline-urilor, nu managementul repo-urilor.  
-# [dpkg-scanpackages]()
+# [dpkg-scanpackages](https://en.linuxportal.info/manuals/d/dpkg-scanpackages-linux-command)
 ### Cerințele:
 | Criteriu | Descriere | Exemplu |
 |-----------|------------|----------|
@@ -179,22 +161,77 @@ Puncte slabe:
     Nu are mirror, snapshot sau promovare între medii.
     Nu are suport GPG integrat.
     Dezvoltare inactivă de câțiva ani.
+# [Reprepro](https://deb.moep.com/manual.html)
+### Cerințele:
+| Criteriu                        | Descriere                                                                   | Exemplu                                 |
+| ------------------------------- | --------------------------------------------------------------------------- | --------------------------------------- |
+| **Compatibilitate**             | Suport exclusiv pentru `.deb` (Debian/Ubuntu).                              | Debian, Ubuntu                          |
+| **Actualizare repo**            | Poate face mirror și sincronizare locală prin comenzi dedicate.             | `reprepro update`, `reprepro pull`      |
+| **Snapshot / freeze**           | Nu are sistem automat de snapshot; se pot face copii manuale de directoare. | `cp -r dists/ dists_2025-10-13/`        |
+| **Migrare între medii**         | Posibilă manual prin `reprepro pull` sau `copy`.                            | `reprepro pull prod test <package>`     |
+| **Interfață web / API**         | Doar CLI local; nu are API sau UI web.                                      | —                                       |
+| **Semnare GPG**                 | Suport complet pentru semnare automată a repo-urilor.                       | `SignWith: yes` în `conf/distributions` |
+| **Performanță / scalabilitate** | Foarte bună pentru repo-uri mici/medii; performant pe sistem single-node.   | Testat cu mii de pachete                |
+| **Ușurință de instalare**       | Foarte simplă (`apt install reprepro`), fără baze de date externe.          | `sudo apt install reprepro`             |
 
+Puncte tari:
 
+    Simplu, stabil, open-source și integrat în ecosistemul Debian.
+    Poate realiza mirror local și actualizare repo automatizată (update, pull).
+    Configurare clară, bazată pe fișiere text (distributions, updates).
+    Suportă semnare GPG nativă și publicare directă pentru APT.
+    Nu necesită baze de date externe sau infrastructură complexă.
+Puncte slabe:
+
+    Nu are snapshot/versionare automată.
+    Migrarea între medii se face manual.
+    Lipsă API / UI web – doar CLI tradițional.
+    Comunitate pasivă, proiect în mentenanță minimă.
+    Lipsă funcționalități moderne (versionare, rollback, lifecycle).
+# [apt-mirror2](https://gitlab.com/apt-mirror2/apt-mirror2)
+### Cerințele:
+| Criteriu                        | Descriere                                                                       | Exemplu                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| **Compatibilitate**             | Suport complet pentru `.deb` și structuri Debian/Ubuntu                         | `deb http://archive.ubuntu.com/ubuntu noble main restricted` |
+| **Actualizare repo**            | Mirror complet automat, cu suport pentru scheduling (cron/systemd timer)        | `apt-mirror2 update`                                         |
+| **Snapshot / freeze**           | Nu are sistem intern de snapshot; se pot face manual prin copierea directorului | `cp -r /var/spool/apt-mirror2 /backup/2025-10-13`            |
+| **Migrare între medii**         | Posibilă prin separarea mirror-urilor (ex. Test/Prod)                           | Structuri diferite `/mirror/test` și `/mirror/prod`          |
+| **Interfață web / API**         | Nu are interfață web sau API                                                    | —                                                            |
+| **Semnare GPG**                 | Repo-ul copiat păstrează semnăturile originale                                  | ✅ Da, semnăturile upstream sunt păstrate                     |
+| **Performanță / scalabilitate** | Foarte bună pentru mirror-uri mari (suport pentru delta, rsync, multithreading) | ✅                                                            |
+| **Ușurință de instalare**       | Simplă (pip/apt + configurare YAML)                                             | `pip install apt-mirror2`                                    |
+| **Licență**                     | GPLv2 (open-source)                                                             | ✅ Gratuit                                                    |
+
+Puncte tari:
+
+    Mirror complet Debian/Ubuntu – copiază integral repo-urile APT, păstrând structura și semnăturile.
+    Automatizare completă: actualizare prin cron/systemd, perfect pentru menținerea unui mirror local.
+    Configurare ușoară: fișier YAML simplu pentru definirea surselor.
+    Performanță ridicată: suport pentru descărcări paralele, fișiere delta și verificare hash.
+    Open-source activ întreținut, fără dependențe grele.
+    Ideal pentru caching și backup de repo-uri externe.
+
+Puncte slabe:
+
+    Nu are funcționalitate de snapshot/versionare automată.
+    Nu oferă promovare între medii (Test → Prod).
+    Nu are interfață web sau API REST.
+    Nu permite semnare GPG proprie — repo-ul rămâne semnat cu cheia upstream.
+    Nu este un manager complet de pachete .deb, ci un mirror sync tool.
+# [Nexus Repository OSS]()
+Nexus Repository OSS NU îndeplinește cerințele proiectului, deoarece cerința principală este o soluție open-source și gratuită cu suport complet pentru pachete `.deb`.
 # Concluzie generală
-
-| Soluție                 | Snapshot    | Mirror | Migrare Test/Prod | Web UI | API | Complexitate   | Recomandare                                     |
-| ----------------------- | ----------- | ------ | ----------------- | ------ | --- | -------------- | ----------------------------------------------- |
-| **Aptly**               | ✅           | ✅      | ✅                 | ❌      | ✅   | Medie          | Ideal pentru repo complet Test/Prod          |
-| **Pulp 3**              | ✅           | ✅      | ✅                 | ✅      | ✅   | Ridicată       | Recomandat pentru infrastructuri enterprise  |
-| **Foreman + Katello**   | ✅           | ✅      | ✅                 | ✅      | ✅   | Ridicată       |  Ideal pentru enterprise cu lifecycle complet |
-| **Repomanager**         | ⚠️ (manual) | ❌      | ⚠️ (manual)       | ✅      | ❌   | Scăzută        | Bun pentru repo mic, UI simplu               |
-| **OpenRepo**            | ❌           | ❌      | ❌                 | ✅      | ❌   | Scăzută        |  Pentru test/demo, nu production              |
-| **Rattlesnake OS Tool** | ❌           | ❌      | ❌                 | ❌      | ❌   | Foarte scăzută |  Pentru CI/CD temporar                        |
-| **dpkg-scanpackages**   | ❌           | ❌      | ⚠️ (manual)       | ❌      | ❌   | Foarte scăzută |  Utilitar minimalist pentru repo-uri mici     |
-
-
-
+| Soluție                  | Snapshot    | Mirror     | Migrare Test/Prod | Web UI | API | Complexitate   | Recomandare                                                                |
+| ------------------------ | ----------- | ---------- | ----------------- | ------ | --- | -------------- | -------------------------------------------------------------------------- |
+| **Aptly**                | ✅           | ✅          | ✅                 | ❌      | ✅   | Medie          | Ideal pentru repo complet Test/Prod (.deb-only)                            |
+| **Pulp 3 + pulp_deb**    | ✅           | ✅          | ✅                 | ✅      | ✅   | Ridicată       | Recomandat pentru infrastructuri enterprise multi-format                   |
+| **Foreman + Katello**    | ✅           | ✅          | ✅                 | ✅      | ✅   | Ridicată       | Ideal pentru enterprise cu lifecycle complet (bazat pe Pulp)               |
+| **Reprepro**             | ⚠️ (manual) | ✅          | ⚠️ (manual)       | ❌      | ❌   | Scăzută        | Simplu și stabil pentru mirror local, dar fără versionare automată         |
+| **apt-mirror2**          | ⚠️ (manual) | ✅          | ⚠️ (manual)       | ❌      | ❌   | Scăzută        | Excelent pentru mirror-uri Debian/Ubuntu automate, fără snapshot           |
+| **Repomanager**          | ⚠️ (manual) | ❌          | ⚠️ (manual)       | ✅      | ❌   | Scăzută        | UI simplu, dar fără funcții automate (mirror/snapshot)                     |
+| **OpenRepo**             | ❌           | ❌          | ❌                 | ✅      | ❌   | Scăzută        | Potrivit doar pentru test/demo; proiect inactiv                            |
+| **dpkg-scanpackages**    | ❌           | ❌          | ⚠️ (manual)       | ❌      | ❌   | Foarte scăzută | Utilitar minimalist pentru repo-uri mici, fără funcționalități automate    |
+| **Nexus Repository OSS** | ⚠️ Limitat  | ⚠️ Limitat | ❌                 | ✅      | ✅   | Medie          | Suport `.deb` doar în versiunea comercială; nealiniat cerinței open-source |
 # Soluțiile-propuse:
 | Criteriu | **Aptly** | **Pulp 3 + pulp_deb** | **Foreman + Katello** |
 |-----------|------------|----------------------|-----------------------|
