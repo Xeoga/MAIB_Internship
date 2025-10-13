@@ -91,33 +91,8 @@ http://207.154.213.49:8080/pool/main/n/nginx/
     Instalare complexă (PostgreSQL + Redis + ansible installer).  
     Consum mai mare de resurse.  
     Supraspecificat pentru infrastructuri mici.  
-
-
-# [Paket Mirror]()
-
-## Cerintele:
-| Criteriu | Descriere | Exemplu |
-|-----------|------------|----------|
-| Compatibilitate | Suport doar pentru repo-uri Debian/Ubuntu (`.deb`) |
-| Actualizare repo | Mirror incremental (sincronizare rapidă) | `packet-mirror sync` |
-| Snapshot / freeze | Nu suportă snapshot / înghețare |
-| Migrare între medii | Nu este suportat |
-| Interfață web / API | Fără UI / API (doar CLI) |
-| Semnare GPG | Nu semnează repo-uri, doar copiază structura |
-| Performanță / scalabilitate | Foarte rapid, scris în Go |
-| Ușurință de instalare | Foarte simplu (un binar Go standalone) | `./packet-mirror --help` |
-
-### Puncte tari
-    Foarte rapid și eficient (Go, binar unic).  
-    Sincronizare incrementală – descarcă doar diferențele.  
-    Ideal pentru **mirroring simplu și cache intern**.  
-    Consum minim de resurse.  
-
-### Puncte slabe
-    Nu oferă funcții de **snapshot, semnare sau migrare între medii**.  
-    Fără API / UI.  
-    Nu este o soluție completă de management (doar mirror).  
-# [Rattlesnake]()
+ 
+# [Rattlesnake](https://github.com/dan-v/rattlesnakeos-stack) -
 
 ### Cerintele:
 | Criteriu | Descriere | Exemplu |
@@ -128,25 +103,50 @@ http://207.154.213.49:8080/pool/main/n/nginx/
 | Migrare între medii | Nu are funcție dedicată |
 | Interfață web / API | Fără UI sau API (script Python) |
 | Semnare GPG | Nu include funcție GPG | 
-| Performanță / scalabilitate | Ușor, orientat pe pipeline-uri CI | ✅ |
-| Ușurință de instalare | Simplu (script Python local) | ✅ |
+| Performanță / scalabilitate | Ușor, orientat pe pipeline-uri CI |
+| Ușurință de instalare | Simplu (script Python local) |
 
 ### Puncte tari:
     Simplu și portabil – ușor de integrat în CI/CD.  
     Poate genera repo `.deb` temporare din directoare de build.  
     Fără dependențe grele.  
-###  Puncte slabe
+###  Puncte slabe:
     Nu are funcții de mirror, snapshot, migrare sau semnare.  
     Nu este un manager de repo complet, ci un utilitar de build.  
     Scop principal: automatizarea pipeline-urilor, nu managementul repo-urilor.  
 
+# [dpkg-scanpackages]()
+## Cerințele analizate
+
+| Criteriu | Descriere | Exemplu |
+|-----------|------------|----------|
+| **Compatibilitate** | Suport exclusiv pentru `.deb` (nativ Debian/Ubuntu). | `dpkg-scanpackages ./ > Packages` |
+| **Actualizare repo** | Fără funcționalitate de mirror; actualizarea se face manual prin regenerarea fișierelor. | `dpkg-scanpackages ./ > Packages && gzip -k Packages` |
+| **Snapshot / freeze** | Nu are versiuni sau snapshot-uri — se pot crea copii manuale ale directorului. | `cp -r repo repo_2025-10-13_backup` |
+| **Migrare între medii** | Fără suport direct; se face manual prin copierea structurii repo. | `rsync -av repo_test/ repo_prod/` |
+| **Interfață web / API** | Nu are interfață grafică sau API; doar CLI local. | — |
+| **Semnare GPG** | Manuală, folosind `gpg` și `apt-ftparchive release`. | `gpg --clearsign -o InRelease Release` |
+| **Performanță / scalabilitate** | Foarte bună pentru directoare mici; nu este scalabil pentru mii de pachete. | Operă rapidă pe câteva sute de pachete. |
+| **Ușurință de instalare** | Foarte simplă — preinstalat în dpkg-dev (nativ în Debian/Ubuntu). | `sudo apt install dpkg-dev` |
+
+## Puncte tari:
+    **Foarte simplu de folosit și disponibil implicit** (nu necesită instalare complexă).  
+    Perfect pentru repo-uri statice sau interne mici.  
+    Poate fi folosit în **CI/CD pipelines** pentru a genera rapid un repo `.deb`.  
+    Fără servicii de fundal, baze de date sau procese de sincronizare.  
+    100% open-source, parte din infrastructura oficială Debian.  
+
+## Puncte slabe:
+    **Fără funcții de mirror sau actualizare automată.**  
+    **Fără snapshot / versionare / migrare între medii** — totul se face manual.  
+    **Nu are API / interfață web.**  
+    Nu scalează eficient pentru mii de pachete (operații manuale lente).  
+    Lipsă integrare directă cu semnarea automată (doar manual prin `gpg`).  
 
 ## Concluzie generală
-
 | Soluție | Snapshot | Mirror | Migrare Test/Prod | Web UI | API | Complexitate | Recomandare |
 |----------|-----------|---------|-------------------|--------|-----|---------------|-------------|
 | **Aptly** | ✅ | ✅ | ✅ | ❌ | ✅ | Medie | 🔹 Ideal pentru repo complet Test/Prod |
 | **Pulp 3** | ✅ | ✅ | ✅ | ✅ | ✅ | Ridicată | 🔸 Recomandat pentru infrastructuri enterprise |
-| **Paket Mirror** | ❌ | ✅ | ❌ | ❌ | ❌ | Scăzută | 🔹 Bun pentru mirror simplu |
 | **Rattlesnake OS Tool** | ❌ | ❌ | ❌ | ❌ | ❌ | Foarte scăzută | ⚙️ Potrivit pentru CI/CD și build-uri temporare |
 
