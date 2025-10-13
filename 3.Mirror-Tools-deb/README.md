@@ -1,10 +1,13 @@
 # Lista de instrumente propuse/comparatia:
-# - aptly
- 
+## - aptly
+## - pulp 3 + plugin pulp_deb
+## - Rattlesnake
+## - dpkg-scanpackages 
+## - Repomanager
+## - Foreman + Katello
+## - OpenRepo
 
-
-
-# [aptly](https://www.aptly.info/) -
+## [aptly](https://www.aptly.info/) -
 
 ### Cerințele:
 | Criteriu | Descriere | Exemplu |
