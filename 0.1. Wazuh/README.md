@@ -1,3 +1,9 @@
+1) Arhitectură (pe scurt)
+- **Wazuh Manager** — colectează/analizează evenimentele de la agenți, API pe 55000/tcp.
+- **Wazuh Indexer** (OpenSearch) — stochează datele.
+- **Wazuh Dashboard** — UI web pentru vizualizare.
+- **Wazuh Agent** — rulează pe endpoint-uri și trimite date la Manager.
+
 Acesta o sa fie instalat din `docker-compose` cu urmatoarele configurari:
 ```yml
 # Wazuh App Copyright (C) 2017, Wazuh Inc. (License GPLv2)  
@@ -95,6 +101,12 @@ volumes:
  filebeat_etc:  
  filebeat_var:
 ```
+2) Porturi implicite
+- **Manager:** 1514/tcp (event), 1515/tcp (enrollment), 55000/tcp (API), 514/udp (syslog, opțional)
+- **Indexer:** 9200/tcp
+- **Dashboard:** 443/tcp
+> În producție, expun public doar 443 și limitează 1514/1515/55000 la LAN/VPN.
+
 In cazul acesta toate 3 (`manager/index/dashboard`)componente o sa fie instalate pe un host in cazul meu pe local host
 Acum tot ce trebuie este sa rulam `docker-compose`:
 ```bash

@@ -226,7 +226,7 @@ Nexus Repository OSS NU îndeplinește cerințele proiectului, deoarece cerința
 | **Foreman + Katello**    | ✅           | ✅          | ✅                 | ✅      | ✅   | Ridicată       | Ideal pentru enterprise cu lifecycle complet (bazat pe Pulp)               |
 | **Reprepro**             | ⚠️ (manual) | ✅          | ⚠️ (manual)       | ❌      | ❌   | Scăzută        | Simplu și stabil pentru mirror local, dar fără versionare automată         |
 | **apt-mirror2**          | ⚠️ (manual) | ✅          | ⚠️ (manual)       | ❌      | ❌   | Scăzută        | Excelent pentru mirror-uri Debian/Ubuntu automate, fără snapshot           |
-| **Repomanager**          | ⚠️ (manual) | ❌          | ⚠️ (manual)       | ✅      | ❌   | Scăzută        | UI simplu, dar fără funcții automate (mirror/snapshot)                     |
+| **Repomanager**          | ⚠️ (manual) | ✅          | ✅      | ✅      | ❌   | Scăzută        | UI simplu, dar fără funcții automate (mirror/snapshot)                     |
 | **OpenRepo**             | ❌           | ❌          | ❌                 | ✅      | ❌   | Scăzută        | Potrivit doar pentru test/demo; proiect inactiv                            |
 | **dpkg-scanpackages**    | ❌           | ❌          | ⚠️ (manual)       | ❌      | ❌   | Foarte scăzută | Utilitar minimalist pentru repo-uri mici, fără funcționalități automate    |
 | **Nexus Repository OSS** | ⚠️ Limitat  | ⚠️ Limitat | ❌                 | ✅      | ✅   | Medie          | Suport `.deb` doar în versiunea comercială; nealiniat cerinței open-source |
