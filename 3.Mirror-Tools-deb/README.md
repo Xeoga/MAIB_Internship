@@ -8,6 +8,8 @@
 - [Reprepro](#reprepro)
 - [apt-mirror2](#apt-mirror2)
 - [Nexus Repository OSS](#nexus-repository-oss) (Open Source) / Community Edition
+- [Spacewalk](#spacewalk-software)
+- [Uyuni](#uyuni)
 - [Comararea Instrumentelor](#concluzie-generală)
 - [Solutia Propusa](#soluțiile-propuse)
 
@@ -224,37 +226,67 @@ Spacewalk nu mai este întreținut oficial — proiectul a fost oprit pe 31 mai 
 # JFrog Artifactory OSS (Open-Source Edition)
 Funcționalitatea este puternic limitată față de versiunile comerciale (Pro / Enterprise).
 
-# Concluzie generală
-| Soluție                  | Snapshot    | Mirror     | Migrare Test/Prod | Web UI | API | Complexitate   | Recomandare                                                                |
-| ------------------------ | ----------- | ---------- | ----------------- | ------ | --- | -------------- | -------------------------------------------------------------------------- |
-| **Aptly**                | ✅           | ✅          | ✅                 | ❌      | ✅   | Medie          | Ideal pentru repo complet Test/Prod (.deb-only)                            |
-| **Pulp 3 + pulp_deb**    | ✅           | ✅          | ✅                 | ✅      | ✅   | Ridicată       | Recomandat pentru infrastructuri enterprise multi-format                   |
-| **Foreman + Katello**    | ✅           | ✅          | ✅                 | ✅      | ✅   | Ridicată       | Ideal pentru enterprise cu lifecycle complet (bazat pe Pulp)               |
-| **Reprepro**             | ⚠️ (manual) | ✅          | ⚠️ (manual)       | ❌      | ❌   | Scăzută        | Simplu și stabil pentru mirror local, dar fără versionare automată         |
-| **apt-mirror2**          | ⚠️ (manual) | ✅          | ⚠️ (manual)       | ❌      | ❌   | Scăzută        | Excelent pentru mirror-uri Debian/Ubuntu automate, fără snapshot           |
-| **Repomanager**          | ⚠️ (manual) | ✅          | ✅      | ✅      | ❌   | Scăzută        | UI simplu, dar fără funcții automate (mirror/snapshot)                     |
-| **OpenRepo**             | ❌           | ❌          | ❌                 | ✅      | ❌   | Scăzută        | Potrivit doar pentru test/demo; proiect inactiv                            |
-| **dpkg-scanpackages**    | ❌           | ❌          | ⚠️ (manual)       | ❌      | ❌   | Foarte scăzută | Utilitar minimalist pentru repo-uri mici, fără funcționalități automate    |
-| **Nexus Repository OSS** | ⚠️ Limitat  | ⚠️ Limitat | ❌                 | ✅      | ✅   | Medie          | Suport `.deb` doar în versiunea comercială; nealiniat cerinței open-source |
-# Soluțiile-propuse:
-| Criteriu                  | **Aptly**                                                    | **Pulp 3 + pulp_deb**                                           | **Foreman + Katello**                                                         | **Repomanager**                                       |
-| ------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- |
-| **Compatibilitate**       | Exclusiv `.deb` (Debian/Ubuntu)                              | Multi-format (`.deb`, `.rpm`, `docker`, `python`, `file`, etc.) | Multi-format prin Pulp (deb, rpm, docker, puppet, iso)                        | `.deb` și `.rpm` (mirror + upload)                    |
-| **Structură internă**     | Fără baze de date externe; stocare pe disc + metadate locale | Necesită PostgreSQL + Redis + servicii (API, content, workers)  | Suită complexă: Foreman, Katello, Pulp, Candlepin, PostgreSQL, Redis, Dynflow | Python + Django (SQLite implicit, ușor de configurat) |
-| **API**                   | REST API simplu (`aptly api serve`) – JSON                   | REST API complet (`/api/v3/`) + OpenAPI/SDK                     | Foreman/Katello REST API (v2)                                                 | API intern limitat (fără documentație REST completă)  |
-| **Interfață web**         | CLI și API only                                              | UI web modern integrat                                          | UI web enterprise complet (lifecycle, hosts, content)                         | UI web simplă și intuitivă                            |
-| **Mirror și sync**        | `aptly mirror create/update`                                 | `pulp deb sync` din `Remote`                                    | Sync Plans în Katello (mirror programat)                                      | Creare mirror `.deb` și `.rpm` direct din UI          |
-| **Snapshot / versionare** | `aptly snapshot create`                                      | Repository Versions (automat la fiecare sync)                   | Content View Versions (publish/promote)                                       | Manual (fără versionare automată)                     |
-| **Migrare Test → Prod**   | `snapshot pull` / `publish switch`                           | `distribution update` (promovare instantă)                      | Promovare Content View între Lifecycle Environments                           | Prin *Environments* (preprod, prod) – manual          |
-| **Semnare GPG**           | Nativ, manual                                                | Prin pluginul `pulp_deb_signing`                                | Suport GPG integrat în Katello                                                | GPG integrat (configurabil în UI)                     |
-| **Scalabilitate**         | Bună pe un singur server                                     | Ridicată (multi-node, workers paralele)                         | Ridicată (multi-node; integrare cu hosts)                                     | Potrivit pentru medii mici și medii de testare        |
-| **Performanță**           | Excelentă pentru repo-uri mici/medii                         | Foarte bună la scară mare                                       | Foarte bună la scară mare, cu overhead operațional                            | Bună pentru câteva mii de pachete                     |
-| **Resurse necesare**      | Minime (RAM 512 MB+, CPU 1–2)                                | Mari (RAM 4–8 GB+, PostgreSQL, Redis)                           | Mari (RAM 8–16 GB+, mai multe servicii)                                       | Reduse (RAM 512 MB–2 GB, fără baze externe)           |
-| **Ușurință de instalare** | Simplu (`apt install aptly` sau Docker)                      | Complex (Ansible Installer / Docker Compose)                    | Complex (`foreman-installer --scenario katello`)                              | Ușor (Python + Django / Docker Compose)               |
-| **Administrare**          | Ușor de automatizat (CLI/API)                                | Necesită configurare DevOps completă                            | Necesită operare enterprise                                                   | Simplu, orientat pe UI; automatizări limitate         |
-| **Licență**               | MIT                                                          | GPLv2                                                           | GPLv3                                                                         | GPLv3                                                 |
-| **Comunitate & suport**   | Comunitate Debian activă                                     | Pulp Project & Red Hat community                                | Foreman/Katello community (enterprise)                                        | Comunitate mică, activitate redusă (GitHub)           |
+# [Uyuni]()
+### Cerințele:
+| Criteriu                   | Descriere                                                                                                               | Exemplu                                                                                |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **Compatibilitate**        | Multi-distro: SLES/openSUSE, RHEL/Alma/Rocky/Oracle, Debian/Ubuntu, Amazon/Alibaba Linux (feature-set diferă pe distro) | Listele „Supported Clients and Features” din documentație. ([uyuni-project.org][1])    |
+| **Actualizare repo**       | Sync/mirror pe „software channels”, management patch-uri și pachete                                                     | „Automated patch and package management”. ([uyuni-project.org][2])                     |
+| **Snapshot / freeze**      | **Content Lifecycle Management**: versiunare, ajustare și testare înainte de producție                                  | „Content lifecycle management” (select, adjust, test → prod). ([uyuni-project.org][3]) |
+| **Migrare între medii**    | Publicare/promovare versiuni de conținut între medii (Dev→Test→Prod)                                                    | Flux de promovare în Content Lifecycle. ([uyuni-project.org][3])                       |
+| **Interfață web / API**    | UI web complet + API; serverul este **Salt master**                                                                     | FAQ: „server is a full Salt master”. ([uyuni-project.org][4])                          |
+| **Semnare / conformitate** | CVE audit + **OpenSCAP** pentru compliance                                                                              | „Auditing” + „System Security with OpenSCAP”. ([uyuni-project.org][5])                 |
+| **Monitoring**             | Integrare **Prometheus + Grafana** (prin formule Salt)                                                                  | Monitoring guide + formulas. ([uyuni-project.org][6])                                  |
+| **Ușurință de instalare**  | Medie-ridicată; ecosistem complex (server + canale + proxy/clients)                                                     | Ghiduri 
 
+Puncte tari:
+
+    Lifecycle complet al conținutului (versiuni, testare, promovare): ideal pentru ferestre controlate de mentenanță.
+    Multi-distro real (SUSE, Red Hat-like, Debian/Ubuntu, inclusiv Alma/Rocky) — util când ai parcuri eterogene.
+    Salt integrat (serverul Uyuni este Salt master) → config management + „recurring actions”.
+    Security & compliance: CVE audit și OpenSCAP (scanări / remedieri din UI).
+    Monitoring nativ: Prometheus + Grafana prin Salt formulas; există integrare cu Grafana Agent/Alloy pentru descoperirea automată a clienților Uyuni.
+
+Puncte slabe:
+
+    Complexitate mai mare la instalare/operare decât un manager simplu de APT (necesită configurarea serverului, a canalelor și a fluxurilor de lifecycle).
+    Funcționalitatea variază pe distribuții (unele capabilități sunt „basic/advanced” sau indisponibile în funcție de client).
+    Monitoring server suportat oficial pe SUSE/openSUSE, ceea ce poate impune preferințe de platformă pentru stack-ul de monitorizare.
+    Curba de învățare ridicată: integrarea Salt + lifecycle + auditing + monitoring e puternică, dar necesită timp de adopție (comparativ cu unelte „repo-only”).
+
+# Concluzie generală
+| Soluție                  | Snapshot    | Mirror     | Migrare Test/Prod | Web UI | API | Complexitate   | Recomandare                                                                              |
+| ------------------------ | ----------- | ---------- | ----------------- | ------ | --- | -------------- | ---------------------------------------------------------------------------------------- |
+| **Aptly**                | ✅           | ✅          | ✅                 | ❌      | ✅   | Medie          | Ideal pentru repo complet Test/Prod (.deb-only)                                          |
+| **Pulp 3 + pulp_deb**    | ✅           | ✅          | ✅                 | ✅      | ✅   | Ridicată       | Recomandat pentru infrastructuri enterprise multi-format                                 |
+| **Foreman + Katello**    | ✅           | ✅          | ✅                 | ✅      | ✅   | Ridicată       | Ideal pentru enterprise cu lifecycle complet (bazat pe Pulp)                             |
+| **Uyuni**                | ✅           | ✅          | ✅                 | ✅      | ✅   | Ridicată       | Soluție enterprise open-source completă cu lifecycle, patching, monitoring și compliance |
+| **Reprepro**             | ⚠️ (manual) | ✅          | ⚠️ (manual)       | ❌      | ❌   | Scăzută        | Simplu și stabil pentru mirror local, dar fără versionare automată                       |
+| **apt-mirror2**          | ⚠️ (manual) | ✅          | ⚠️ (manual)       | ❌      | ❌   | Scăzută        | Excelent pentru mirror-uri Debian/Ubuntu automate, fără snapshot                         |
+| **Repomanager**          | ⚠️ (manual) | ✅          | ✅                 | ✅      | ❌   | Scăzută        | UI simplu, dar fără funcții automate (mirror/snapshot)                                   |
+| **OpenRepo**             | ❌           | ❌          | ❌                 | ✅      | ❌   | Scăzută        | Potrivit doar pentru test/demo; proiect inactiv                                          |
+| **dpkg-scanpackages**    | ❌           | ❌          | ⚠️ (manual)       | ❌      | ❌   | Foarte scăzută | Utilitar minimalist pentru repo-uri mici, fără funcționalități automate                  |
+| **Nexus Repository OSS** | ⚠️ Limitat  | ⚠️ Limitat | ❌                 | ✅      | ✅   | Medie          | Suport `.deb` doar în versiunea comercială; nealiniat cerinței open-source               |
+
+
+# Soluțiile-propuse:
+| Criteriu                  | **Aptly**                                                    | **Pulp 3 + pulp_deb**                                           | **Foreman + Katello**                                                         | **Repomanager**                                       | **Uyuni**                                                                    |
+| ------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **Compatibilitate**       | Exclusiv `.deb` (Debian/Ubuntu)                              | Multi-format (`.deb`, `.rpm`, `docker`, `python`, `file`, etc.) | Multi-format prin Pulp (deb, rpm, docker, puppet, iso)                        | `.deb` și `.rpm` (mirror + upload)                    | Multi-distro (SUSE, Red Hat-like, Debian/Ubuntu, Alma/Rocky)                 |
+| **Structură internă**     | Fără baze de date externe; stocare pe disc + metadate locale | Necesită PostgreSQL + Redis + servicii (API, content, workers)  | Suită complexă: Foreman, Katello, Pulp, Candlepin, PostgreSQL, Redis, Dynflow | Python + Django (SQLite implicit, ușor de configurat) | Arhitectură completă: Uyuni Server + Pulp backend + Salt Master + PostgreSQL |
+| **API**                   | REST API simplu (`aptly api serve`) – JSON                   | REST API complet (`/api/v3/`) + OpenAPI/SDK                     | Foreman/Katello REST API (v2)                                                 | API intern limitat                                    | REST API + Salt API complet                                                  |
+| **Interfață web**         | CLI și API only                                              | UI web modern integrat                                          | UI web enterprise complet (lifecycle, hosts, content)                         | UI web simplă și intuitivă                            | UI web complet + dashboard + Salt integration                                |
+| **Mirror și sync**        | `aptly mirror create/update`                                 | `pulp deb sync` din `Remote`                                    | Sync Plans în Katello (mirror programat)                                      | Creare mirror `.deb` și `.rpm` direct din UI          | Sync/mirror automat prin „Software Channels”                                 |
+| **Snapshot / versionare** | `aptly snapshot create`                                      | Repository Versions (automat la fiecare sync)                   | Content View Versions (publish/promote)                                       | Manual (fără versionare automată)                     | Content Lifecycle Management (versionare automată și promovare)              |
+| **Migrare Test → Prod**   | `snapshot pull` / `publish switch`                           | `distribution update` (promovare instantă)                      | Promovare Content View între Lifecycle Environments                           | Prin *Environments* (preprod, prod) – manual          | Promovare între medii (Dev → Test → Prod) prin Content Lifecycle             |
+| **Semnare GPG**           | Nativ, manual                                                | Prin pluginul `pulp_deb_signing`                                | Suport GPG integrat în Katello                                                | GPG integrat (configurabil în UI)                     | Semnare GPG + audit OpenSCAP integrat                                        |
+| **Scalabilitate**         | Bună pe un singur server                                     | Ridicată (multi-node, workers paralele)                         | Ridicată (multi-node; integrare cu hosts)                                     | Potrivit pentru medii mici și medii de testare        | Ridicată (multi-node, Salt-managed clients)                                  |
+| **Performanță**           | Excelentă pentru repo-uri mici/medii                         | Foarte bună la scară mare                                       | Foarte bună la scară mare                                                     | Bună pentru câteva mii de pachete                     | Foarte bună; permite mii de clienți gestionați simultan                      |
+| **Resurse necesare**      | Minime (RAM 512 MB+, CPU 1–2)                                | Mari (RAM 4–8 GB+, PostgreSQL, Redis)                           | Mari (RAM 8–16 GB+, mai multe servicii)                                       | Reduse (RAM 512 MB–2 GB, fără baze externe)           | Mari (RAM 8–16 GB+, PostgreSQL, Salt, Pulp)                                  |
+| **Ușurință de instalare** | Simplu (`apt install aptly` sau Docker)                      | Complex (Ansible Installer / Docker Compose)                    | Complex (`foreman-installer --scenario katello`)                              | Ușor (Python + Django / Docker Compose)               | Complex (Uyuni Server + Proxy + Clients setup)                               |
+| **Administrare**          | Ușor de automatizat (CLI/API)                                | Necesită configurare DevOps completă                            | Necesită operare enterprise                                                   | Simplu, orientat pe UI; automatizări limitate         | Automatizare completă prin Salt + UI                                         |
+| **Licență**               | MIT                                                          | GPLv2                                                           | GPLv3                                                                         | GPLv3                                                 | GPLv2 (SUSE open-source)                                                     |
+| **Comunitate & suport**   | Comunitate Debian activă                                     | Pulp Project & Red Hat community                                | Foreman/Katello community (enterprise)                                        | Comunitate mică, activitate redusă                    | Comunitate activă (SUSE + open-source contributors)                          |
 
 ## Concluzie:
 Combinația Aptly + Repomanager oferă o soluție open-source completă pentru gestionarea repository-urilor .deb, îmbinând robustețea și funcțiile avansate ale Aptly (mirror, snapshot, migrare Test/Prod) cu interfața web și administrarea centralizată oferită de Repomanager.
