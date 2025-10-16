@@ -197,10 +197,10 @@
 | **Snapshot / freeze**           | Nu are sistem intern de snapshot; se pot face manual prin copierea directorului | `cp -r /var/spool/apt-mirror2 /backup/2025-10-13`            |
 | **Migrare între medii**         | Posibilă prin separarea mirror-urilor (ex. Test/Prod)                           | Structuri diferite `/mirror/test` și `/mirror/prod`          |
 | **Interfață web / API**         | Nu are interfață web sau API                                                    | —                                                            |
-| **Semnare GPG**                 | Repo-ul copiat păstrează semnăturile originale                                  | ✅ Da, semnăturile upstream sunt păstrate                     |
-| **Performanță / scalabilitate** | Foarte bună pentru mirror-uri mari (suport pentru delta, rsync, multithreading) | ✅                                                            |
+| **Semnare GPG**                 | Repo-ul copiat păstrează semnăturile originale                                  | Da, semnăturile upstream sunt păstrate                     |
+| **Performanță / scalabilitate** | Foarte bună pentru mirror-uri mari (suport pentru delta, rsync, multithreading) | Performanta buna                                                          |
 | **Ușurință de instalare**       | Simplă (pip/apt + configurare YAML)                                             | `pip install apt-mirror2`                                    |
-| **Licență**                     | GPLv2 (open-source)                                                             | ✅ Gratuit                                                    |
+| **Licență**                     | GPLv2 (open-source)                                                             | Gratuit                                                    |
 
 ### Puncte tari:
 
@@ -222,11 +222,9 @@
 Nexus Repository OSS NU îndeplinește cerințele proiectului, deoarece cerința principală este o soluție open-source și gratuită cu suport complet pentru pachete `.deb`.
 # [Spacewalk] (software) 
 Spacewalk nu mai este întreținut oficial — proiectul a fost oprit pe 31 mai 2020.
-
 # JFrog Artifactory OSS (Open-Source Edition)
 Funcționalitatea este puternic limitată față de versiunile comerciale (Pro / Enterprise).
-
-# [Uyuni]()
+# [Uyuni](https://www.uyuni-project.org/)
 ### Cerințele:
 | Criteriu                   | Descriere                                                                                                               | Exemplu                                                                                |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
@@ -253,7 +251,6 @@ Puncte slabe:
     Funcționalitatea variază pe distribuții (unele capabilități sunt „basic/advanced” sau indisponibile în funcție de client).
     Monitoring server suportat oficial pe SUSE/openSUSE, ceea ce poate impune preferințe de platformă pentru stack-ul de monitorizare.
     Curba de învățare ridicată: integrarea Salt + lifecycle + auditing + monitoring e puternică, dar necesită timp de adopție (comparativ cu unelte „repo-only”).
-
 # Concluzie generală
 | Soluție                  | Snapshot    | Mirror     | Migrare Test/Prod | Web UI | API | Complexitate   | Recomandare                                                                              |
 | ------------------------ | ----------- | ---------- | ----------------- | ------ | --- | -------------- | ---------------------------------------------------------------------------------------- |
