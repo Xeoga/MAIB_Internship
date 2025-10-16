@@ -231,23 +231,24 @@ Nexus Repository OSS NU îndeplinește cerințele proiectului, deoarece cerința
 | **dpkg-scanpackages**    | ❌           | ❌          | ⚠️ (manual)       | ❌      | ❌   | Foarte scăzută | Utilitar minimalist pentru repo-uri mici, fără funcționalități automate    |
 | **Nexus Repository OSS** | ⚠️ Limitat  | ⚠️ Limitat | ❌                 | ✅      | ✅   | Medie          | Suport `.deb` doar în versiunea comercială; nealiniat cerinței open-source |
 # Soluțiile-propuse:
-| Criteriu | **Aptly** | **Pulp 3 + pulp_deb** | **Foreman + Katello** |
-|-----------|------------|----------------------|-----------------------|
-| **Compatibilitate** | Exclusiv `.deb` (Debian/Ubuntu) | Multi-format (`.deb`, `.rpm`, `docker`, `python`, `file`, etc.) | Multi-format prin Pulp (deb, rpm, docker, puppet, iso) |
-| **Structură internă** | Fără baze de date externe; stocare pe disc + metadate locale | Necesită PostgreSQL + Redis + servicii (API, content, workers) | Suită complexă: Foreman, Katello, Pulp, Candlepin, PostgreSQL, Redis, Dynflow |
-| **API** | REST API simplu (`aptly api serve`) – JSON | REST API complet (`/api/v3/`) + OpenAPI/SDK | Foreman/Katello REST API (v2) |
-| **Interfață web** | Nu are (CLI și API only) | UI web modern integrat | UI web enterprise complet (lifecycle, hosts, content) |
-| **Mirror și sync** | `aptly mirror create/update` | `pulp deb sync` din `Remote` | Sync Plans în Katello (mirror programat) |
-| **Snapshot / versionare** | `aptly snapshot create` | Repository Versions (automat la fiecare sync) | Content View Versions (publish/promote) |
-| **Migrare Test → Prod** | `snapshot pull` / `publish switch` | `distribution update` (promovare instantă) | Promovare Content View între Lifecycle Environments (Dev→Test→Prod) |
-| **Semnare GPG** | Nativ, manual | Prin pluginul `pulp_deb_signing` | Suport GPG integrat în Katello |
-| **Scalabilitate** | Bună pe un singur server | Ridicată (multi-node, workers paralele) | Ridicată (multi-node; integrare cu management de hosts) |
-| **Performanță** | Excelentă pentru repo-uri mici/medii | Foarte bună la scară mare | Foarte bună la scară mare, cu overhead operațional |
-| **Resurse necesare** | Minime (RAM 512 MB+, CPU 1–2) | Mari (PostgreSQL + Redis + workers → RAM 4–8 GB+) | Mari (mai multe servicii → RAM 8–16 GB+) |
-| **Ușurință de instalare** | Simplu (`apt install aptly` sau Docker) | Complex (Ansible Installer / Docker Compose) | Complex (`foreman-installer --scenario katello`) |
-| **Administrare** | Ușor de automatizat (CLI/API) | Necesită configurare DevOps completă | Necesită operare enterprise (provisioning + content lifecycle) |
-| **Licență** | MIT | GPLv2 | GPLv3 (Foreman/Katello) |
-| **Comunitate & suport** | Comunitate Debian activă | Pulp Project & Red Hat community | Foreman/Katello community (orientat enterprise) |
+| Criteriu                  | **Aptly**                                                    | **Pulp 3 + pulp_deb**                                           | **Foreman + Katello**                                                         | **Repomanager**                                       |
+| ------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- |
+| **Compatibilitate**       | Exclusiv `.deb` (Debian/Ubuntu)                              | Multi-format (`.deb`, `.rpm`, `docker`, `python`, `file`, etc.) | Multi-format prin Pulp (deb, rpm, docker, puppet, iso)                        | `.deb` și `.rpm` (mirror + upload)                    |
+| **Structură internă**     | Fără baze de date externe; stocare pe disc + metadate locale | Necesită PostgreSQL + Redis + servicii (API, content, workers)  | Suită complexă: Foreman, Katello, Pulp, Candlepin, PostgreSQL, Redis, Dynflow | Python + Django (SQLite implicit, ușor de configurat) |
+| **API**                   | REST API simplu (`aptly api serve`) – JSON                   | REST API complet (`/api/v3/`) + OpenAPI/SDK                     | Foreman/Katello REST API (v2)                                                 | API intern limitat (fără documentație REST completă)  |
+| **Interfață web**         | CLI și API only                                              | UI web modern integrat                                          | UI web enterprise complet (lifecycle, hosts, content)                         | UI web simplă și intuitivă                            |
+| **Mirror și sync**        | `aptly mirror create/update`                                 | `pulp deb sync` din `Remote`                                    | Sync Plans în Katello (mirror programat)                                      | Creare mirror `.deb` și `.rpm` direct din UI          |
+| **Snapshot / versionare** | `aptly snapshot create`                                      | Repository Versions (automat la fiecare sync)                   | Content View Versions (publish/promote)                                       | Manual (fără versionare automată)                     |
+| **Migrare Test → Prod**   | `snapshot pull` / `publish switch`                           | `distribution update` (promovare instantă)                      | Promovare Content View între Lifecycle Environments                           | Prin *Environments* (preprod, prod) – manual          |
+| **Semnare GPG**           | Nativ, manual                                                | Prin pluginul `pulp_deb_signing`                                | Suport GPG integrat în Katello                                                | GPG integrat (configurabil în UI)                     |
+| **Scalabilitate**         | Bună pe un singur server                                     | Ridicată (multi-node, workers paralele)                         | Ridicată (multi-node; integrare cu hosts)                                     | Potrivit pentru medii mici și medii de testare        |
+| **Performanță**           | Excelentă pentru repo-uri mici/medii                         | Foarte bună la scară mare                                       | Foarte bună la scară mare, cu overhead operațional                            | Bună pentru câteva mii de pachete                     |
+| **Resurse necesare**      | Minime (RAM 512 MB+, CPU 1–2)                                | Mari (RAM 4–8 GB+, PostgreSQL, Redis)                           | Mari (RAM 8–16 GB+, mai multe servicii)                                       | Reduse (RAM 512 MB–2 GB, fără baze externe)           |
+| **Ușurință de instalare** | Simplu (`apt install aptly` sau Docker)                      | Complex (Ansible Installer / Docker Compose)                    | Complex (`foreman-installer --scenario katello`)                              | Ușor (Python + Django / Docker Compose)               |
+| **Administrare**          | Ușor de automatizat (CLI/API)                                | Necesită configurare DevOps completă                            | Necesită operare enterprise                                                   | Simplu, orientat pe UI; automatizări limitate         |
+| **Licență**               | MIT                                                          | GPLv2                                                           | GPLv3                                                                         | GPLv3                                                 |
+| **Comunitate & suport**   | Comunitate Debian activă                                     | Pulp Project & Red Hat community                                | Foreman/Katello community (enterprise)                                        | Comunitate mică, activitate redusă (GitHub)           |
+
 
 ## Concluzie:
 În urma analizei comparative, soluția Pulp 3 + pluginul pulp_deb este cea mai potrivită pentru implementarea unui sistem open-source și self-hosted de management al repozitoriilor .deb. Aceasta îndeplinește integral toate cerințele propuse.
