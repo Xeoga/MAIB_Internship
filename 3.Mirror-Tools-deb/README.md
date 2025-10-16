@@ -251,5 +251,4 @@ Nexus Repository OSS NU îndeplinește cerințele proiectului, deoarece cerința
 
 
 ## Concluzie:
-În urma analizei comparative, soluția Pulp 3 + pluginul pulp_deb este cea mai potrivită pentru implementarea unui sistem open-source și self-hosted de management al repozitoriilor .deb. Aceasta îndeplinește integral toate cerințele propuse.
-Prin urmare, Pulp 3 + pulp_deb reprezintă o platformă extensibilă, stabilă și enterprise-ready, capabilă să asigure gestionarea completă a ciclului de viață al unui repository Debian: de la mirror și snapshot până la promovare între medii.
+Combinația Aptly + Repomanager oferă o soluție open-source completă pentru gestionarea repository-urilor .deb, îmbinând robustețea și funcțiile avansate ale Aptly (mirror, snapshot, migrare Test/Prod) cu interfața web și administrarea centralizată oferită de Repomanager.
