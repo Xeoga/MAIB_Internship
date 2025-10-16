@@ -96,19 +96,18 @@ volumes:
  filebeat_var:
 ```
 In cazul acesta toate 3 (`manager/index/dashboard`)componente o sa fie instalate pe un host in cazul meu pe local host
-
-
-1. Update pe VM
+Acum tot ce trebuie este sa rulam `docker-compose`:
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo docker-compose up 
 ```
-1. Descarcă și instalează agentul
-(Pentru Wazuh v4.12, ca managerul tău.)
+
+Descarcă și instalează agentul
+(Pentru Wazuh v4.12)
 ```bash
 curl -sO https://packages.wazuh.com/4.12/wazuh-agent-4.12.0.deb
 sudo dpkg -i ./wazuh-agent-4.12.0.deb
 ```
-3. Configurează managerul (IP-ul unde rulează Wazuh Manager)
+Configurează managerul (IP-ul unde rulează Wazuh Manager)
 Editează fișierul:
 ```bash
 sudo nano /var/ossec/etc/ossec.conf
@@ -116,35 +115,31 @@ sudo nano /var/ossec/etc/ossec.conf
 Caută secțiunea `<client>` și schimbă linia:
 `<address>127.0.0.1</address>`
 pune acolo IP-ul mașinii unde rulează Wazuh Manager (dacă VM și managerul sunt pe același host → lasă 127.0.0.1).
-4. Activează și pornește agentul
-```
+Activează și pornește agentul
+```bash
 sudo systemctl enable wazuh-agent
 sudo systemctl start wazuh-agent
 ```
-5. Verifică status
+Verifică status
 ```bash
 sudo systemctl status wazuh-agent
 ```
 
-Trebuie să fie active (running).
-🔹 În Wazuh Dashboard
-    Intră pe https://127.0.0.1 (sau IP-ul serverului cu Docker).
-    Mergi la Agents → Agent enrollment.
-    Vei vedea agentul Ubuntu cu „Pending”.
-    Acceptă-l și după câteva minute vei primi primele loguri.
-🔹 Cum rezolvi (instalare corectă agent Wazuh pe Ubuntu)
-    Mai întâi, adaugă repository-ul oficial Wazuh și cheia GPG:
-    
+```bash
 curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | sudo apt-key add -
 echo "deb https://packages.wazuh.com/4.x/apt/ stable main" | sudo tee /etc/apt/sources.list.d/wazuh.list
 sudo apt update
-
-    Instalează agentul:
-
+```
+Instalează agentul:
+```bash
 sudo apt install wazuh-agent -y
-    Configurează agentul să trimită logurile la manager (IP-ul unde rulează Wazuh Manager în Docker):
+```
+Configurează agentul să trimită logurile la manager (IP-ul unde rulează Wazuh Manager în Docker):
+```bash
 sudo nano /var/ossec/etc/ossec.conf
+```
 Schimbă secțiunea:
+```yml
 <client>
   <server>
     <address>IP_MANAGER</address>
@@ -152,31 +147,31 @@ Schimbă secțiunea:
     <protocol>tcp</protocol>
   </server>
 </client>
+```
 
-👉 Pune în <address> IP-ul unde rulează managerul Wazuh. Dacă agentul și managerul sunt pe aceeași mașină, lasă 127.0.0.1.
-
-    Activează și pornește serviciul:
-
+```bash
 sudo systemctl daemon-reexec
 sudo systemctl enable wazuh-agent
 sudo systemctl start wazuh-agent
-
-    Verifică statusul:
-
+```
+Verifică statusul:
+```bash
 sudo systemctl status wazuh-agent
-Dacă vrei totuși să instalezi manual cu .deb, link-ul corect pentru Ubuntu 20.04 (amd64) e acesta:
+```
 
+Dacă vrei totuși să instalezi manual cu .deb, link-ul corect pentru Ubuntu 20.04 (amd64) e acesta:
+```bash
 curl -O https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.12.0-1_amd64.deb
 sudo dpkg -i wazuh-agent_4.12.0-1_amd64.deb
-
+```
 
 Pentru a afla din care `docker-compose` se ruleaza 
-```
+```bash
 sudo docker inspect -f '{{ index .Config.Labels "com.docker.compose.project" }} {{ index .Config.Labels "com.docker.compose.project.config_files" }}' zabbix-traefik-1
 ```
 
 Pentrul ca sal stopam:
-```
+```bash
 sudo docker-compose down
 ```
 
