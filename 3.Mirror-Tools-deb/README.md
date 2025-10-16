@@ -230,13 +230,13 @@ Funcționalitatea este puternic limitată față de versiunile comerciale (Pro /
 ### Cerințele:
 | Criteriu                   | Descriere                                                                                                               | Exemplu                                                                                |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **Compatibilitate**        | Multi-distro: SLES/openSUSE, RHEL/Alma/Rocky/Oracle, Debian/Ubuntu, Amazon/Alibaba Linux (feature-set diferă pe distro) | Listele „Supported Clients and Features” din documentație. ([uyuni-project.org][1])    |
-| **Actualizare repo**       | Sync/mirror pe „software channels”, management patch-uri și pachete                                                     | „Automated patch and package management”. ([uyuni-project.org][2])                     |
-| **Snapshot / freeze**      | **Content Lifecycle Management**: versiunare, ajustare și testare înainte de producție                                  | „Content lifecycle management” (select, adjust, test → prod). ([uyuni-project.org][3]) |
-| **Migrare între medii**    | Publicare/promovare versiuni de conținut între medii (Dev→Test→Prod)                                                    | Flux de promovare în Content Lifecycle. ([uyuni-project.org][3])                       |
-| **Interfață web / API**    | UI web complet + API; serverul este **Salt master**                                                                     | FAQ: „server is a full Salt master”. ([uyuni-project.org][4])                          |
-| **Semnare / conformitate** | CVE audit + **OpenSCAP** pentru compliance                                                                              | „Auditing” + „System Security with OpenSCAP”. ([uyuni-project.org][5])                 |
-| **Monitoring**             | Integrare **Prometheus + Grafana** (prin formule Salt)                                                                  | Monitoring guide + formulas. ([uyuni-project.org][6])                                  |
+| **Compatibilitate**        | Multi-distro: SLES/openSUSE, RHEL/Alma/Rocky/Oracle, Debian/Ubuntu, Amazon/Alibaba Linux (feature-set diferă pe distro) | Listele „Supported Clients and Features” din documentație.   |
+| **Actualizare repo**       | Sync/mirror pe „software channels”, management patch-uri și pachete                                                     | „Automated patch and package management”.                  |
+| **Snapshot / freeze**      | **Content Lifecycle Management**: versiunare, ajustare și testare înainte de producție                                  | „Content lifecycle management” (select, adjust, test → prod).  |
+| **Migrare între medii**    | Publicare/promovare versiuni de conținut între medii (Dev→Test→Prod)                                                    | Flux de promovare în Content Lifecycle.                     |
+| **Interfață web / API**    | UI web complet + API; serverul este **Salt master**                                                                     | FAQ: „server is a full Salt master”.                         |
+| **Semnare / conformitate** | CVE audit + **OpenSCAP** pentru compliance                                                                              | „Auditing” + „System Security with OpenSCAP”.               |
+| **Monitoring**             | Integrare **Prometheus + Grafana** (prin formule Salt)                                                                  | Monitoring guide + formulas.                                   |
 | **Ușurință de instalare**  | Medie-ridicată; ecosistem complex (server + canale + proxy/clients)                                                     | Ghiduri 
 
 Puncte tari:
