@@ -13,7 +13,7 @@ Aici `172.22.0.2` este containerul cu `pulp` instalat:
 ~/.local/bin/pulp config create \
   --base-url http://172.22.0.2 \
   --username admin \
-  --password 'fn4chi9P'
+  --password 'password'
 ```
 
 Creem un repozitoriu:
@@ -42,7 +42,7 @@ curl -u admin:'PAROLA_TA' -H "Content-Type: application/json" \
 ```
 
 ```bash
-[root@8831ff65014d debs]# curl -u admin:'fn4chi9P' -H "Content-Type: application/json" \
+[root@8831ff65014d debs]# curl -u admin:'password' -H "Content-Type: application/json" \
   -d '{
         "repository": "/pulp/api/v3/repositories/deb/apt/0199f139-8f5d-7915-bb01-e80cb29ae9b9/",
         "simple": true
@@ -53,7 +53,7 @@ curl -u admin:'PAROLA_TA' -H "Content-Type: application/json" \
 
 
 ```bash
-curl -u admin:'fn4chi9P' -H "Content-Type: application/json" \
+curl -u admin:'password' -H "Content-Type: application/json" \
   -d "{
         \"name\": \"local-deb-distro\",
         \"base_path\": \"local/deb\",
@@ -95,4 +95,9 @@ Dupa 7 mii de incercari avem si repozitoriul nostru
     "publications/deb/verbatim": "http://127.0.0.1:8088/pulp/api/v3/publications/deb/verbatim/",
 ```
 
-
+## Snapsoturi:
+#TODO
+## Inghetarea repo:
+#TODO
+## Stable vs Testing
+#todo
