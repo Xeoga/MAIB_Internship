@@ -23,5 +23,5 @@ volumes:
   repomanager-repo:
 ```
 Rulam si intram pe interfata Web:
-![alt text](image.png)
+![alt text](repo_example.png)
 Avem repositories care sunt adaugate 2 tipuri `Mirror/Local` 
