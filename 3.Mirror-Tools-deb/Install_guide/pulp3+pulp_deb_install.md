@@ -142,10 +142,10 @@ TASK="/pulp/api/v3/tasks/0199f22f-34af-716b-984b-8b0831fa6ab2/"
 
 ```bash
 # vezi starea task-ului
-curl -u admin:'fn4chi9P' -sS "$BASE$TASK" | jq '{state, created_resources, error}'
+curl -u admin:'password' -sS "$BASE$TASK" | jq '{state, created_resources, error}'
 
 # când state = "completed", extrage resursele create (content + repository-version)
-curl -u admin:'fn4chi9P' -sS "$BASE$TASK" | jq -r '.created_resources[]'
+curl -u admin:'password' -sS "$BASE$TASK" | jq -r '.created_resources[]'
 ```
 
 ```bash
@@ -165,6 +165,8 @@ curl -u admin:'fn4chi9P' -sS "$BASE$TASK" | jq -r '.created_resources[]'
 #TODO
 ## Stable vs Testing
 #todo
+
+
 ## Probleme depistate:
 Principala problema la moment depistata este ca interfata grafica nu este disponibela pentru `.deb` 
 Incomoditatea dea lucru doar din consola + un stack plin de tehnologi

@@ -67,3 +67,37 @@ sudo systemctl status uyuni-server.service
 sudo journalctl -u uyuni-server -n 200
 ```
 
+
+
+## Add repo:
+![alt text](image.png)
+
+
+![alt text](image-1.png)
+
+
+![alt text](image-2.png)
+
+
+```
+http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=main&uyuni_arch=amd64
+http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=universe&uyuni_arch=amd64
+http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=restricted&uyuni_arch=amd64
+http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=multiverse&uyuni_arch=amd64
+```
+## Add this:
+```
+http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=restricted&uyuni_arch=amd64
+```
+
+![alt text](image-3.png)
+Snaphot:
+
+
+![alt text](image-4.png)
+Auto-update off:
+
+
+![alt text](image-5.png)
+3 versiuni de repo/chanal:
+
