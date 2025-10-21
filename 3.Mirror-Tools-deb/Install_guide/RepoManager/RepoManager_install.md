@@ -80,9 +80,12 @@ Se reatribuie mediul Prod la snapshotul anterior (folosind funcția Point enviro
 
 Astfel:
 
-  Mediul Prod revine instant la pachetele stabile testate anterior;
-  Nu este nevoie de reinstalări manuale;
-  Versiunile rămân complet controlabile și trasabile.
+    Mediul Prod revine instant la pachetele stabile testate anterior;
+
+    Nu este nevoie de reinstalări manuale;
+
+    Versiunile rămân complet controlabile și trasabile.
+    
 ![alt text](mirrot_repo.png)
 ## Verificare funcționare repository:
 Dupa ce am adaugat repoul acum avem si pachetele locale `apt update`:
