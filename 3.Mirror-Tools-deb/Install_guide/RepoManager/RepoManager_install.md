@@ -59,8 +59,7 @@ sudo docker-compose logs -f repomanager
 Acces UI: http://\<IP\>:8080 sau http://repomanager.local:8080
 
 Rulam si intram pe interfata Web:
-![alt text](repo_example.png)
-Avem repositories care sunt adaugate 2 tipuri `Mirror/Local` 
+![alt text](repo_example.png) 
 
 Dupa ce am facut sync la toate pachetele avem urmatoare logica.
 Flux logic de actualizare și promovare:
@@ -85,7 +84,7 @@ Astfel:
     Nu este nevoie de reinstalări manuale;
 
     Versiunile rămân complet controlabile și trasabile.
-    
+
 ![alt text](mirrot_repo.png)
 ## Verificare funcționare repository:
 Dupa ce am adaugat repoul acum avem si pachetele locale `apt update`:
@@ -94,3 +93,6 @@ root@ubuntu2004:/home/ubuntu# apt list -a acl
 Listing... Done
 acl/focal,now 2.2.53-6 amd64 [installed]
 ```
+
+# In 2 cuvinte:
+În fiecare zi mirrorul principal se actualizează → pachetele merg în Test → după 3 săptămâni fără erori sunt promovate în Prod → snapshoturile sunt păstrate 3 luni → dacă apare o problemă, se revine rapid la snapshotul anterior.

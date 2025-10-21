@@ -36,7 +36,9 @@ aptly serve -listen=":8080"
 aptly serve -listen="0.0.0.0:8080"
 ```
 Acesibil la lincul:
-```
+
 http://207.154.213.49:8080
 #Pachetul nginx (adaugat anterior)
 http://207.154.213.49:8080/pool/main/n/nginx/
+
+
