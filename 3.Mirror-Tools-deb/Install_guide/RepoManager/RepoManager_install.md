@@ -63,11 +63,15 @@ Rulam si intram pe interfata Web:
 Avem repositories care sunt adaugate 2 tipuri `Mirror/Local` 
 
 Dupa ce am facut sync la toate pachetele avem urmatoare logica.
-Flux logic de actualizare și promovare
+Flux logic de actualizare și promovare:
 Update zilnic: Mirror-ul principal (main mirror) se actualizează zilnic cu ultimele pachete din sursa upstream (ex: archive.ubuntu.com).
+
 Testare: După fiecare update, noile pachete sunt publicate automat în mediul Test, unde se efectuează testarea pe serverele de test.
+
 Perioadă de validare: Se menține o perioadă de observație de aproximativ 3 săptămâni. Dacă în acest interval nu apar erori, conflicte sau vulnerabilități, snapshotul curent este promovat în Prod.
+
 Promovare în Prod: După validare, același snapshot testat este setat ca activ pentru mediul de producție (Prod), fără a reface update-ul.
+
 Politică de retenție: Snapshoturile utile (Test/Prod) se păstrează pentru o perioadă de minimum 3 luni. Această arhivare permite rollback rapid în caz de probleme.
 
 Rollback și protecție
@@ -75,6 +79,7 @@ Dacă după promovare este descoperită o problemă majoră (ex: vulnerabilitate
 Se reatribuie mediul Prod la snapshotul anterior (folosind funcția Point environment → Prod).
 
 Astfel:
+
   Mediul Prod revine instant la pachetele stabile testate anterior;
   Nu este nevoie de reinstalări manuale;
   Versiunile rămân complet controlabile și trasabile.
