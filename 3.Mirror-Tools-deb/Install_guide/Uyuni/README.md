@@ -97,3 +97,7 @@ Auto-update off:
 
 3 versiuni de repo/chanal:
 ![alt text](3_repo_test_prod.png)
+
+## Concluzie:
+Din motivul că acest instrument necesită un sistem specific — openSUSE Leap Micro — și are o arhitectură containerizată complexă, utilizarea lui nu este rațională pentru mediile noastre standard.
+

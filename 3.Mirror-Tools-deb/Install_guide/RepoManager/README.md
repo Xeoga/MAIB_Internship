@@ -94,3 +94,4 @@ acl/focal,now 2.2.53-6 amd64 [installed]
 # In 2 cuvinte:
 În fiecare zi mirrorul principal se actualizează → pachetele merg în Test → după 3 săptămâni fără erori sunt promovate în Prod → snapshoturile sunt păstrate 3 luni → dacă apare o problemă, se revine rapid la snapshotul anterior.
 ![alt text](life_cycling.png)
+

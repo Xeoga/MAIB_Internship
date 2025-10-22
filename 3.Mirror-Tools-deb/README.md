@@ -6,6 +6,7 @@
 - [dpkg-scanpackages](#dpkg-scanpackages)
 - [Repomanager](#repomanager)
     - [Repomanager guide](Install_guide/RepoManager/README.md)
+    - [Repomanager Testing](Install_guide/RepoManager/Real_testing.md)
 - [Foreman + Katello](#foreman--katello)
     - [Foreman + Katello guide](Install_guide/Foreman+Katello%20/README.md)
 - [OpenRepo](#openrepo)
