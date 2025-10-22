@@ -7,4 +7,6 @@
 | **Stocare**       | Discuri / partiții                      | – „/var/lib/pulp” mare, 30 GB per sistem de operare sincronizat. :contentReference[oaicite:9]{index=9} <br>– „/var/spool/squid” poate crește cu zeci de GB. :contentReference[oaicite:10]{index=10} |
 | **RAM pentru instalare** | Memorie | Pentru instalare/elemente complexe necesar ~20 GB conform ghidului recent. :contentReference[oaicite:11]{index=11} |
 | **OS suportat**   | Sistemul de operare                    | EL8/EL9 (x86_64). :contentReference[oaicite:12]{index=12} |
-
+Din cauza consumului ridicat de resurse, s-a decis renunțarea la acest instrument.
+Deși este o soluție complexă și oferă funcționalități avansate, vom utiliza doar componenta dedicată gestionării depozitelor (repozitoriilor), iar restul funcționalităților nu se justifică din punct de vedere al eficienței.
+Prin urmare, instrumentul nu va fi inclus în implementarea finală.

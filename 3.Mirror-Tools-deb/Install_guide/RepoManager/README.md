@@ -22,7 +22,6 @@ Instrument: UI modern pentru gestionarea repository‑urilor DEB (mirroring, sna
 | **Install**              | Publică snapshotul pentru instalare prin APT             | Faci repo-ul accesibil la `http://repo.local/ubuntu`           |
 | **Delete**               | Șterge snapshotul sau repo-ul selectat                   | Elimini snapshoturile vechi pentru a elibera spațiu            |
 
-Snapshoturile nu dublează spațiul — conținutul DEB este deduplicat; snapshotul adaugă doar metadate.
 
 ## Instalare rapidă (Docker Compose)
 Configurația standard folosește o imagine publică și definește volume persistente pentru a stoca datele aplicației și pachetele repo.
@@ -80,9 +79,7 @@ Se reatribuie mediul Prod la snapshotul anterior (folosind funcția Point enviro
 Astfel:
 
     Mediul Prod revine instant la pachetele stabile testate anterior;
-
     Nu este nevoie de reinstalări manuale;
-
     Versiunile rămân complet controlabile și trasabile.
 
 ![alt text](mirrot_repo.png)
@@ -96,3 +93,4 @@ acl/focal,now 2.2.53-6 amd64 [installed]
 
 # In 2 cuvinte:
 În fiecare zi mirrorul principal se actualizează → pachetele merg în Test → după 3 săptămâni fără erori sunt promovate în Prod → snapshoturile sunt păstrate 3 luni → dacă apare o problemă, se revine rapid la snapshotul anterior.
+![alt text](life_cycling.png)

@@ -1,17 +1,24 @@
 # Lista de instrumente propuse/comparatia:
 - [aptly](#aptly)
+    - [aptly guide](Install_guide/aplty/README.md)
 - [pulp 3 + plugin pulp_deb](#pulp-3--plugin-pulp_deb)
+    - [pulp 3 + plugin pulp_deb guide](Install_guide/pulp3+pulp_deb/README.md)
 - [dpkg-scanpackages](#dpkg-scanpackages)
 - [Repomanager](#repomanager)
+    - [Repomanager guide](Install_guide/RepoManager/README.md)
 - [Foreman + Katello](#foreman--katello)
+    - [Foreman + Katello guide](Install_guide/Foreman+Katello%20/README.md)
 - [OpenRepo](#openrepo)
 - [Reprepro](#reprepro)
 - [apt-mirror2](#apt-mirror2)
 - [Nexus Repository OSS](#nexus-repository-oss) (Open Source) / Community Edition
 - [Spacewalk](#spacewalk-software)
 - [Uyuni](#uyuni)
+    - [Uyuni guide](Install_guide/Uyuni/README.md)
 - [Comararea Instrumentelor](#concluzie-generală)
 - [Solutia Propusa](#soluțiile-propuse)
+
+---
 
 # [aptly](https://www.aptly.info/)
 
@@ -264,7 +271,6 @@ Puncte slabe:
 | **OpenRepo**             | ❌           | ❌          | ❌                 | ✅      | ❌   | Scăzută        | Potrivit doar pentru test/demo; proiect inactiv                                          |
 | **dpkg-scanpackages**    | ❌           | ❌          | ⚠️ (manual)       | ❌      | ❌   | Foarte scăzută | Utilitar minimalist pentru repo-uri mici, fără funcționalități automate                  |
 | **Nexus Repository OSS** | ⚠️ Limitat  | ⚠️ Limitat | ❌                 | ✅      | ✅   | Medie          | Suport `.deb` doar în versiunea comercială; nealiniat cerinței open-source               |
-
 
 # Soluțiile-propuse:
 | Criteriu                  | **Aptly**                                                    | **Pulp 3 + pulp_deb**                                           | **Foreman + Katello**                                                         | **Repomanager**                                       | **Uyuni**                                                                    |

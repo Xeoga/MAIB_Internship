@@ -12,7 +12,7 @@
 Instalare completă Uyuni Server (Containerized) pe openSUSE Leap Micro 6.2
 cu podman, mgradm, mgrctl, și repository local creat ulterior.
 
-## 1. Instalează pachetele de bază
+## Instalează pachetele de bază
 Pe Leap Micro nu ai zypper clasic complet, deci se folosesc transactional updates:
 ```
 # Deschide o sesiune transactională
@@ -35,7 +35,7 @@ sudo reboot
 
 ```
 
-## 2 Configurare hostname și hosts
+## Configurare hostname și hosts
 
 Uyuni necesită un hostname static (FQDN):
 ```
@@ -43,7 +43,7 @@ sudo hostnamectl set-hostname uyuni.local
 echo "172.16.49.135 uyuni.local uyuni" | sudo tee -a /etc/hosts
 ```
 
-## 3 Instalează Uyuni Server (containerizat)
+## Instalează Uyuni Server (containerizat)
 
 După reboot, rulează:
 ```
@@ -70,34 +70,30 @@ sudo journalctl -u uyuni-server -n 200
 
 
 ## Add repo:
-![alt text](image.png)
-
-
-![alt text](image-1.png)
-
-
-![alt text](image-2.png)
-
-
+Aici este un exemplu de adaugare de repo:
+![alt text](add_repo.png)
+Unele `URL` penntru a face testul de `Mirror`:
 ```
 http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=main&uyuni_arch=amd64
 http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=universe&uyuni_arch=amd64
 http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=restricted&uyuni_arch=amd64
 http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=multiverse&uyuni_arch=amd64
 ```
+Adaugarea unui chanal in el sunt mai multe repository adaugarea unui chanal:
+![alt text](channel_add.png)
+Synhronizarea pachetelelor `Mirror` la repo:
+![alt text](sync_repo.png)
+
 ## Add this:
 ```
 http://archive.ubuntu.com/ubuntu/?uyuni_suite=jammy&uyuni_component=restricted&uyuni_arch=amd64
 ```
+In felul dat putem face un snaphot pentru a ingheta versiunele la pachete:
+![alt text](clone_repo-snapshot.png)
 
-![alt text](image-3.png)
-Snaphot:
-
-
-![alt text](image-4.png)
+Este important din `Channel` sa scoatem repo sa nu se faca auto-update:
 Auto-update off:
+![alt text](auto_update.png)
 
-
-![alt text](image-5.png)
 3 versiuni de repo/chanal:
-
+![alt text](3_repo_test_prod.png)
