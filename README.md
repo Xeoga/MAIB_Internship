@@ -1,13 +1,14 @@
 # <p align="center">🌐 MAIB Internship  </p>
+
 <p align="center">
-  <img src="maib_logo.png" alt="MAIB Internship" width="900"/>
+  <img src="maib_logo.png" alt="MAIB Internship" width="900"/><br>
+
+  <!-- Social / Platform badges -->
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-YourName-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/<YOUR-LINKEDIN-USERNAME>/)
+  [![TryHackMe](https://img.shields.io/badge/TryHackMe-<USERNAME>-8BC34A?logo=tryhackme&logoColor=white)](https://tryhackme.com/p/<USERNAME>)
+  [![HackTheBox](https://img.shields.io/badge/HackTheBox-<USERNAME>-7B61FF?logo=hackthebox&logoColor=white)](https://www.hackthebox.com/profile/<USERNAME>)
 </p>
 
-![Contributors](https://img.shields.io/github/contributors/<username>/<repository>?color=2ecc71)
-![Forks](https://img.shields.io/github/forks/<username>/<repository>?color=9b59b6)
-![Stargazers](https://img.shields.io/github/stars/<username>/<repository>?color=f1c40f)
-![Issues](https://img.shields.io/github/issues/<username>/<repository>?color=e74c3c)
-![License](https://img.shields.io/github/license/<username>/<repository>?color=3498db)
 
 ##  Module principale
 
