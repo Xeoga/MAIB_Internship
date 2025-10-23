@@ -1,10 +1,7 @@
 # Adaugarea unui mirror complet:
-In cazul meu am adaugat repo `ubuntu` cu pachetele `main`,`restricted`,`universe` pentru arhitectura `amd64` nu adaugam nici un envirement dar trebuie sal adaugam in groupul nostru:
+In cazul meu am adaugat repo `ubuntu` cu pachetele `main`,`restricted`,`universe` pentru arhitectura `amd64` nu adaugam nici un envirement dar trebuie sal adaugam in grupul nostru:
+
 ![alt text](new_repo_main+restricted+universe.png)
-
-
-
-
 
 Pachetele schimbate in snapshotul nou  de la data de (22-10-2025):
 ```bash
@@ -14,29 +11,20 @@ libnvidia-compute-440_440.82+really.440.64-0ubuntu6_amd64.deb
 ...
 ```
 
-Aici sunt volumele:
-```bash
-ls -la /var/lib/docker/volumes/repomanager_repomanager-repo/_data 
-```
-
 Avem urmatoarea logica:
-![alt text](image.png)
+![alt text](image-1.png)
 Aici 439Mb sunt ocupata de pachetele noi 
 
 
 Pe serverul de test avem urmatoarele surse:
 ```bash
-apt update
-Ign:1 http://172.22.0.5:8080/repo/deb/The_main_mirror/focal/restricted/Test focal InRelease
 Get:2 http://172.22.0.5:8080/repo/deb/The_main_mirror/focal/restricted/Test focal Release [3346 B]
 Get:3 http://172.22.0.5:8080/repo/deb/The_main_mirror/focal/restricted/Test focal Release.gpg [874 B]
-Get:4 http://172.22.0.5:8080/repo/deb/The_main_mirror/focal/restricted/Test focal/restricted amd64 Packages [45.8 kB]
-Fetched 50.0 kB in 0s (320 kB/s)     
+Get:4 http://172.22.0.5:8080/repo/deb/The_main_mirror/focal/restricted/Test focal/restricted amd64 Packages [45.8 kB]  
 ```
 
 Prod repo:
 ```bash
-apt update
 Ign:1 http://172.22.0.5:8080/repo/deb/The_main_mirror/focal/restricted/Prod focal InRelease
 Hit:2 http://172.22.0.5:8080/repo/deb/The_main_mirror/focal/restricted/Prod focal Release
 ```
@@ -93,3 +81,9 @@ Rularea:
 linupdate --mod-configure reposerver --agent-enable true
 ```
 
+
+
+Aici sunt volumele:
+```bash
+ls -la /var/lib/docker/volumes/repomanager_repomanager-repo/_data 
+```
