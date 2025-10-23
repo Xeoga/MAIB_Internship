@@ -4,9 +4,9 @@
   <img src="maib_logo.png" alt="MAIB Internship" width="900"/><br>
 
   <!-- Social / Platform badges -->
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-YourName-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/<YOUR-LINKEDIN-USERNAME>/)
-  [![TryHackMe](https://img.shields.io/badge/TryHackMe-<USERNAME>-8BC34A?logo=tryhackme&logoColor=white)](https://tryhackme.com/p/<USERNAME>)
-  [![HackTheBox](https://img.shields.io/badge/HackTheBox-<USERNAME>-7B61FF?logo=hackthebox&logoColor=white)](https://www.hackthebox.com/profile/<USERNAME>)
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-StanislavChirita-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/stanislav-chirita-0952401a5/)
+  [![TryHackMe](https://img.shields.io/badge/TryHackMe-xeoga.hito-8BC34A?logo=tryhackme&logoColor=white)](https://tryhackme.com/p/xeoga.hito)
+  [![HackTheBox](https://img.shields.io/badge/HackTheBox-KatLon-7B61FF?logo=hackthebox&logoColor=white)](https://app.hackthebox.com/profile/overview)
 </p>
 
 
