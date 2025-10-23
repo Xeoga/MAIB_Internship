@@ -3,6 +3,12 @@
   <img src="maib_logo.png" alt="MAIB Internship" width="900"/>
 </p>
 
+![Contributors](https://img.shields.io/github/contributors/<username>/<repository>?color=2ecc71)
+![Forks](https://img.shields.io/github/forks/<username>/<repository>?color=9b59b6)
+![Stargazers](https://img.shields.io/github/stars/<username>/<repository>?color=f1c40f)
+![Issues](https://img.shields.io/github/issues/<username>/<repository>?color=e74c3c)
+![License](https://img.shields.io/github/license/<username>/<repository>?color=3498db)
+
 ##  Module principale
 
 ###  Monitorizare și Securitate
@@ -13,7 +19,7 @@
 
 ---
 
-###  Network Protocols Stack
+###  [Network Protocols Stack](2.%20Network-Design-and-Simulation/README.md)
 Arhitectura rețelelor, rutare și protocoale fundamentale:  
 - [Static Routing](1.%20Network-Protocols-Stack/0.StaticalRouting/README.md)
 - [Spanning Tree Protocol (STP)](1.%20Network-Protocols-Stack/1.STP/README.md)
@@ -26,13 +32,13 @@ Arhitectura rețelelor, rutare și protocoale fundamentale:
 
 ---
 
-###  Network Design and Simulation
+###  [Network Design and Simulation](1.%20Network-Protocols-Stack/README.md)
 - [Documentația și topologia rețelei](2.%20Network-Design-and-Simulation/README.md)
 -  *Reteaua implementată (în lucru)*
 
 ---
 
-### Debian Repository Mirror Tools
+### [Debian Repository Mirror Tools](3.%20Debian-Repository-Mirror-Tools/README.md)
 Compararea și testarea soluțiilor pentru managementul local al pachetelor `.deb`  
 - [Ghid principal](3.%20Debian-Repository-Mirror-Tools/README.md)
 - **Install guides:**
