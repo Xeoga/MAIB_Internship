@@ -12,11 +12,8 @@
 
 ##  Module principale
 
-###  Monitorizare și Securitate
+###  Monitorizare
 - [Zabbix Monitoring and Alerts](0.%20Zabbix-Monitoring-and-Alerts/README.md)
-- [SIEM Platform Wazuh](0.1.%20SIEM-Platform-Wazuh/README.md)
-- [Secure VPN Server](0.2%20Secure-VPN-Server/README.md)
-- [Honeypot T-Pot Deployment](0.3%20Honeypot-T-Pot-Deployment/README.md)
 
 ---
 
