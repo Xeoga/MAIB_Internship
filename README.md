@@ -55,3 +55,52 @@ Proiecte individuale dezvoltate în cadrul internshipului:
 - [Honeypot T-Pot Deployment](0.3%20Honeypot-T-Pot-Deployment/README.md)
 
 ---
+
+### 👨‍🏫 Mentori
+
+<table border="0" style="border-collapse: collapse; border: none;">
+  <tr>
+    <td align="center" width="160">
+      <a href="https://www.linkedin.com/in/alex-cushnir-457a8a33/">
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQF1Dc3WBBnULw/profile-displayphoto-shrink_200_200/B4DZcwzBiCGwAc-/0/1748870371839?e=1762992000&v=beta&t=xVV8Ijjiq5o5SQGCzfixZNGPnilCmUfDA1H0AIr1Cc0"
+             width="90" height="90" style="border-radius:50%; border:2px solid #333;" alt="Alex Cushnir"/>
+        <br/><sub><b>Alex Cushnir</b></sub><br/><sub>💼 NOC Manager</sub>
+      </a>
+    </td>
+    <td align="center" width="160">
+      <a href="https://www.linkedin.com/in/mihail-cushnir-27551296/">
+        <img src="https://media.licdn.com/dms/image/v2/C4E03AQG5rejofPTK-w/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1516822322425?e=1762992000&v=beta&t=iTl_dtYA9tHt-GCte6xWU5NOc6HeCeMpBcH5_jxQ6N8"
+             width="90" height="90" style="border-radius:50%; border:2px solid #333;" alt="Mihail Cushnir"/>
+        <br/><sub><b>Mihail Cushnir</b></sub><br/><sub>🐧 Linux System Administrator</sub>
+      </a>
+    </td>
+    <td align="center" width="160">
+      <a href="https://www.linkedin.com/in/dumitru-ene-0298b556/">
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGnTggQW-fV5Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1685708348939?e=1762992000&v=beta&t=Nx7vZW8mpMTerwN09rrjcWaHmdRUa86HsOwymbAshuU"
+             width="90" height="90" style="border-radius:50%; border:2px solid #333;" alt="Dumitru Ene"/>
+        <br/><sub><b>Dumitru Ene</b></sub><br/><sub>🌐 Network Administrator</sub>
+      </a>
+    </td>
+    <td align="center" width="160">
+      <a href="https://www.linkedin.com/in/alexandr-hasnas-a921aaa9/">
+        <img src="https://media.licdn.com/dms/image/v2/C4E03AQHVtNltxLBjxg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1517527973250?e=1762992000&v=beta&t=lT4XzYZGzpaN5Z7C1LLLMyijOcdfsA0M_EA79Muvp2w"
+             width="90" height="90" style="border-radius:50%; border:2px solid #333;" alt="Alexandr Hasnaș"/>
+        <br/><sub><b>Alexandr Hasnaș</b></sub><br/><sub>🌐 Network Administrator</sub>
+      </a>
+    </td>
+    <td align="center" width="160">
+      <a href="https://www.linkedin.com/in/mihail-batiri-57ba188b/">
+        <img src="https://media.licdn.com/dms/image/v2/C4E03AQFje5EsWZnyNQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1659265853565?e=1762992000&v=beta&t=ZHGEaiadZdaW2DOA-Io_TeUAHVvizF87YcXbhlLpspQ"
+             width="90" height="90" style="border-radius:50%; border:2px solid #333;" alt="Mihail Batiri"/>
+        <br/><sub><b>Mihail Batiri</b></sub><br/><sub>⚙️ System Engineer</sub>
+      </a>
+    </td>
+    <td align="center" width="160">
+      <a href="https://www.linkedin.com/in/vladimir-petritchi/">
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGCLl8ot8T8Ag/profile-displayphoto-shrink_200_200/B4DZWL8.szH4AY-/0/1741809775379?e=1762992000&v=beta&t=kQC93RSs6mFiQl0dxj0ZYrmd1wyHFG_MF5NTYgsG3yA"
+             width="90" height="90" style="border-radius:50%; border:2px solid #333;" alt="Vladimir Petritchi"/>
+        <br/><sub><b>Vladimir Petritchi</b></sub><br/><sub>🪟 Windows System Administrator</sub>
+      </a>
+    </td>
+  </tr>
+</table>
