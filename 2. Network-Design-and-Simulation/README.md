@@ -83,27 +83,31 @@ CiscoSwitchL3-1               CiscoSwitchL3-2
      e2/15  ======================  e2/15
 
             Port-Channel1 (L3)
-            192.168.10.1/30  <-->  192.168.10.2/30
+     192.168.10.1/30  <-->  192.168.10.2/30
 ```
 ### Configuratia: 
+#TODO
+
 
 ## Activam SNMP pe routere:
+Pentru a adauga un dispozitiv de retea in **zabbix** avem nevoie sa activam serviciul de SNMP pe acesta.
 ```bash
 snmp-server community public RO
 snmp-server location "R1 edge"
 snmp-server contact "stas@i9t24.online"
 ```
-
+Pentru a adauga rutele statice folosim pentru a avea conexiune cu dispozitivele din **GNS3**.
 ```bash
 sudo ip route add 192.168.1.0/30 via 172.20.0.100
 sudo ip route add 192.168.1.4/30 via 172.20.0.100   # dacă ai link R3–R2
 ```
-
+Pentru a salva configurile pe Switch de L3 folosim urmatoare comanda nu si `wr mem`
 ```bash
 #Instand for wr mem:
 copy running-config startup-config
 ```
 
+#TODO add all config file from GNS3
 ```bash
 enable
 configure terminal
