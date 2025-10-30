@@ -1,41 +1,10 @@
-#TODO
-
-
-![alt text](network_schema.png)
-
+# Introducere
+Acest proiect reprezintă o simulare completă a unei infrastructuri de rețea enterprise, construită și testată în **GNS3**, cu integrarea unor servicii precum **OSPF, VLAN, Firewall ASA, SNMP Monitoring și Zabbix**.  
+Scopul este de a reproduce o rețea de tip **production-like environment** pentru analiză, testare și demonstrarea competențelor de administrare și securizare.
+## Arhitectura rețelei
 ![alt text](network_schema1.png)
-```bash
-            ┌──────────────┐
-            │     Core     │ ← R3
-            └──────┬───────┘
-            /       \
-    ┌───────┴───────┐  ┌────────┴────────┐
-    │ Distribution  │  │  Distribution   │ ← NX-OSvL3-1..5
-    └───────┬───────┘  └────────┬────────┘
-        Access (L2)         Access (L2)
-    ┌─────┴─────┐           ┌────┴────┐
-    PC1..PC8, Servers      Linux/Windows
-```
 
-## Activam SNMP pe routere:
-```bash
-snmp-server community public RO
-snmp-server location "R1 edge"
-snmp-server contact "stas@i9t24.online"
-```
-
-
-
-```bash
-sudo ip route add 192.168.1.0/30 via 172.20.0.100
-sudo ip route add 192.168.1.4/30 via 172.20.0.100   # dacă ai link R3–R2
-```
-
-```bash
-#Instand for wr mem:
-copy running-config startup-config
-```
-
+### Segmente de rețea
 | Legătură     | Rețea           | Dispozitive            | IP-uri                      |
 | ------------ | --------------- | ---------------------- | --------------------------- |
 | R1 ↔ L3-1    | 192.168.10.0/30 | R1–L3-1                | 192.168.10.1 / 192.168.10.2 |
@@ -48,15 +17,24 @@ copy running-config startup-config
 | VLAN 40      | 40.1.1.0/24     | PC7, PC8               | GW: 40.1.1.1                |
 | VLAN Servere | 172.20.0.0/16   | Linux, Windows, Zabbix | GW: 172.20.0.1              |
 
+## Configurație principală
+Routere (R1, R2, R3)
+- **Routing protocol:** OSPF (area 0)
+- **Addressing:** punct-la-punct /30 între routere
+- **Funcții suplimentare:** default route + redistribuire statică pentru segmentele interne
+
+
+## Tabel de configurare IP:
+🔹 Toate adresele sunt configurate manual (static) în cadrul unei scheme ierarhice — routerele interconectează segmentele /30 pentru uplink, iar switch-urile Layer 3 gestionează VLAN-urile și gateway-urile locale.
 | Dispozitiv                  | Interfață     | Adresă IP / Masca   | Rețea           | Conectat la           | Descriere                           |
 | --------------------------- | ------------- | ------------------- | --------------- | --------------------- | ----------------------------------- |
-| **R1 (Router utilizatori)** | e0/0          | 192.168.10.1 /30    | 192.168.10.0/30 | CiscoNX-OSvL3-1       | Legătură uplink VLAN-uri stânga     |
+| **R1 (Router Left sections)**        | e0/0          | 192.168.10.1 /30    | 192.168.10.0/30 | CiscoNX-OSvL3-1       | Legătură uplink VLAN-uri stânga     |
 |                             | e0/2          | 192.168.1.1 /30     | 192.168.1.0/30  | R3 g1/0               | Legătură OSPF spre R3               |
 |                             | —             | —                   | —               | —                     | Alte porturi neutilizate            |
-| **R3 (Router tranzit)**     | g1/0          | 192.168.1.2 /30     | 192.168.1.0/30  | R1 e0/2               | Link spre R1                        |
+| **R3 (Router Core)**        | g1/0          | 192.168.1.2 /30     | 192.168.1.0/30  | R1 e0/2               | Link spre R1                        |
 |                             | g2/0          | 192.168.1.5 /30     | 192.168.1.4/30  | R2 e0/0               | Link spre R2                        |
 |                             | g0/0          | 172.20.0.100 /16    | 172.20.0.0/16   | Cloud/Zabbix          | Conectare management                |
-| **R2 (Router servere)**     | e0/0          | 192.168.1.6 /30     | 192.168.1.4/30  | R3 g2/0               | Legătură spre R3                    |
+| **R2 (Router Right sections)**     | e0/0          | 192.168.1.6 /30     | 192.168.1.4/30  | R3 g2/0               | Legătură spre R3                    |
 |                             | e0/1          | —                   | —               | NX-OS L3-4            | Legătură VLAN 10 servere            |
 |                             | e0/2, e0/3    | —                   | —               | NX-OS L3-5            | Legături redundante                 |
 | **CiscoNX-OSvL3-1**         | e2/3          | 192.168.10.2 /30    | 192.168.10.0/30 | R1 e0/0               | Uplink spre R1                      |
@@ -81,3 +59,63 @@ copy running-config startup-config
 | **PC8**                     | e0            | 40.1.1.11 /24       | 40.1.1.0/24     | VLAN 40               | Client VLAN 40                      |
 | **PC9**                     | e0            | 172.20.0.30 /16     | 172.20.0.0/16   | VLAN 10 (dreapta)     | Client servere                      |
 | **Cloud1 (Zabbix)**         | br-8b1bacf1cbf    | 172.20.0.6 | 172.20.0.0/16   | VLAN 10 (dreapta)     | Conectare cloud/Zabbix monitorizare |
+
+
+![alt text](ether_channel.png)
+## L3 EtherChannel între Switch-uri Layer 3
+Descriere generală
+
+EtherChannel (numit și Port-Channel) este un mecanism de agregare a legăturilor fizice între dispozitive de rețea.
+Prin combinarea mai multor interfețe într-una logică unică, obținem:
+
+lățime de bandă sporită (traficul se distribuie pe toate legăturile),
+
+redundanță (dacă un cablu cade, legătura rămâne activă),
+
+gestionare simplificată (o singură interfață logică în loc de 4 separate).
+
+În această topologie, CiscoSwitchL3-1 și CiscoSwitchL3-2 sunt conectate printr-un EtherChannel de nivel 3, care transportă pachete IP fără VLAN-uri.
+
+```bash
+CiscoSwitchL3-1               CiscoSwitchL3-2
+     e2/13  ======================  e2/13
+     e2/14  ======================  e2/14
+     e2/15  ======================  e2/15
+
+            Port-Channel1 (L3)
+            192.168.10.1/30  <-->  192.168.10.2/30
+```
+### Configuratia: 
+
+## Activam SNMP pe routere:
+```bash
+snmp-server community public RO
+snmp-server location "R1 edge"
+snmp-server contact "stas@i9t24.online"
+```
+
+```bash
+sudo ip route add 192.168.1.0/30 via 172.20.0.100
+sudo ip route add 192.168.1.4/30 via 172.20.0.100   # dacă ai link R3–R2
+```
+
+```bash
+#Instand for wr mem:
+copy running-config startup-config
+```
+
+```bash
+enable
+configure terminal
+hostname CiscoSwitchL3-1
+
+# Activăm interfața către R1 (trunk / routed port)
+interface e2/3
+ no switchport
+ ip address 192.168.10.2 255.255.255.252
+ no shutdown
+
+# Verificare conectivitate
+exit
+ping 192.168.10.1
+```
