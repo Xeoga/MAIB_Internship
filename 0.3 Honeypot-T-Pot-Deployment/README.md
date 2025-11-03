@@ -1,0 +1,2 @@
+#TODO Instalarea de la 0 pana la 100 ce tip de honeypot sunt. Deploy pe Chuwi cela vechi dar trebuie de rezolvat problema cu power adapter la moment acesta este defect nu incarca :(
+    

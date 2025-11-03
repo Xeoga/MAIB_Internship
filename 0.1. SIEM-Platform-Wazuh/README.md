@@ -1,3 +1,5 @@
+#TODO deploy pe un host de la DigitalOceon la fel conectarea la VPN intro retea ca si celelante dispozitive
+
 1) Arhitectură (pe scurt)
 - **Wazuh Manager** — colectează/analizează evenimentele de la agenți, API pe 55000/tcp.
 - **Wazuh Indexer** (OpenSearch) — stochează datele.

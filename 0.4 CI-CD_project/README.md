@@ -1,0 +1,1 @@
+#TODO proiectul de pe gitlab trebuie sa fie pus pe VPN_Zabbix_Pro la acesta trebuie de installat agentul pentru deploy tot ce nimereste pe `main` in gitlab merge prin test la moment hz cum se face lucru dat :(.  Pe urma acesta se face deploy automat pe containerile serverului'
