@@ -1,5 +1,3 @@
-#TODO adaug mai multe dispozitive fac un dashboard pentru toate 
-
 # Zabbix dashboard and alert
 Pentru teste am pus un serviciul `zabbix` local prin **docker compose**.
 ### Adaugarea mapei de retea:
@@ -26,3 +24,4 @@ Acum trecem la crearea retelei de pentru infrastructura creata
 ### Adaugarea unui dashboard customezat 
 ![alt text](Dashboard.png)
 #TODO Arata uboga Acum arata tot uboga 
+#TODO adaug mai multe dispozitive fac un dashboard pentru toate 

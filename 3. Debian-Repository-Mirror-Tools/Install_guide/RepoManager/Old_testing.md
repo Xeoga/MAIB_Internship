@@ -1,7 +1,11 @@
 # Adaugarea unui mirror complet:
 In cazul meu am adaugat repo `ubuntu` cu pachetele `main`,`restricted`,`universe` pentru arhitectura `amd64` nu adaugam nici un envirement dar trebuie sal adaugam in grupul nostru:
 
-![alt text](new_repo_main+restricted+universe.png)
+[Docker-hub repo](https://hub.docker.com/r/lbr38/repomanager):
+
+<p align="center">
+  <img src="new_repo_main+restricted+universe.png" alt="Repo layout" width="600">
+</p>
 
 Pachetele schimbate in snapshotul nou  de la data de (22-10-2025):
 ```bash
@@ -36,13 +40,14 @@ Problema depistata este ca nu avem sursa la mirrorul principal deci nu o sa pute
 | **`ubuntu`**         | `http://archive.ubuntu.com/ubuntu`      | pentru majoritatea sistemelor curente (Desktop/Server standard)        | ✅ *Alege aceasta*                                                |
 | **`ubuntu-archive`** | `http://old-releases.ubuntu.com/ubuntu` | pentru versiuni **vechi (EOL)** care nu mai sunt pe archive.ubuntu.com | ❌ doar dacă faci mirror pentru versiuni vechi (ex: 16.04, 18.04) |
 
+| Componentă                               | Descriere                                                                 | Dimensiune aproximativă | Observații                                 |
+| ---------------------------------------- | ------------------------------------------------------------------------- | ----------------------- | ------------------------------------------ |
+| **main**                                 | pachetele libere principale (kernel, utilitare, librării etc.)            | ~20–25 GB               | Baza sistemului                            |
+| **security**                             | actualizări de securitate pentru *main* și *non-free*                     | ~3–5 GB                 | crește doar când apar patch-uri noi        |
+| **updates**                              | actualizări de pachete fără vulnerabilități (fixuri obișnuite)            | ~3–5 GB                 | similar cu security                        |
+| **non-free**                             | drivere, firmware, cod cu licență restrictivă (NVIDIA, firmware-uri etc.) | ~10–15 GB               | poate varia mult în funcție de arhitecturi |
+| **non-free-firmware** (nou în Debian 12) | firmware-uri separate                                                     | ~2–4 GB                 | opțional, dar util pentru hardware nou     |
 
-| Componentă     | Ce conține                                                                | Recomandare     | Dimensiune estimată |
-| -------------- | ------------------------------------------------------------------------- | --------------- | ------------------- |
-| **main**       | Pachete oficiale suportate de Canonical (kernel, apt, systemd, bash etc.) | ✅ *obligatoriu* | ~5–6 GB             |
-| **restricted** | Drivere cu licență restrânsă (ex. NVIDIA, firmware-uri)                   | ✅ *recomandat*  | ~2 GB               |
-| **universe**   | Pachete open-source întreținute de comunitate                             | ✅ *recomandat*  | ~20–25 GB           |
-| **multiverse** | Pachete cu restricții de licență (codecuri, multimedia, etc.)             | ⚙️ *opțional*   | ~5–8 GB             |
 
 
 ## Combinatie recomandată (completă):

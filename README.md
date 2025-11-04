@@ -1,13 +1,15 @@
 # <p align="center">🌐 MAIB Internship  </p>
 
 <p align="center">
-  <img src="maib_logo.png" alt="MAIB Internship" width="900"/><br>
+  <img src="src/img/maib_logo.png" alt="MAIB Internship" width="900"/><br>
 
   <!-- Social / Platform badges -->
   [![LinkedIn](https://img.shields.io/badge/LinkedIn-StanislavChirita-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/stanislav-chirita-0952401a5/)
   [![TryHackMe](https://img.shields.io/badge/TryHackMe-xeoga.hito-8BC34A?logo=tryhackme&logoColor=white)](https://tryhackme.com/p/xeoga.hito)
   [![HackTheBox](https://img.shields.io/badge/HackTheBox-KatLon-7B61FF?logo=hackthebox&logoColor=white)](https://app.hackthebox.com/profile/overview)
 </p>
+
+
 
 
 ##  Module principale
