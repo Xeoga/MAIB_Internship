@@ -7,102 +7,9 @@
 - **Wazuh Agent** — rulează pe endpoint-uri și trimite date la Manager.
 
 Acesta o sa fie instalat din `docker-compose` cu urmatoarele configurari:
-```yml
-# Wazuh App Copyright (C) 2017, Wazuh Inc. (License GPLv2)  
-version: '3.7'  
-  
-services:  
- wazuh.manager:  
-   build:  
-     context: wazuh-manager/  
-     args:  
-       WAZUH_VERSION: ${WAZUH_VERSION}  
-       WAZUH_TAG_REVISION: ${WAZUH_TAG_REVISION}  
-       FILEBEAT_TEMPLATE_BRANCH: ${FILEBEAT_TEMPLATE_BRANCH}  
-       WAZUH_FILEBEAT_MODULE: ${WAZUH_FILEBEAT_MODULE}  
-   image: wazuh/wazuh-manager:${WAZUH_IMAGE_VERSION}  
-   hostname: wazuh.manager  
-   restart: always  
-   ports:  
-     - "1514:1514"  
-     - "1515:1515"  
-     - "514:514/udp"  
-     - "55000:55000"  
-   environment:  
-     - INDEXER_URL=https://wazuh.indexer:9200  
-     - INDEXER_USERNAME=admin  
-     - INDEXER_PASSWORD=admin  
-     - FILEBEAT_SSL_VERIFICATION_MODE=none  
-   volumes:  
-     - wazuh_api_configuration:/var/ossec/api/configuration  
-     - wazuh_etc:/var/ossec/etc  
-     - wazuh_logs:/var/ossec/logs  
-     - wazuh_queue:/var/ossec/queue  
-     - wazuh_var_multigroups:/var/ossec/var/multigroups  
-     - wazuh_integrations:/var/ossec/integrations  
-     - wazuh_active_response:/var/ossec/active-response/bin  
-     - wazuh_agentless:/var/ossec/agentless  
-     - wazuh_wodles:/var/ossec/wodles  
-     - filebeat_etc:/etc/filebeat  
-     - filebeat_var:/var/lib/filebeat  
-  
- wazuh.indexer:  
-   build:  
-     context: wazuh-indexer/  
-     args:  
-       WAZUH_VERSION: ${WAZUH_VERSION}  
-       WAZUH_TAG_REVISION: ${WAZUH_TAG_REVISION}  
-   image: wazuh/wazuh-indexer:${WAZUH_IMAGE_VERSION}  
-   hostname: wazuh.indexer  
-   restart: always  
-   ports:  
-     - "9200:9200"  
-   environment:  
-     - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"  
-   ulimits:  
-     memlock:  
-       soft: -1  
-       hard: -1  
-     nofile:  
-       soft: 65536  
-       hard: 65536  
-  
- wazuh.dashboard:  
-   build:  
-     context: wazuh-dashboard/  
-     args:  
-       WAZUH_VERSION: ${WAZUH_VERSION}  
-       WAZUH_TAG_REVISION: ${WAZUH_TAG_REVISION}  
-       WAZUH_UI_REVISION: ${WAZUH_UI_REVISION}  
-   image: wazuh/wazuh-dashboard:${WAZUH_IMAGE_VERSION}  
-   hostname: wazuh.dashboard  
-   restart: always  
-   ports:  
-     - 443:443  
-   environment:  
-     - INDEXER_USERNAME=admin  
-     - INDEXER_PASSWORD=admin  
-     - SERVER_SSL_ENABLED=false  
-     - WAZUH_API_URL=https://wazuh.manager  
-   depends_on:  
-     - wazuh.indexer  
-   links:  
-     - wazuh.indexer:wazuh.indexer  
-     - wazuh.manager:wazuh.manager  
-  
-volumes:  
- wazuh_api_configuration:  
- wazuh_etc:  
- wazuh_logs:  
- wazuh_queue:  
- wazuh_var_multigroups:  
- wazuh_integrations:  
- wazuh_active_response:  
- wazuh_agentless:  
- wazuh_wodles:  
- filebeat_etc:  
- filebeat_var:
-```
+
+[👉 build-images.yml](./build-images.yml)
+
 2) Porturi implicite
 - **Manager:** 1514/tcp (event), 1515/tcp (enrollment), 55000/tcp (API), 514/udp (syslog, opțional)
 - **Indexer:** 9200/tcp
@@ -114,7 +21,7 @@ Acum tot ce trebuie este sa rulam `docker-compose`:
 ```bash
 sudo docker-compose up 
 ```
-
+## Install agent pe host:
 Descarcă și instalează agentul
 (Pentru Wazuh v4.12)
 ```bash
@@ -168,12 +75,12 @@ sudo systemctl daemon-reexec
 sudo systemctl enable wazuh-agent
 sudo systemctl start wazuh-agent
 ```
-Verifică statusul:
+Verificăm statusul:
 ```bash
 sudo systemctl status wazuh-agent
 ```
 
-Dacă vrei totuși să instalezi manual cu .deb, link-ul corect pentru Ubuntu 20.04 (amd64) e acesta:
+Dacă vrei totuși să instalezi manual cu .deb, link-ul corect pentru Ubuntu 20.04 (amd64):
 ```bash
 curl -O https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.12.0-1_amd64.deb
 sudo dpkg -i wazuh-agent_4.12.0-1_amd64.deb

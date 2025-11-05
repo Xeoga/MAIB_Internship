@@ -1,0 +1,46 @@
+version: "3.8"
+
+networks:
+  traefik-network:
+    external: true
+
+volumes:
+  rundeck_data:
+  rundeck_config:
+  rundeck_libext:
+
+services:
+  rundeck:
+    image: rundeck/rundeck:5.4.0
+    container_name: rundeck
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      RUNDECK_GRAILS_URL: "https://${RUNDECK_DOMAIN}"
+      RUNDECK_SERVER_ADDRESS: "0.0.0.0"
+      RUNDECK_SERVER_FORWARDED: "true"
+    networks:
+      - traefik-network
+    # Montează inventarul Ansible și cheia (RO) din host
+    volumes:
+      - rundeck_data:/home/rundeck/server/data
+      - rundeck_config:/home/rundeck/server/config
+      - rundeck_libext:/home/rundeck/libext
+      - /etc/ansible:/etc/ansible:ro
+      - /home/ansible/.ssh/id_ed25519:/home/rundeck/.ssh/id_ed25519:ro
+      - /home/ansible/.ssh/known_hosts:/home/rundeck/.ssh/known_hosts:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-network"
+
+      # Router HTTPS pe subdomeniu
+      - "traefik.http.routers.rundeck.rule=Host(`${RUNDECK_DOMAIN}`)"
+      - "traefik.http.routers.rundeck.entrypoints=websecure"
+      - "traefik.http.routers.rundeck.tls=true"
+      - "traefik.http.routers.rundeck.tls.certresolver=${CERT_RESOLVER}"
+
+      # Aplică middleware-ul definit în stack-ul Traefik (observă @docker)
+      - "traefik.http.routers.rundeck.middlewares=vpnonly@docker"
+
+      # Trimite traficul la portul intern al Rundeck
+      - "traefik.http.services.rundeck.loadbalancer.server.port=4440"
