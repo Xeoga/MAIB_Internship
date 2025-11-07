@@ -2,7 +2,7 @@
 Acest proiect reprezintă o simulare completă a unei infrastructuri de rețea enterprise, construită și testată în **GNS3**, cu integrarea unor servicii precum **OSPF, VLAN, Firewall ASA, SNMP Monitoring și Zabbix**.  
 Scopul este de a reproduce o rețea de tip **production-like environment** pentru analiză, testare și demonstrarea competențelor de administrare și securizare.
 ## Arhitectura rețelei
-![alt text](network_schema1.png)
+![alt text](../src/img/network_design_network_schema.png)
 
 ### Segmente de rețea
 | Legătură     | Rețea           | Dispozitive            | IP-uri                      |
@@ -61,7 +61,7 @@ Routere (R1, R2, R3)
 | **Cloud1 (Zabbix)**         | br-8b1bacf1cbf    | 172.20.0.6 | 172.20.0.0/16   | VLAN 10 (dreapta)     | Conectare cloud/Zabbix monitorizare |
 
 
-![alt text](ether_channel.png)
+![alt text](../src/img/network_design_ether_channel.png)
 ## L3 EtherChannel între Switch-uri Layer 3
 Descriere generală
 

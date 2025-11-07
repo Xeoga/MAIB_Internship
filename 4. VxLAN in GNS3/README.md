@@ -1,30 +1,54 @@
-VxLAN schema:
-![alt text](VxLAN_schema.png)
+# VxLAN:
+**VXLAN** (Virtual eXtensible LAN) -  VxLan supports 16,000,000 Layer 2 sergments
 
-![alt text](schema_vxlan.png)
+## Terminologie:
+VXLAN tunnel – Tunel care transportă un cadru Ethernet (Layer 2) peste o rețea IP (Layer 3), permițând extinderea unui VLAN între switch-uri aflate în rețele diferite.
 
-![alt text](header_vxlan.png)
+VTEP (VXLAN Tunnel Endpoint) – Dispozitivul (de obicei un switch Leaf) care împachetează traficul în VXLAN și îl despachetează la destinație.
 
-![alt text](fabric_vxlan.png)
+GRE (Generic Routing Encapsulation) – Un tip simplu de tunel care transportă pachete IP peste alte rețele IP, dar fără segmentare VLAN și fără control-plane (spre deosebire de VXLAN).
+
+EVPN (Ethernet VPN) – Un mecanism de control-plane care spune switch-urilor unde se află MAC-urile și IP-urile, evitând broadcast-ul și învățarea prin flood.
+
+MP-BGP (Multiprotocol BGP) – Protocolul folosit pentru a transporta informațiile EVPN între Leaf-uri, adică „poștașul” care distribuie actualizările MAC/IP în fabric.
+
+## Schema:
+![alt text](../src/img/vxlan_fabric_vxlan_schema.png)
+
+![alt text](../src/img/vxlan_header_vxlan.png)
 
 https://www.youtube.com/watch?v=80RFILipeng
+
 **Leaf** - Rulează VXLAN Tunnel Endpoints (VTEP) încapsulează și decapsulează traficul VXLAN. Conectează servere, hypervisoare, echipamente de securitate etc.Rulează VXLAN Tunnel Endpoints (VTEP) → încapsulează și decapsulează traficul VXLAN.Pot rula EVPN (Ethernet VPN) pentru control plane, care anunță ce MAC/IP apar în fiecare Leaf.Se ocupă de gateway L3 (routing între segmente VXLAN).
 
 🔹 Exemplu:
 Dacă ai un server în VLAN 10 conectat la Leaf1 și altul în VLAN 10 pe Leaf2, traficul dintre ele merge peste VXLAN tunnel.
 
-**Spine** - 
+**Spine** - Sunt switch-urile din stratul central al fabric-ului.
 
-**VXLAN** (Virtual eXtensible LAN) -  VxLan supports 16,000,000 Layer 2 sergments
-VXLAN tunnel
-VTEP Tunnel - ???
+🔹 Exemplu:
 
-GRE - ???
+Leaf1 ↔ Spine1/Spine2 ↔ Leaf2
+Spine-le nu trebuie să știe VLAN-uri → doar rutează IP-urile care transportă encapsularea VXLAN.
 
-EVPN - ???
 
-MP-BGP - ???
+### Rezumat vizual:
+```bash
+          +------------+
+          |   Spine1   |
+          +------------+
+           /    |     \
+          /     |      \
++---------+  +---------+  +---------+
+|  Leaf1  |  |  Leaf2  |  |  Leaf3  |
++---------+  +---------+  +---------+
+    |             |             |
+   VM/Server     VM/Server     VM/Server
 
+Leaf: termină VXLAN (VTEP) + gateway + EVPN.
+Spine: doar rutare L3 + ECMP (nu termină VXLAN).
+```
+### Implementarea in GNS3:
 Deploying VXLAN with MP-BGP EVPN
 
     Configure L3 links

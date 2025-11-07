@@ -19,7 +19,7 @@ Administratorul configurează manual rutele pe fiecare echipament, specificând 
                          |        |
                      10.0.0.1   10.0.0.2
 ```
-![alt text](example_static_route.png)
+![alt text](../../src/img/staticalRouting_example_static_route.png)
 
 R1 trebuie să știe cum ajunge la rețeaua `192.168.2.0/24`,  
 iar R2 trebuie să știe cum ajunge la `192.168.1.0/24`.

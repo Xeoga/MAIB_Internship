@@ -26,4 +26,4 @@ Fiecare subdirector conține:
 | Lab 2 | Rutare dinamică OSPF între domenii | [3.DynamicalRouting/lab2.md](3.DynamicalRouting/lab2.md) |
 | Lab 3 | Creare tunel VPN site-to-site | [4.VPN/lab3.md](4.VPN/lab3.md) |
 
-![alt text](TCP_IP_stack.png)
+![alt text](../src/img/network_protocols_TCP_IP_stack.png)

@@ -36,7 +36,7 @@ El selectează automat un **Root Bridge (Switch principal)** și dezactivează p
  [SW2]------[SW3]
        1Gb
 ```
-![alt text](STP_example.png)
+![alt text](../../src/img/STP_example.png)
 
 ## Concepte Cheie
 
@@ -71,7 +71,7 @@ Valoarea este invers proporțională cu viteza legăturii.
   - **Backup Port** – backup pentru Designated Port.  
 - Detectează instant legături point-to-point și poate trece rapid în „Forwarding”.
 
-![alt text](STP_and_RSTP.png)
+![alt text](../../src/img/STP_and_RSTP.png)
 ---
 
 ##  Configurație de bază Cisco
