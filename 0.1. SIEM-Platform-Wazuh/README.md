@@ -8,7 +8,7 @@
 
 Acesta o sa fie instalat din `docker-compose` cu urmatoarele configurari:
 
-[👉 build-images.yml](./build-images.yml)
+[👉 Docker Compose](../src/docker-compose/wazuh_docker-compose.yml)
 
 2) Porturi implicite
 - **Manager:** 1514/tcp (event), 1515/tcp (enrollment), 55000/tcp (API), 514/udp (syslog, opțional)

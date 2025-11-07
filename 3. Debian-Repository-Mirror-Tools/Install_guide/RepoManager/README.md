@@ -58,7 +58,7 @@ sudo docker-compose logs -f repomanager
 Acces UI: http://\<IP\>:8080 sau http://repomanager.local:8080
 
 Rulam si intram pe interfata Web:
-![alt text](repo_example.png) 
+![alt text](../../../src/img/repo_example.png) 
 
 Dupa ce am facut sync la toate pachetele avem urmatoare logica.
 Flux logic de actualizare și promovare:
@@ -82,7 +82,7 @@ Astfel:
     Nu este nevoie de reinstalări manuale;
     Versiunile rămân complet controlabile și trasabile.
 
-![alt text](mirrot_repo.png)
+![alt text](../../../src/img/mirrot_repo.png)
 ## Verificare funcționare repository:
 Dupa ce am adaugat repoul acum avem si pachetele locale `apt update`:
 ```bash
@@ -93,5 +93,44 @@ acl/focal,now 2.2.53-6 amd64 [installed]
 
 # In 2 cuvinte:
 În fiecare zi mirrorul principal se actualizează → pachetele merg în Test → după 3 săptămâni fără erori sunt promovate în Prod → snapshoturile sunt păstrate 3 luni → dacă apare o problemă, se revine rapid la snapshotul anterior.
-![alt text](life_cycling.png)
+![alt text](../../../src/img/life_cycling.png)
 
+
+### Lista URL-uri:
+##### Ubuntu 24.04 -- noble
+```bash
+https://archive.ubuntu.com/ubuntu noble main restricted universe multiverse
+https://archive.ubuntu.com/ubuntu noble-updates main restricted universe multiverse
+https://archive.ubuntu.com/ubuntu noble-backports main restricted universe multiverse
+https://security.ubuntu.com/ubuntu noble-security main restricted universe multiverse
+```
+##### Ubuntu 22.04 -- jammy
+```bash
+https://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+https://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+https://archive.ubuntu.com/ubuntu jammy-backports main restricted universe multiverse
+https://security.ubuntu.com/ubuntu jammy-security main restricted universe multiverse
+```
+##### Ubuntu 20.04 -- jammy
+```bash
+https://archive.ubuntu.com/ubuntu focal main restricted universe multiverse
+https://archive.ubuntu.com/ubuntu focal-updates main restricted universe multiverse
+https://archive.ubuntu.com/ubuntu focal-backports main restricted universe multiverse
+https://security.ubuntu.com/ubuntu focal-security main restricted universe multiverse
+```
+### Ubuntu:
+| Versiune | Minimal (main+restricted+updates+security) | Complet (inclusiv universe & multiverse) |
+| -------- | ------------------------------------------ | ---------------------------------------- |
+| noble    | ~30–45 GB                                  | ~120–180 GB                              |
+| jammy    | ~28–40 GB                                  | ~100–160 GB                              |
+| focal    | ~25–35 GB                                  | ~90–140 GB                               |
+| bionic   | ~22–32 GB                                  | ~80–130 GB                               |
+
+| Repo Ubuntu  | Dimensiune aproximativă | Observații                                          |
+| ------------ | ----------------------- | --------------------------------------------------- |
+| `main`       | 20–25 GB                | obligatoriu                                         |
+| `restricted` | 2–6 GB                  | include NVIDIA, drivere                             |
+| `universe`   | 60–120 GB               | foarte mare, include majoritatea tool-urilor devops |
+| `multiverse` | 5–15 GB                 | opțional                                            |
+| `-updates`   | 3–5 GB                  | obligatoriu                                         |
+| `-security`  | 3–5 GB                  | obligatoriu                                         |

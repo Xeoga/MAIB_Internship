@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  repomanager:
+    image: lbr38/repomanager:5.3.2          # versiune nouă
+    container_name: repomanager
+    restart: unless-stopped
+    environment:
+      - FQDN=repomanager.local              # IP sau FQDN
+      - MAX_UPLOAD_SIZE=64M
+    ports:
+      - "8080:8080"                         # UI + endpointuri repo
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - repomanager-data:/var/lib/repomanager   # DB + loguri
+      - repomanager-repo:/home/repo             # pachete/mirror-uri
+    networks:
+      - repo_net
+
+  # --- Clienți TEST ---
+  ubuntu-test-1:
+    image: ubuntu:24.04
+    container_name: ubuntu-test-1
+    command: sleep infinity
+    networks:
+      - repo_net
+
+  ubuntu-test-2:
+    image: ubuntu:24.04
+    container_name: ubuntu-test-2
+    command: sleep infinity
+    networks:
+      - repo_net
+
+  # --- Clienți PROD ---
+  ubuntu-prod-1:
+    image: ubuntu:24.04
+    container_name: ubuntu-prod-1
+    command: sleep infinity
+    networks:
+      - repo_net
+
+  ubuntu-prod-2:
+    image: ubuntu:24.04
+    container_name: ubuntu-prod-2
+    command: sleep infinity
+    networks:
+      - repo_net
+
+volumes:
+  repomanager-data:
+  repomanager-repo:
+
+networks:
+  repo_net:
+    driver: bridge

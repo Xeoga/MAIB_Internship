@@ -4,7 +4,7 @@ In cazul meu am adaugat repo `ubuntu` cu pachetele `main`,`restricted`,`universe
 [Docker-hub repo](https://hub.docker.com/r/lbr38/repomanager):
 
 <p align="center">
-  <img src="new_repo_main+restricted+universe.png" alt="Repo layout" width="600">
+  <img src="../../../src/img/new_repo_main+restricted+universe.png" alt="Repo layout" width="600">
 </p>
 
 Pachetele schimbate in snapshotul nou  de la data de (22-10-2025):
@@ -16,7 +16,7 @@ libnvidia-compute-440_440.82+really.440.64-0ubuntu6_amd64.deb
 ```
 
 Avem urmatoarea logica:
-![alt text](image-1.png)
+![alt text](../../../src/img/repomanager_snapshot_exemple.png)
 Aici 439Mb sunt ocupata de pachetele noi 
 
 

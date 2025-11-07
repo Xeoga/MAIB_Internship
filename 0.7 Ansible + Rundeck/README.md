@@ -40,7 +40,7 @@ Acum pe toate serverile trebuie sa adaugam cheia publica pentru a permite logare
         2. In directoriul `/home/ansible/.ssh` creiem fisierul `authorized_keys` si punem acolo public key:
 
 
-## Rundeck install ([docker-compose](./build-image.yml)):
+## Rundeck install ([docker-compose](../src/docker-compose/rundeck_docker-compose.yml)):
 Acesta este instalat prin docker deoarece este mult mai comod de instalat si manevrat cu el 
 La fel fisierul `.env` pentru dockerul dat:
 ```bash
@@ -51,3 +51,5 @@ CERT_RESOLVER=lehttp   # același resolver ca în Traefik (din stack-ul tău)
 
 ## Guide pentru interfata grafica:
 [Aici incepem](https://www.youtube.com/watch?v=QSY_qw9Buic&list=PLTDT4q38A2NutovIx_IFJev9Z6w68P6Xo)
+
+Concluzie: Din motivele ca serverul are doar 2GB de RAM si un 1GB este deja ocupat aceta moare cand doresc sa introduc ceva functional exemplu add key, sau test cu executarea la comenzi. Nu ajunge resurse.

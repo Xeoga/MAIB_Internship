@@ -14,7 +14,7 @@ cu podman, mgradm, mgrctl, și repository local creat ulterior.
 
 ## Instalează pachetele de bază
 Pe Leap Micro nu ai zypper clasic complet, deci se folosesc transactional updates:
-```
+```bash
 # Deschide o sesiune transactională
 sudo transactional-update shell
 # Adaugă repository-ul Uyuni Master pentru Container Utils
@@ -38,7 +38,7 @@ sudo reboot
 ## Configurare hostname și hosts
 
 Uyuni necesită un hostname static (FQDN):
-```
+```bash
 sudo hostnamectl set-hostname uyuni.local
 echo "172.16.49.135 uyuni.local uyuni" | sudo tee -a /etc/hosts
 ```
@@ -46,7 +46,7 @@ echo "172.16.49.135 uyuni.local uyuni" | sudo tee -a /etc/hosts
 ## Instalează Uyuni Server (containerizat)
 
 După reboot, rulează:
-```
+```bash
 sudo mgradm install podman
 ```
 ### Acest pas:

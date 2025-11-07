@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  repomanager:
+    image: lbr38/repomanager:latest
+    container_name: repomanager
+    restart: unless-stopped
+    environment:
+      - FQDN=repo.example.com
+      - MAX_UPLOAD_SIZE=64M
+    networks: [frontend]
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/repomanager/data:/var/lib/repomanager
+      - /opt/repomanager/repo:/home/repo
+    expose:
+      - "8080"
+
+  nginx:
+    image: nginx:alpine
+    container_name: repomanager-nginx
+    restart: unless-stopped
+    depends_on: [repomanager]
+    networks: [frontend]
+    ports:
+      - "80:80"
+    volumes:
+      - /opt/repomanager/nginx/conf.d:/etc/nginx/conf.d:ro
+      - /opt/repomanager/letsencrypt:/etc/letsencrypt
+      - /opt/repomanager/www:/var/www/certbot
+
+networks:
+  frontend: {}
