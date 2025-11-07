@@ -17,8 +17,6 @@ MP-BGP (Multiprotocol BGP) – Protocolul folosit pentru a transporta informați
 
 ![alt text](../src/img/vxlan_header_vxlan.png)
 
-https://www.youtube.com/watch?v=80RFILipeng
-
 **Leaf** - Rulează VXLAN Tunnel Endpoints (VTEP) încapsulează și decapsulează traficul VXLAN. Conectează servere, hypervisoare, echipamente de securitate etc.Rulează VXLAN Tunnel Endpoints (VTEP) → încapsulează și decapsulează traficul VXLAN.Pot rula EVPN (Ethernet VPN) pentru control plane, care anunță ce MAC/IP apar în fiecare Leaf.Se ocupă de gateway L3 (routing între segmente VXLAN).
 
 🔹 Exemplu:
@@ -48,24 +46,23 @@ Spine-le nu trebuie să știe VLAN-uri → doar rutează IP-urile care transport
 Leaf: termină VXLAN (VTEP) + gateway + EVPN.
 Spine: doar rutare L3 + ECMP (nu termină VXLAN).
 ```
-### Implementarea in GNS3:
+### Implementarea:
 Deploying VXLAN with MP-BGP EVPN
-
-    Configure L3 links
-    Configure Link-state routing protocol on underlay network (OSPF or IS-IS)
-    Configure BGP and set up route reflectors on non-VTEP switches
-    Configure Multicast routing (PIM Sparse-mode)
-    Enable VXLAN on the switches
-    Map VLANs to VXLAN VNIs
-    Create Network Virtualization Endpoint (NVE) interfaces for the VNIs
-    Configure EVPN on BGP
-    Attach devices and set them to the correct VLANs/VNIs
-
+1. Configurează legăturile Layer 3 între switch-uri.
+2. Configurează protocolul de rutare de tip link-state în rețeaua underlay (OSPF sau IS-IS).
+3. Configurează BGP și stabilește route reflectors pe switch-urile care nu sunt VTEP-uri (de obicei Spine-urile).
+4. Configurează rutarea multicast (PIM Sparse-Mode) dacă folosești VXLAN în modul flood & learn (fără EVPN).
+5. Activează VXLAN pe switch-uri.
+6. Asociază VLAN-urile cu identificatori VXLAN (VNI).
+7. Creează interfețele de virtualizare NVE (Network Virtualization Endpoint) pentru fiecare VNI.
+8. Configurează EVPN peste BGP pentru distribuirea MAC/IP în fabric.
+9. Conectează echipamentele finale și atribuie-le VLAN-urile / VNI-urile corespunzătoare.s
 
 
 
-### VXLAN:
- ```Cisco
+### Implementarea in GNS3:
+#TODO schema + configuratie la dispozitive
+ ```cisco
  feature tunnel
  interface tunnel 0
  tunnel source loopback0
@@ -74,11 +71,13 @@ Deploying VXLAN with MP-BGP EVPN
  ```
 
 Verificam ce functional putem activa:
-```
+```cisco
 show feature | inc <bgp sau ospf>
 ```
 
 Enable **bgp** on router:
-```
+```cisco
 router bgp 65005
 ```
+
+#### [Guide youtube](https://www.youtube.com/watch?v=80RFILipeng):
