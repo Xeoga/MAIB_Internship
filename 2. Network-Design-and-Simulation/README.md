@@ -96,6 +96,14 @@ snmp-server community public RO
 snmp-server location "R1 edge"
 snmp-server contact "stas@i9t24.online"
 ```
+![README-2025-11-07-17-36-19.png](../src/img/README-2025-11-07-17-36-19.png)
+
+| Variantă         | Protecție                | Recomandat? |
+| ---------------- | ------------------------ | ----------- |
+| v1/v2c           | Community string în clar | ❌ slab      |
+| v3 auth-no-priv  | autentificare            | ok          |
+| **v3 auth-priv** | autentificare + criptare | ✅ ideal     |
+
 Pentru a adauga rutele statice folosim pentru a avea conexiune cu dispozitivele din **GNS3**.
 ```bash
 sudo ip route add 192.168.1.0/30 via 172.20.0.100
