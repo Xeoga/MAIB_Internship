@@ -96,4 +96,4 @@ Pentrul ca sal stopam:
 sudo docker-compose down
 ```
 
-https://computingforgeeks.com/run-wazuh-server-in-docker-containers-using-docker-compose/
+https://computingforgeeks.com/run-wazuh-sservererver-in-docker-containers-using-docker-compose/
