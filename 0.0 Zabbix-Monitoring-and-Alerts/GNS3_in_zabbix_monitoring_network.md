@@ -19,9 +19,9 @@ Adaugam serverul de VPN in zabbix pentru monitorizarea ulterioara cu hosturile e
 
 ### Creiem carta retelei:
 Acum trecem la crearea retelei de pentru infrastructura creata
-![alt text](GNS3_network_schema.png)
+![alt text](../src/img/GNS3_network_schema.png)
 
 ### Adaugarea unui dashboard customezat 
-![alt text](Dashboard.png)
-#TODO Arata uboga Acum arata tot uboga 
-#TODO adaug mai multe dispozitive fac un dashboard pentru toate 
+![alt text](../src/img/Dashboard.png)
+#TODO implementarea unei retele in modulul 4. sau 5. si adaugarea acestei la monitorizare special dashboard 
+

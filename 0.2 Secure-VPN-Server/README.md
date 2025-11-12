@@ -82,7 +82,7 @@ Generate client keys:
 ```bash
 wg genkey | tee client_private.key | wg pubkey > client_public.key
 ```
-Or we can automate the user add with this [script](../src/img/wireguard_generate_client_conf.sh):
+Or we can automate the user add with this [script](../src/confs/wireguard_generate_client_conf.sh):
 
 ### Client configuration (`client.conf`)
 
