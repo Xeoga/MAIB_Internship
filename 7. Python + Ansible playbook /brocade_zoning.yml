@@ -1,0 +1,59 @@
+---
+- name: Configure zoning for new server on Brocade SAN
+  hosts: brocade_san
+  connection: local
+  gather_facts: no
+
+  collections:
+    - brocade.fos
+
+  tasks:
+    - name: Create alias for server PWWN (alicreate)
+      brocade_zoning_alias:
+        credential: "{{ credential }}"
+        vfid: "{{ vfid }}"
+        aliases:
+          - name: "{{ server_name }}"
+            members:
+              - "{{ server_pwwn }}"
+
+    - name: Create zones for server + HSD and TV5K ports (zonecreate)
+      brocade_zoning_zone:
+        credential: "{{ credential }}"
+        vfid: "{{ vfid }}"
+        zones:
+          - name: "{{ server_name }}_HSD01_A_P2"
+            members:
+              - "HSD01_A_P2"
+              - "{{ server_name }}"
+          - name: "{{ server_name }}_HSD01_B_P2"
+            members:
+              - "HSD01_B_P2"
+              - "{{ server_name }}"
+          - name: "{{ server_name }}_HSD02_A_P2"
+            members:
+              - "HSD02_A_P2"
+              - "{{ server_name }}"
+          - name: "{{ server_name }}_HSD02_B_P2"
+            members:
+              - "HSD02_B_P2"
+              - "{{ server_name }}"
+          - name: "{{ server_name }}_TV5K_N1_N2_P1"
+            members:
+              - "TV5K_N1_P1"
+              - "TV5K_N2_P1"
+              - "{{ server_name }}"
+
+    - name: Add zones to configuration and activate cfg (cfgadd + cfgenable + cfgsave)
+      brocade_zoning_cfg:
+        credential: "{{ credential }}"
+        vfid: "{{ vfid }}"
+        cfgs:
+          - name: "{{ cfg_name }}"
+            members:
+              - "{{ server_name }}_HSD01_A_P2"
+              - "{{ server_name }}_HSD01_B_P2"
+              - "{{ server_name }}_HSD02_A_P2"
+              - "{{ server_name }}_HSD02_B_P2"
+              - "{{ server_name }}_TV5K_N1_N2_P1"
+        active_cfg: "{{ cfg_name }}"

@@ -539,5 +539,10 @@ Obiecte în Active Directory:
 
 ##  Active Directory Lab Build:
 #TODO aici am ramas
+### ISO Necessary:
+Link: https://www.microsoft.com/en-us/evalcenter
+Instalam rolul de DC + Certificate Authority pe serverul Windows:
+
+
 
 

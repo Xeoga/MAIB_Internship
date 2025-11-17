@@ -1,0 +1,28 @@
+# ---------------------------
+# Conexiune la Brocade Switch
+# ---------------------------
+credential:
+  fos_ip_addr: "{{ ansible_host }}"
+  fos_user_name: "{{ san_user }}"
+  fos_password: "{{ san_password }}"
+  https: False
+  ssh_hostkeymust: False   # parametru oficial
+
+# vfid TREBUIE să fie la nivel de modul, nu în credential
+vfid: -1
+
+
+# ---------------------------
+# Configurație Zoning globală
+# ---------------------------
+cfg_name: "fcsw1_bc"
+
+hsd_ports:
+  - "HSD01_A_P2"
+  - "HSD01_B_P2"
+  - "HSD02_A_P2"
+  - "HSD02_B_P2"
+
+tv5k_ports:
+  - "TV5K_N1_P1"
+  - "TV5K_N2_P1"

@@ -65,7 +65,7 @@ Proiecte individuale dezvoltate în cadrul internshipului:
     <!-- Alex Cushnir -->
     <td align="center" width="160">
       <a href="https://www.linkedin.com/in/alex-cushnir-457a8a33/">
-        <img src="https://media.licdn.com/dms/image/v2/D4D03AQF1Dc3WBBnULw/profile-displayphoto-shrink_200_200/B4DZcwzBiCGwAc-/0/1748870371839?e=1762992000&v=beta&t=xVV8Ijjiq5o5SQGCzfixZNGPnilCmUfDA1H0AIr1Cc0"
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQF1Dc3WBBnULw/profile-displayphoto-shrink_200_200/B4DZcwzBiCGwAc-/0/1748870371839?e=1764806400&v=beta&t=kAMoa77WFFq6plJQi-ohHFWiBLnUQIi8iDKz_FaIDEA"
              width="90" height="90"
              style="border-radius:50% !important; border:2px solid #006B3F !important; box-shadow:none !important;"
              alt="Alex Cushnir"/>
@@ -75,7 +75,7 @@ Proiecte individuale dezvoltate în cadrul internshipului:
     <!-- Mihail Cushnir -->
     <td align="center" width="160">
       <a href="https://www.linkedin.com/in/mihail-cushnir-27551296/">
-        <img src="https://media.licdn.com/dms/image/v2/C4E03AQG5rejofPTK-w/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1516822322425?e=1762992000&v=beta&t=iTl_dtYA9tHt-GCte6xWU5NOc6HeCeMpBcH5_jxQ6N8"
+        <img src="https://media.licdn.com/dms/image/v2/C4E03AQG5rejofPTK-w/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1516822322425?e=1764806400&v=beta&t=1gYm5TMkvZ73ZyHlNGkcg2RkQgnDBmEDOrU3ygMo2HU"
              width="90" height="90"
              style="border-radius:50% !important; border:2px solid #006B3F !important; box-shadow:none !important;"
              alt="Mihail Cushnir"/>
@@ -85,7 +85,7 @@ Proiecte individuale dezvoltate în cadrul internshipului:
     <!-- Dumitru Ene -->
     <td align="center" width="160">
       <a href="https://www.linkedin.com/in/dumitru-ene-0298b556/">
-        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGnTggQW-fV5Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1685708348939?e=1762992000&v=beta&t=Nx7vZW8mpMTerwN09rrjcWaHmdRUa86HsOwymbAshuU"
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGnTggQW-fV5Q/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1685708348939?e=1764806400&v=beta&t=ZOh-BbCE6smL4DfmNnFvO-p6T13CwiOHMgYVcd_l4nE"
              width="90" height="90"
              style="border-radius:50% !important; border:2px solid #006B3F !important; box-shadow:none !important;"
              alt="Dumitru Ene"/>
@@ -95,7 +95,7 @@ Proiecte individuale dezvoltate în cadrul internshipului:
     <!-- Alexandr Hasnaș -->
     <td align="center" width="160">
       <a href="https://www.linkedin.com/in/alexandr-hasnas-a921aaa9/">
-        <img src="https://media.licdn.com/dms/image/v2/C4E03AQHVtNltxLBjxg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1517527973250?e=1762992000&v=beta&t=lT4XzYZGzpaN5Z7C1LLLMyijOcdfsA0M_EA79Muvp2w"
+        <img src="https://media.licdn.com/dms/image/v2/C4E03AQHVtNltxLBjxg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1517527973250?e=1764806400&v=beta&t=yXSK-5lfRrX58OMZy23Z3iE6mfk2Ly0qSKzH1jXp6aA"
              width="90" height="90"
              style="border-radius:50% !important; border:2px solid #006B3F !important; box-shadow:none !important;"
              alt="Alexandr Hasnaș"/>
@@ -105,7 +105,7 @@ Proiecte individuale dezvoltate în cadrul internshipului:
     <!-- Mihail Batiri -->
     <td align="center" width="160">
       <a href="https://www.linkedin.com/in/mihail-batiri-57ba188b/">
-        <img src="https://media.licdn.com/dms/image/v2/C4E03AQFje5EsWZnyNQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1659265853565?e=1762992000&v=beta&t=ZHGEaiadZdaW2DOA-Io_TeUAHVvizF87YcXbhlLpspQ"
+        <img src="https://media.licdn.com/dms/image/v2/C4E03AQFje5EsWZnyNQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1659265853565?e=1764806400&v=beta&t=gmiYmB19OoDV5FF61qQEGGpvXF9O9XFtxwsGPeOuikw"
              width="90" height="90"
              style="border-radius:50% !important; border:2px solid #006B3F !important; box-shadow:none !important;"
              alt="Mihail Batiri"/>
@@ -115,13 +115,24 @@ Proiecte individuale dezvoltate în cadrul internshipului:
     <!-- Vladimir Petritchi -->
     <td align="center" width="160">
       <a href="https://www.linkedin.com/in/vladimir-petritchi/">
-        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGCLl8ot8T8Ag/profile-displayphoto-shrink_200_200/B4DZWL8.szH4AY-/0/1741809775379?e=1762992000&v=beta&t=kQC93RSs6mFiQl0dxj0ZYrmd1wyHFG_MF5NTYgsG3yA"
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGCLl8ot8T8Ag/profile-displayphoto-shrink_200_200/B4DZWL8.szH4AY-/0/1741809775379?e=1764806400&v=beta&t=g-YeyWOYEuXVUaV9oMH0_MRV0Ih5uC21om_v7-rk4aE"
              width="90" height="90"
              style="border-radius:50% !important; border:2px solid #006B3F !important; box-shadow:none !important;"
              alt="Vladimir Petritchi"/>
         <br/><sub><b>Vladimir Petritchi</b></sub><br/><sub>🪟 Windows System Administrator</sub>
       </a>
     </td>
+    <td align="center" width="160">
+          <a href="www.linkedin.com/in/alexandru-gluscenco-774294235/">
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQHux2BXib0X0w/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1676578522153?e=1764806400&v=beta&t=T8UoceP-8eeGgGSjfYOE5QbM-lHgfzzjdQ1lQ2cF2x8"
+             width="90" height="90"
+             style="border-radius:50% !important; border:2px solid #006B3F !important; box-shadow:none !important;"
+             alt="Vladimir Petritchi"/>
+        <br/><sub><b>Vladimir Petritchi</b></sub><br/><sub>System Administrator</sub>
+      </a>
+    </td>
+
+    
 
   </tr>
 </table>
