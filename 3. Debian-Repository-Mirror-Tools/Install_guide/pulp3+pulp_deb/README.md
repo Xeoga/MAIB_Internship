@@ -85,7 +85,7 @@ curl -I http://127.0.0.1:8088/pulp/content/local/deb/
 ```
 
 #### Dupa 7 mii de incercari avem si repozitoriul nostru 
-![alt text](add_repo_in_pulp.png)
+![alt text](../../../src/img/add_repo_in_pulp.png)
 Toate **API** pentru lucru cu `.deb`:
 ```bash
     "distributions/deb/apt": "http://127.0.0.1:8088/pulp/api/v3/distributions/deb/apt/",

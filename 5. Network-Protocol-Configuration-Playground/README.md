@@ -1,6 +1,4 @@
-
-
-1. Tehnologii & concepte cheie (ce să practici în GNS3)
+# Tehnologii & concepte cheie
 2. Routing dinamic: OSPF, EIGRP (Cisco), BGP — fundament.
 3. Multihoming & BGP Internet-facing: BGP pe două ISP-uri, prepending, communities, route-maps.
 4. MPLS & L3VPN: core MPLS, LDP/RSVP, VRF, route leaking.

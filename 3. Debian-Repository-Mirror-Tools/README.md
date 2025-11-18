@@ -226,9 +226,9 @@
     Nu are interfață web sau API REST.
     Nu permite semnare GPG proprie — repo-ul rămâne semnat cu cheia upstream.
     Nu este un manager complet de pachete .deb, ci un mirror sync tool.
-# [Nexus Repository OSS]
+# Nexus Repository OSS
 Nexus Repository OSS NU îndeplinește cerințele proiectului, deoarece cerința principală este o soluție open-source și gratuită cu suport complet pentru pachete `.deb`.
-# [Spacewalk] (software) 
+# Spacewalk(software) 
 Spacewalk nu mai este întreținut oficial — proiectul a fost oprit pe 31 mai 2020.
 # JFrog Artifactory OSS (Open-Source Edition)
 Funcționalitatea este puternic limitată față de versiunile comerciale (Pro / Enterprise).

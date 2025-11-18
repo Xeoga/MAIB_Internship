@@ -131,8 +131,5 @@ Proiecte individuale dezvoltate în cadrul internshipului:
         <br/><sub><b>Vladimir Petritchi</b></sub><br/><sub>System Administrator</sub>
       </a>
     </td>
-
-    
-
   </tr>
 </table>
