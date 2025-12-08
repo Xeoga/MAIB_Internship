@@ -33,41 +33,15 @@ Instalarea se executa in felul dat:
 ```bash
 ./install.sh -t h -u <user> -p <pass> #pentru interfata grafica
 ```
+![README-2025-11-27-10-24-10.png](../src/img/README-2025-11-27-10-24-10.png)
+![README-2025-11-27-10-30-27.png](../src/img/README-2025-11-27-10-30-27.png)
 
-...
+Dupa instalare accesul se face la adresa web data `https://<IP>:64297/` si logarea se face la fel aici.
 
 
-...
 
-Acesul se face la adresa data `https://<IP>:64297/` si logarea se face la fel aici #TODOOOOOOOOOOOO
+
+
+
 
 [Documentatia este aici](https://github.security.telekom.com/2024/04/honeypot-tpot-24.04-released.html)
-
-T-Pot offers docker images for the following honeypots:
-
-    adbhoney,
-    ciscoasa,
-    citrixhoneypot,
-    conpot,
-    cowrie,
-    ddospot,
-    dicompot,
-    dionaea,
-    elasticpot,
-    endlessh,
-    glutton,
-    hellpot,
-    heralding,
-    honeypots,
-    honeytrap,
-    ipphoney,
-    log4pot,
-    mailoney,
-    medpot,
-    redishoneypot,
-    sentrypeer,
-    snare,
-    tanner,
-    wordpot
-
-#TODO Instalarea de la 0 pana la 100 ce tip de honeypot sunt. Deploy pe Chuwi cela vechi dar trebuie de rezolvat problema cu power adapter la moment acesta este defect nu incarca :(

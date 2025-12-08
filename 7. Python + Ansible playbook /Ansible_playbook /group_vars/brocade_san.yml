@@ -16,13 +16,3 @@ vfid: -1
 # Configurație Zoning globală
 # ---------------------------
 cfg_name: "fcsw1_bc"
-
-hsd_ports:
-  - "HSD01_A_P2"
-  - "HSD01_B_P2"
-  - "HSD02_A_P2"
-  - "HSD02_B_P2"
-
-tv5k_ports:
-  - "TV5K_N1_P1"
-  - "TV5K_N2_P1"
