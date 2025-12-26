@@ -1,0 +1,151 @@
+---
+- name: Enable firewall and allow only required ports + trusted IPs
+  hosts: all
+  become: true
+  gather_facts: true
+
+  vars:
+    # Porturi publice (din orice IP)
+    allowed_public_ports:
+      - { port: 80,  proto: tcp }
+      - { port: 443, proto: tcp }
+
+    # SSH permis DOAR din IP/subnet-uri de încredere
+    ssh_port: 22
+    allowed_ssh_sources:
+      - "127.0.0.1/32"
+      - "10.10.10.0/24"      # exemplu VPN/LAN (schimbă cu ale tale!)
+      # - "x.x.x.x/32"
+
+    # (optional) ICMP ping
+    allow_ping: true
+
+  tasks:
+    - name: Show target OS family
+      ansible.builtin.debug:
+        msg: "OS family: {{ ansible_facts.os_family }}"
+
+    # -------------------------
+    # Debian/Ubuntu -> UFW
+    # -------------------------
+    - name: Install ufw (Debian/Ubuntu)
+      ansible.builtin.apt:
+        name: ufw
+        state: present
+        update_cache: true
+      when: ansible_facts.os_family == "Debian"
+
+    - name: UFW - default deny incoming, allow outgoing
+      community.general.ufw:
+        direction: incoming
+        policy: deny
+      when: ansible_facts.os_family == "Debian"
+
+    - name: UFW - allow outgoing
+      community.general.ufw:
+        direction: outgoing
+        policy: allow
+      when: ansible_facts.os_family == "Debian"
+
+    - name: UFW - allow public ports (from anywhere)
+      community.general.ufw:
+        rule: allow
+        port: "{{ item.port }}"
+        proto: "{{ item.proto }}"
+      loop: "{{ allowed_public_ports }}"
+      when: ansible_facts.os_family == "Debian"
+
+    - name: UFW - allow SSH only from trusted sources
+      community.general.ufw:
+        rule: allow
+        port: "{{ ssh_port }}"
+        proto: tcp
+        from_ip: "{{ item }}"
+      loop: "{{ allowed_ssh_sources }}"
+      when: ansible_facts.os_family == "Debian"
+
+    - name: UFW - allow ping (ICMP)
+      ansible.builtin.lineinfile:
+        path: /etc/ufw/before.rules
+        insertafter: '^# ok icmp codes for INPUT'
+        line: '-A ufw-before-input -p icmp --icmp-type echo-request -j ACCEPT'
+        state: present
+      when:
+        - ansible_facts.os_family == "Debian"
+        - allow_ping | bool
+
+    - name: Enable UFW
+      community.general.ufw:
+        state: enabled
+      when: ansible_facts.os_family == "Debian"
+
+    # -------------------------
+    # RHEL-family -> firewalld
+    # -------------------------
+    - name: Install firewalld (RHEL-family)
+      ansible.builtin.package:
+        name: firewalld
+        state: present
+      when: ansible_facts.os_family == "RedHat"
+
+    - name: Ensure firewalld is enabled and running
+      ansible.builtin.service:
+        name: firewalld
+        enabled: true
+        state: started
+      when: ansible_facts.os_family == "RedHat"
+
+    - name: Firewalld - set default zone to public
+      ansible.posix.firewalld:
+        zone: public
+        state: enabled
+        permanent: true
+      when: ansible_facts.os_family == "RedHat"
+
+    - name: Firewalld - allow public ports (from anywhere) in public zone
+      ansible.posix.firewalld:
+        zone: public
+        port: "{{ item.port }}/{{ item.proto }}"
+        permanent: true
+        state: enabled
+      loop: "{{ allowed_public_ports }}"
+      when: ansible_facts.os_family == "RedHat"
+
+    - name: Firewalld - create trusted zone (for SSH sources)
+      ansible.posix.firewalld:
+        zone: trusted
+        permanent: true
+        state: present
+      when: ansible_facts.os_family == "RedHat"
+
+    - name: Firewalld - add allowed SSH sources to trusted zone
+      ansible.posix.firewalld:
+        zone: trusted
+        source: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop: "{{ allowed_ssh_sources }}"
+      when: ansible_facts.os_family == "RedHat"
+
+    - name: Firewalld - allow SSH in trusted zone only
+      ansible.posix.firewalld:
+        zone: trusted
+        port: "{{ ssh_port }}/tcp"
+        permanent: true
+        state: enabled
+      when: ansible_facts.os_family == "RedHat"
+
+    - name: Firewalld - allow ping (ICMP)
+      ansible.posix.firewalld:
+        zone: public
+        icmp_block_inversion: false
+        permanent: true
+        state: enabled
+      when:
+        - ansible_facts.os_family == "RedHat"
+        - allow_ping | bool
+
+    - name: Reload firewalld to apply changes
+      ansible.builtin.command: firewall-cmd --reload
+      changed_when: true
+      when: ansible_facts.os_family == "RedHat"

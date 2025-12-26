@@ -34,13 +34,14 @@ Instalarea se executa in felul dat:
 ./install.sh -t h -u <user> -p <pass> #pentru interfata grafica
 ```
 ![README-2025-11-27-10-24-10.png](../src/img/README-2025-11-27-10-24-10.png)
+
+Dupa ce sistemul se adapteza acesta o sa intaleze docker-containerile care si sunt HonePoturile noastre 
+
 ![README-2025-11-27-10-30-27.png](../src/img/README-2025-11-27-10-30-27.png)
 
 Dupa instalare accesul se face la adresa web data `https://<IP>:64297/` si logarea se face la fel aici.
 
-
-
-
+Dupa o perioada putem observa 
 
 
 

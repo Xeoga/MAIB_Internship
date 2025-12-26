@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Colors
+GREEN="\e[32m"
+BLUE="\e[34m"
+CYAN="\e[36m"
+YELLOW="\e[33m"
+RED="\e[31m"
+RESET="\e[0m"
+
+HOSTNAME=$(hostname)
+OS=$(grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '"')
+KERNEL=$(uname -r)
+UPTIME=$(uptime -p)
+LOAD=$(uptime | awk -F'load average:' '{ print $2 }')
+CPU_MODEL=$(lscpu | awk -F: '/Model name/ {print $2}' | xargs)
+CPU_CORES=$(nproc)
+MEM_USED=$(free -h | awk '/Mem:/ {print $3}')
+MEM_TOTAL=$(free -h | awk '/Mem:/ {print $2}')
+DISK_USED=$(df -h / | awk 'NR==2 {print $3}')
+DISK_TOTAL=$(df -h / | awk 'NR==2 {print $2}')
+IP_ADDR=$(hostname -I | awk '{print $1}')
+USERS=$(who | wc -l)
+DATE=$(date)
+
+echo -e "${BLUE}=============================================================${RESET}"
+echo -e "${GREEN} Welcome to ${HOSTNAME}${RESET}"
+echo -e "${BLUE}=============================================================${RESET}"
+echo -e "${CYAN} OS:${RESET}            ${OS}"
+echo -e "${CYAN} Kernel:${RESET}        ${KERNEL}"
+echo -e "${CYAN} Uptime:${RESET}        ${UPTIME}"
+echo -e "${CYAN} Load:${RESET}          ${LOAD}"
+echo
+echo -e "${CYAN} CPU:${RESET}           ${CPU_MODEL}"
+echo -e "${CYAN} CPU Cores:${RESET}     ${CPU_CORES}"
+echo -e "${CYAN} Memory:${RESET}        ${MEM_USED} / ${MEM_TOTAL}"
+echo -e "${CYAN} Disk (/):${RESET}      ${DISK_USED} / ${DISK_TOTAL}"
+echo
+echo -e "${CYAN} IP Address:${RESET}    ${IP_ADDR}"
+echo -e "${CYAN} Logged Users:${RESET}  ${USERS}"
+echo -e "${CYAN} Date:${RESET}          ${DATE}"
+echo -e "${BLUE}=============================================================${RESET}"
